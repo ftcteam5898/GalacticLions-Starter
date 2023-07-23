@@ -11,11 +11,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 /**
- * This particular OpMode executes a POV Teleop for a mecanum robot
+ * This particular OpMode executes a field centric Teleop for a mecanum robot
  * The code is structured as a LinearOpMode
  *
- * In this mode the left stick moves the robot FWD and back and strafes left & right.
+ * In this mode, the left stick moves the robot relative to the field.
  * The Right stick rotates the robot left and right.
+ * The Logitech button resets the robot's heading.
  *
  */
 
@@ -58,8 +59,8 @@ public class StraferFieldCentric extends LinearOpMode {
 
             // This button choice was made so that it is hard to hit on accident,
             // it can be freely changed based on preference.
-            // The equivalent button is start on Xbox-style controllers.
-            if (gamepad1.options) {
+            // The equivalent button is start on Xbox-style controllers or options on PS4-style controllers.
+            if (gamepad1.guide) {
                 imu.resetYaw();
             }
 
