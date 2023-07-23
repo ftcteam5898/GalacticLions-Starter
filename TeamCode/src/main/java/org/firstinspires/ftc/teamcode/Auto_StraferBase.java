@@ -1,44 +1,40 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Auto_StraferBase", group="Starter Code")
 public class Auto_StraferBase extends LinearOpMode{
     // variable declaration & setup
     DcMotor frontleft, frontright, backleft, backright;
 
+    // motor counts per rotation (ticks/pulses per rotation)
+    // check motor specs from manufacturer
+    // 537.7 is for GoBilda 312 RPM Yellow Jacket motor
+    double cpr = 537.7;
 
-
-    // motor counts per rotation
-    int cpr = 28;
-
-    // motor gear ratio
-    double gearRatio = 19.2;
+    // adjust gearRatio if you have geared up or down your motors
+    double gearRatio = 1;
 
     // wheel diameter in inches
+    // 3.779 is for the GoBilda mecanum wheels
     double diameter = 3.779;
 
-    //counts per inch, 28cpr * gear ratio / (pi * diameter (in inches))
+    //counts per inch: cpr * gear ratio / (pi * diameter (in inches))
     double cpi = (cpr * gearRatio)/(Math.PI * diameter);
-    double bias = 0.8;//default 0.8
+    double bias = 0.8; // adjust based on calibration opMode
     double strafeBias = 0.9;//change to adjust only strafing movement
     //
     double conversion = cpi * bias;
     //
-    BNO055IMU imu;
-    Orientation angles;
-    Acceleration gravity;
+    IMU imu;
 
     @Override
     public void runOpMode(){
@@ -60,63 +56,56 @@ public class Auto_StraferBase extends LinearOpMode{
 
     }
 
+
+
+
+
+
+
     /**
     Use to make the robot go forward a number of inches
     @param speed has a range of [0,1]
      */
-    public void forward(double inches, double speed)
-    {
-        moveToPosition(inches, speed);
-    }
+    public void forward(double inches, double speed){ moveToPosition(inches, speed); }
 
     /**
     Use to make the robot go backward a number of inches
     @param speed has a range of [0,1]
      */
-    public void back(double inches, double speed)
-    {
-        moveToPosition(-inches, speed);
-    }
+    public void back(double inches, double speed){ moveToPosition(-inches, speed); }
 
     /**
     Rotate the robot left
     @param degrees the amount of degrees to rotate
     @param speed has a range of [0,1]
      */
-    public void turnLeft(double degrees, double speed)
-    {
-        turnWithGyro(degrees, -speed);
-    }
+    public void turnLeft(double degrees, double speed){ turnWithGyro(degrees, -speed); }
 
     /**
     Rotate the robot right
     @param degrees the amount of degrees to rotate
     @param speed has a range of [0,1]
      */
-    public void turnRight(double degrees, double speed)
-    {
-        turnWithGyro(degrees, speed);
-    }
+    public void turnRight(double degrees, double speed){ turnWithGyro(degrees, speed); }
 
     /**
     Strafe left
     @param inches the distance in inches to strafe
     @param speed has a range of [0,1]
      */
-    public void strafeLeft(double inches, double speed)
-    {
-        strafeToPosition(-inches, speed);
-    }
+    public void strafeLeft(double inches, double speed){ strafeToPosition(-inches, speed); }
 
     /**
     Strafe right
     @param inches the distance in inches to strafe
     @param speed has a range of [0,1]
      */
-    public void strafeRight(double inches, double speed)
-    {
-        strafeToPosition(inches, speed);
-    }
+    public void strafeRight(double inches, double speed){ strafeToPosition(inches, speed); }
+
+
+
+
+
 
 
     /*
@@ -153,9 +142,13 @@ public class Auto_StraferBase extends LinearOpMode{
     Degrees should always be positive, make speedDirection negative to turn left.
      */
     public void turnWithGyro(double degrees, double speedDirection){
+        // Create an object to receive the IMU angles
+        YawPitchRollAngles robotOrientation;
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+
         //Initialize
-        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double yaw = -angles.firstAngle;//make this negative
+
+        double yaw = robotOrientation.getYaw(AngleUnit.DEGREES); //make this negative?
         telemetry.addData("Speed Direction", speedDirection);
         telemetry.addData("Yaw", yaw);
         telemetry.update();
@@ -184,9 +177,8 @@ public class Auto_StraferBase extends LinearOpMode{
 
         if (Math.abs(firsta - firstb) < 11) {
             while (!(firsta < yaw && yaw < firstb) && opModeIsActive()) {//within range?
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                gravity = imu.getGravity();
-                yaw = -angles.firstAngle;
+                robotOrientation = imu.getRobotYawPitchRollAngles();
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); //make this negative?
                 telemetry.addData("Position", yaw);
                 telemetry.addData("first before", first);
                 telemetry.addData("first after", convertify(first));
@@ -195,9 +187,8 @@ public class Auto_StraferBase extends LinearOpMode{
         }
         else{
             while (!((firsta < yaw && yaw < 180) || (-180 < yaw && yaw < firstb)) && opModeIsActive()) {//within range?
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                gravity = imu.getGravity();
-                yaw = -angles.firstAngle;
+                robotOrientation = imu.getRobotYawPitchRollAngles();
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); //make this negative?
                 telemetry.addData("Position", yaw);
                 telemetry.addData("first before", first);
                 telemetry.addData("first after", convertify(first));
@@ -212,18 +203,16 @@ public class Auto_StraferBase extends LinearOpMode{
 
         if (Math.abs(seconda - secondb) < 11) {
             while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {//within range?
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                gravity = imu.getGravity();
-                yaw = -angles.firstAngle;
+                robotOrientation = imu.getRobotYawPitchRollAngles();
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); //make this negative?
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
                 telemetry.update();
             }
             while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {//within range?
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                gravity = imu.getGravity();
-                yaw = -angles.firstAngle;
+                robotOrientation = imu.getRobotYawPitchRollAngles();
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); //make this negative?
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
@@ -244,7 +233,6 @@ public class Auto_StraferBase extends LinearOpMode{
         backleft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         backright.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-
 
     /*
     This function uses the encoders to strafe left or right.
@@ -302,15 +290,16 @@ public class Auto_StraferBase extends LinearOpMode{
     the IMU Integrated Gyro.
      */
     public void initGyro(){
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        //parameters.calibrationDataFile = "GyroCal.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        //
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        // Check the orientation of the Rev Hub
+        // more info on ftc-docs.firstinspires.org
+        IMU.Parameters parameters = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                )
+        );
+
+        imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(parameters);
     }
 
@@ -329,6 +318,4 @@ public class Auto_StraferBase extends LinearOpMode{
         frontright.setPower(-input);
         backright.setPower(-input);
     }
-    //
-
 }
