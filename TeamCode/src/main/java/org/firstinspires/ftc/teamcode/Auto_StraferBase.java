@@ -63,14 +63,16 @@ public class Auto_StraferBase extends LinearOpMode{
 
 
     /**
-    Use to make the robot go forward a number of inches
-    @param speed has a range of [0,1]
+     * Use to make the robot go forward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
      */
     public void forward(double inches, double speed){ moveToPosition(inches, speed); }
 
     /**
-    Use to make the robot go backward a number of inches
-    @param speed has a range of [0,1]
+     * Use to make the robot go backward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
      */
     public void back(double inches, double speed){ moveToPosition(-inches, speed); }
 
