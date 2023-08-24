@@ -23,7 +23,7 @@ public class CalibrateAuto extends LinearOpMode{
     double cpi = (cpr * gearRatio) / (Math.PI * diameter); //counts per inch -> counts per rotation / circumference
 
     //
-    double bias = 1.0;//adjust until your robot goes 20 inches
+    double bias = 0.94;//adjust until your robot goes 25 inches
     //
 
 
@@ -35,12 +35,12 @@ public class CalibrateAuto extends LinearOpMode{
         frontright = hardwareMap.dcMotor.get("rf");
         backleft = hardwareMap.dcMotor.get("lb");
         backright = hardwareMap.dcMotor.get("rb");
-        frontright.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
-        backright.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
+        frontleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
+        backleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
         waitForStart();
 
         //
-        moveToPosition(20, .2);//Don't change this line, unless you want to calibrate with different speeds
+        moveToPosition(25, .2);//Don't change this line, unless you want to calibrate with different speeds
         //
     }
     //

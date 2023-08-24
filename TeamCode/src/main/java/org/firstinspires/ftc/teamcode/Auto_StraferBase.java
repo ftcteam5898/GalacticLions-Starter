@@ -29,7 +29,7 @@ public class Auto_StraferBase extends LinearOpMode{
 
     //counts per inch: cpr * gear ratio / (pi * diameter (in inches))
     double cpi = (cpr * gearRatio)/(Math.PI * diameter);
-    double bias = 0.8; // adjust based on calibration opMode
+    double bias = 0.94; // adjust based on calibration opMode
     double strafeBias = 0.9;//change to adjust only strafing movement
     //
     double conversion = cpi * bias;
@@ -45,13 +45,22 @@ public class Auto_StraferBase extends LinearOpMode{
         frontright = hardwareMap.dcMotor.get("rf");
         backleft = hardwareMap.dcMotor.get("lb");
         backright = hardwareMap.dcMotor.get("rb");
-        frontright.setDirection(DcMotorSimple.Direction.REVERSE);
-        backright.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backleft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // wait for Start to be pressed
         waitForStart();
 
         // Call functions here
+
+        forward(5, .5);
+        strafeLeft(10, .4);
+        strafeRight(10, .4);
+        turnLeft(.180, .3);
+        turnRight(.180,.3);
+        back(5,.5);
+
+
 
 
     }
