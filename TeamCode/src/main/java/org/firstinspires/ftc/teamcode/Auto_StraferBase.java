@@ -52,17 +52,6 @@ public class Auto_StraferBase extends LinearOpMode{
         waitForStart();
 
         // Call functions here
-
-        forward(5, .5);
-        strafeLeft(10, .4);
-        strafeRight(10, .4);
-        turnLeft(.180, .3);
-        turnRight(.180,.3);
-        back(5,.5);
-
-
-
-
     }
 
 
