@@ -29,7 +29,10 @@ public class Auto_StraferBase extends LinearOpMode{
 
     //counts per inch: cpr * gear ratio / (pi * diameter (in inches))
     double cpi = (cpr * gearRatio)/(Math.PI * diameter);
+
+    // use calibrate auto to check this number before proceeding
     double bias = 0.94; // adjust based on calibration opMode
+    
     double strafeBias = 0.9;//change to adjust only strafing movement
     //
     double conversion = cpi * bias;
