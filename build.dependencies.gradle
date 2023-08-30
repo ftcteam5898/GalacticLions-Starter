@@ -1,6 +1,14 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+    // rr stuff
+    maven {
+        url = 'https://maven.brott.dev/'
+    }
+    // rr stuff end
+    flatDir {
+        dirs rootProject.file('libs')
+    }
 }
 
 dependencies {
@@ -17,5 +25,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'org.firstinspires.ftc:gameAssets-PowerPlay:1.0.0'
     implementation 'org.firstinspires.ftc:Vision:8.2.0'
+    // rr stuff
+        implementation 'com.acmerobotics.dashboard:dashboard:0.4.5'
 }
 

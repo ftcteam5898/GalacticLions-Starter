@@ -29,14 +29,17 @@ public class StraferTeleOp extends LinearOpMode {
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-        motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+       // motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
+
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
@@ -54,6 +57,7 @@ public class StraferTeleOp extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
+
         }
     }
 }
