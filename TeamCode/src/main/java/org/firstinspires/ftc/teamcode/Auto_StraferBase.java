@@ -43,11 +43,15 @@ public class Auto_StraferBase extends LinearOpMode{
     public void runOpMode(){
 
         initGyro();
+
         // setup motors
+        // make sure names match what is in the config on Driver Hub
         frontleft = hardwareMap.dcMotor.get("lf");
         frontright = hardwareMap.dcMotor.get("rf");
         backleft = hardwareMap.dcMotor.get("lb");
         backright = hardwareMap.dcMotor.get("rb");
+
+        // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -141,7 +145,7 @@ public class Auto_StraferBase extends LinearOpMode{
     }
 
     /*
-    This function uses the Expansion Hub IMU Integrated Gyro to turn a precise number of degrees (+/- 5).
+    This function uses the Hub IMU Integrated Gyro to turn a precise number of degrees (+/- 5).
     Degrees should always be positive, make speedDirection negative to turn left.
      */
     public void turnWithGyro(double degrees, double speedDirection){
