@@ -22,10 +22,10 @@ public class StraferTeleOp extends LinearOpMode {
     public void runOpMode() {
         // Declare our motors
         // Make sure your ID's match your configuration
-        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("lf");
-        DcMotor motorBackLeft = hardwareMap.dcMotor.get("lb");
-        DcMotor motorFrontRight = hardwareMap.dcMotor.get("rf");
-        DcMotor motorBackRight = hardwareMap.dcMotor.get("rb");
+        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("fl");
+        DcMotor motorBackLeft = hardwareMap.dcMotor.get("bl");
+        DcMotor motorFrontRight = hardwareMap.dcMotor.get("fr");
+        DcMotor motorBackRight = hardwareMap.dcMotor.get("br");
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
