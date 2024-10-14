@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team5898;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -31,7 +32,7 @@ public class Auto_StraferBase extends LinearOpMode{
     double cpi = (cpr * gearRatio)/(Math.PI * diameter);
 
     // use calibrate auto to check this number before proceeding
-    double bias = 0.94; // adjust based on calibration opMode
+    double bias = 1.0; // adjust based on calibration opMode
     
     double strafeBias = 0.9;//change to adjust only strafing movement
     //
@@ -46,10 +47,19 @@ public class Auto_StraferBase extends LinearOpMode{
 
         // setup motors
         // make sure names match what is in the config on Driver Hub
-        frontleft = hardwareMap.dcMotor.get("lf");
-        frontright = hardwareMap.dcMotor.get("rf");
-        backleft = hardwareMap.dcMotor.get("lb");
-        backright = hardwareMap.dcMotor.get("rb");
+        frontleft = hardwareMap.dcMotor.get("FL");
+        frontright = hardwareMap.dcMotor.get("FR");
+        backleft = hardwareMap.dcMotor.get("RL");
+        backright = hardwareMap.dcMotor.get("RR");
+        DcMotor motorArmTilt = hardwareMap.dcMotor.get("Arm");
+        DcMotor motorBeltDrive = hardwareMap.dcMotor.get("Belt");
+        Servo servoClaw = hardwareMap.servo.get("Claw");
+        Servo servoWrist = hardwareMap.servo.get("Wrist");
+        double wristPos = 1.0;
+        servoWrist.setPosition(wristPos);
+        sleep(1000);
+        double CLAW_CLOSE = 0.27;
+        servoClaw.setPosition(CLAW_CLOSE);//close
 
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,6 +69,12 @@ public class Auto_StraferBase extends LinearOpMode{
         waitForStart();
 
         // Call functions here
+        forward(15, .5);
+        turnRight(-45, .6);
+        back(11, .5);
+        // Claw drops sample into basket
+        turnLeft(45, .5);
+        strafeLeft(15, .5);
     }
 
 
@@ -302,7 +318,7 @@ public class Auto_StraferBase extends LinearOpMode{
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
                 )
         );
 
