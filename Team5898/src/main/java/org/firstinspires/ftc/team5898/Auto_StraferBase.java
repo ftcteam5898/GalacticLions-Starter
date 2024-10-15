@@ -69,12 +69,20 @@ public class Auto_StraferBase extends LinearOpMode{
         waitForStart();
 
         // Call functions here
-        forward(15, .5);
-        turnRight(-45, .6);
-        back(11, .5);
+        forward(20, .3);
+        turnRight(-40, .6);
+        back(15, .3);
         // Claw drops sample into basket
-        turnLeft(45, .5);
-        strafeLeft(15, .5);
+
+        // Getting new Sample and putting in Basket
+        turnLeft(-40, .3);
+        forward(10, .3);
+        strafeLeft(20, .3);
+        strafeRight(7, .3);
+        back(15, .3);
+        turnRight(-40, .6);
+        sleep(1000);
+
     }
 
 
@@ -317,8 +325,8 @@ public class Auto_StraferBase extends LinearOpMode{
         // more info on ftc-docs.firstinspires.org
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
 
