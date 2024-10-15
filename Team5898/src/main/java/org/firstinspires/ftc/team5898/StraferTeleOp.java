@@ -71,37 +71,37 @@ public class StraferTeleOp extends LinearOpMode {
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
-            if (gamepad1.dpad_up)
+            if (gamepad2.dpad_up)
             {
                 motorBeltDrive.setPower(.5);
             }
-            else if (gamepad1.dpad_down)
+            else if (gamepad2.dpad_down)
             {
                 motorBeltDrive.setPower(-.5);
             }
-            else if (!gamepad1.dpad_up && !gamepad1.dpad_down)
+            else if (!gamepad2.dpad_up && !gamepad1.dpad_down)
             {
                 motorBeltDrive.setPower(0);
             }
 
-            if (gamepad1.left_bumper)
+            if (gamepad2.left_bumper)
             {
                 motorArmTilt.setPower(-.75);
             }
-            else if (gamepad1.right_bumper)
+            else if (gamepad2.right_bumper)
             {
                 motorArmTilt.setPower(.75);
             }
-            else if (!gamepad1.right_bumper && !gamepad1.left_bumper){
+            else if (!gamepad2.right_bumper && !gamepad1.left_bumper){
                 motorArmTilt.setPower(0);
             }
 
-            if (gamepad1.y)
+            if (gamepad2.y)
             {
                 wristPos -= .001;
                 servoWrist.setPosition(wristPos);
             }
-            else if (gamepad1.a)
+            else if (gamepad2.a)
             {
                 wristPos += .001;
                 servoWrist.setPosition(wristPos);
