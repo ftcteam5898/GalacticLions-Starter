@@ -107,11 +107,11 @@ public class StraferTeleOp extends LinearOpMode {
                 servoWrist.setPosition(wristPos);
             }
 
-            if (gamepad1.x)
+            if (gamepad1.left_bumper)
             {
                 servoClaw.setPosition(.4);//open
             }
-            else if (gamepad1.b)
+            else if (gamepad1.right_bumper)
             {
                 servoClaw.setPosition(CLAW_CLOSE);//close
             }
