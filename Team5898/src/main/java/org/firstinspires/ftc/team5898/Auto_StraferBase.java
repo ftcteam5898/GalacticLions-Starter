@@ -14,7 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Autonomous(name="Auto_StraferBase", group="Starter Code")
 public class Auto_StraferBase extends LinearOpMode{
     // variable declaration & setup
-    DcMotor frontleft, frontright, backleft, backright;
+    DcMotor frontleft, frontright, backleft, backright, motorArmTilt, motorBeltDrive;
+    Servo servoClaw, servoWrist;
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -51,10 +52,10 @@ public class Auto_StraferBase extends LinearOpMode{
         frontright = hardwareMap.dcMotor.get("FR");
         backleft = hardwareMap.dcMotor.get("RL");
         backright = hardwareMap.dcMotor.get("RR");
-        DcMotor motorArmTilt = hardwareMap.dcMotor.get("Arm");
-        DcMotor motorBeltDrive = hardwareMap.dcMotor.get("Belt");
-        Servo servoClaw = hardwareMap.servo.get("Claw");
-        Servo servoWrist = hardwareMap.servo.get("Wrist");
+        motorArmTilt = hardwareMap.dcMotor.get("Arm");
+        motorBeltDrive = hardwareMap.dcMotor.get("Belt");
+        servoClaw = hardwareMap.servo.get("Claw");
+        servoWrist = hardwareMap.servo.get("Wrist");
         double wristPos = 1.0;
         servoWrist.setPosition(wristPos);
         sleep(1000);
@@ -348,5 +349,8 @@ public class Auto_StraferBase extends LinearOpMode{
         backleft.setPower(input);
         frontright.setPower(-input);
         backright.setPower(-input);
+    }
+    public void beltDrive(double inches, double speed){
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
