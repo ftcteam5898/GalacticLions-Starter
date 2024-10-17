@@ -56,7 +56,7 @@ public class Auto_StraferBase extends LinearOpMode{
         motorBeltDrive = hardwareMap.dcMotor.get("Belt");
         servoClaw = hardwareMap.servo.get("Claw");
         servoWrist = hardwareMap.servo.get("Wrist");
-        double wristPos = 1.0;
+        double wristPos = .7;
         servoWrist.setPosition(wristPos);
         sleep(1000);
         double CLAW_CLOSE = 0.27;
@@ -65,6 +65,9 @@ public class Auto_StraferBase extends LinearOpMode{
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Int gets pressed
+
+
 
         // wait for Start to be pressed
         waitForStart();
@@ -74,6 +77,7 @@ public class Auto_StraferBase extends LinearOpMode{
         turnRight(-40, .6);
         back(15, .3);
         // Claw drops sample into basket
+
 
         // Getting new Sample and putting in Basket
         turnLeft(-40, .3);
@@ -350,7 +354,16 @@ public class Auto_StraferBase extends LinearOpMode{
         frontright.setPower(-input);
         backright.setPower(-input);
     }
-    public void beltDrive(double inches, double speed){
+    public void belt(double inches, double speed){
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void tilt(double degrees, double speed){
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void claw(double position, double speed){
+        servoClaw.setPosition(Servo.Direction.values().length);
+    }
+    public void wrist(double position, double speed){
+        servoWrist.setPosition(Servo.Direction.values().length);
     }
 }
