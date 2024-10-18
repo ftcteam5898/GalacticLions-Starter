@@ -3,7 +3,7 @@
 # Galactic Lions TeamCode - 2024-2025 IntoTheDeep Season
 **Welcome to the Lakeview Robotics Code Respiratory! This space is primarily built for our dedicated programmers of our teams.**
 
-This repo contains the Android Studio projects with code for our robotics Teams' FTC robots for the IntoTheDeep season. It's based on the [original FTC SDK](https://github.com/FIRST-Tech-Challenge/FtcRobotController).
+This repo contains the Android Studio projects with code for our robotics teams' FTC robots for the IntoTheDeep season. It's based on the [original FTC SDK](https://github.com/FIRST-Tech-Challenge/FtcRobotController).
 
 ## Requirements
 
