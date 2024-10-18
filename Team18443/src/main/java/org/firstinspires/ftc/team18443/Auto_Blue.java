@@ -128,7 +128,7 @@ public class Auto_Blue extends LinearOpMode {
         arm.setPower(-1);
         sleep(time * 1000L);
     }
-    
+
     /**
      Closes the arm
      @param time number of seconds that slide should extend
