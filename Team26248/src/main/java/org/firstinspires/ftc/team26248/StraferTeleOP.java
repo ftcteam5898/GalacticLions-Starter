@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="Strafer Tele Op", group="Starter Code")
+@TeleOp(name="TeleOp V4", group="TeleOp")
 public class StraferTeleOP extends LinearOpMode{
     @Override
     public void runOpMode() {
@@ -36,6 +36,7 @@ public class StraferTeleOP extends LinearOpMode{
         double prevBackLeftPower = 0;
         double prevBackRightPower = 0;
         double smoothingFactor = 0.2; // Adjust for more or less smoothing
+        boolean moveSwitch = false;
 
         //Run the OpMode
         while(opModeIsActive()) {
@@ -78,6 +79,10 @@ public class StraferTeleOP extends LinearOpMode{
                 clawRightMotor.setPosition(Math.max(clawRightPosition - 0.1, 0.0));
             }
 
+            if(gamepad1.left_bumper||gamepad1.right_bumper){
+                moveSwitch = !moveSwitch;
+            }
+
             // SecuritySwitch
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1 || gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
                 motorFrontLeft.setPower(0);
@@ -85,11 +90,18 @@ public class StraferTeleOP extends LinearOpMode{
                 motorBackLeft.setPower(0);
                 motorBackRight.setPower(0);
             } else {
-                motorFrontLeft.setPower(frontLeftPower*0.8);
-                motorFrontRight.setPower(frontRightPower*0.8);
-                motorBackLeft.setPower(backLeftPower*0.8);
-                motorBackRight.setPower(backRightPower*0.8);
-                armMotor.setPower(armPower*0.9);
+                if (moveSwitch) {
+                    motorFrontLeft.setPower(-backRightPower * 0.8);
+                    motorFrontRight.setPower(-backLeftPower * 0.8);
+                    motorBackLeft.setPower(-frontRightPower * 0.8);
+                    motorBackRight.setPower(-frontLeftPower * 0.8);
+                } else {
+                    motorFrontLeft.setPower(frontLeftPower * 0.8);
+                    motorFrontRight.setPower(frontRightPower * 0.8);
+                    motorBackLeft.setPower(backLeftPower * 0.8);
+                    motorBackRight.setPower(backRightPower * 0.8);
+                }
+                armMotor.setPower(armPower * 0.9);
             }
         }
     }

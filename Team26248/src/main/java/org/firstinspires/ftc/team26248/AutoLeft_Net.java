@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoRight_Park", group = "Autonomous")
+@Autonomous(name = "AutoLeft_Net", group = "Autonomous")
 
-public class AutoRight extends LinearOpMode {
+public class AutoLeft_Net extends LinearOpMode {
 
     // 定义PIDController类
 //    class PIDController {
@@ -114,6 +114,19 @@ public class AutoRight extends LinearOpMode {
 //
 //        // wait for Start to be pressed
 //        waitForStart();
+
+        // 逆时针旋转90度
+        turnLeft(90, 0.5);
+
+        // 前进22英寸
+        forward(22, 0.7);
+
+        // 松开舵机的爪子
+        clawLeft.setPosition(0);
+        clawRight.setPosition(1);
+
+        // 后退120英寸
+        back(120, 0.8);
 //
 //        // 提升机械臂到45度
 //        while (opModeIsActive()) {
@@ -152,68 +165,68 @@ public class AutoRight extends LinearOpMode {
     }
 
     /**
-     * Use to make the robot go forward a number of inches
+     * 用于使机器人前进指定英寸。
      *
-     * @param inches distance to travel in inches
-     * @param speed  has a range of [0,1]
+     * @param inches 要前进的距离，单位为英寸
+     * @param speed  速度范围为[0,1]
      */
     public void forward(double inches, double speed) {
         moveToPosition(inches, speed);
     }
 
     /**
-     * Use to make the robot go backward a number of inches
+     * 用于使机器人后退指定英寸。
      *
-     * @param inches distance to travel in inches
-     * @param speed  has a range of [0,1]
+     * @param inches 要后退的距离，单位为英寸
+     * @param speed  速度范围为[0,1]
      */
     public void back(double inches, double speed) {
         moveToPosition(-inches, speed);
     }
 
     /**
-     * Rotate the robot left
+     * 使机器人向左旋转。
      *
-     * @param degrees the amount of degrees to rotate
-     * @param speed   has a range of [0,1]
+     * @param degrees 要旋转的角度
+     * @param speed   速度范围为[0,1]
      */
     public void turnLeft(double degrees, double speed) {
         turnWithGyro(degrees, -speed);
     }
 
     /**
-     * Rotate the robot right
+     * 使机器人向右旋转。
      *
-     * @param degrees the amount of degrees to rotate
-     * @param speed   has a range of [0,1]
+     * @param degrees 要旋转的角度
+     * @param speed   速度范围为[0,1]
      */
     public void turnRight(double degrees, double speed) {
         turnWithGyro(degrees, speed);
     }
 
     /**
-     * Strafe left
+     * 横移到左侧。
      *
-     * @param inches the distance in inches to strafe
-     * @param speed  has a range of [0,1]
+     * @param inches 要横移的距离，单位为英寸
+     * @param speed  速度范围为[0,1]
      */
     public void strafeLeft(double inches, double speed) {
         strafeToPosition(-inches, speed);
     }
 
     /**
-     * Strafe right
+     * 横移到右侧。
      *
-     * @param inches the distance in inches to strafe
-     * @param speed  has a range of [0,1]
+     * @param inches 要横移的距离，单位为英寸
+     * @param speed  速度范围为[0,1]
      */
     public void strafeRight(double inches, double speed) {
         strafeToPosition(inches, speed);
     }
 
     /*
-     * This function's purpose is simply to drive forward or backward.
-     * To drive backward, simply make the inches input negative.
+     * 这个函数的目的是简单地驱动前进或后退。
+     * 要向后驾驶，只需将英寸输入设为负数。
      */
     public void moveToPosition(double inches, double speed) {
         int move = (int) (Math.round(inches * conversion));
@@ -241,18 +254,17 @@ public class AutoRight extends LinearOpMode {
     }
 
     /*
-     * This function uses the Hub IMU Integrated Gyro to turn a precise number of
-     * degrees (+/- 5).
-     * Degrees should always be positive, make speedDirection negative to turn left.
+     * 这个函数使用Hub IMU集成陀螺仪精确旋转一定角度（+/- 5）。
+     * 角度应始终为正，若要左转则使speedDirection为负。
      */
     public void turnWithGyro(double degrees, double speedDirection) {
-        // Create an object to receive the IMU angles
+        // 创建一个对象来接收IMU角度
         YawPitchRollAngles robotOrientation;
         robotOrientation = imu.getRobotYawPitchRollAngles();
 
-        // Initialize
+        // 初始化
 
-        double yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // make this negative?
+        double yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
         telemetry.addData("Speed Direction", speedDirection);
         telemetry.addData("Yaw", yaw);
         telemetry.update();
@@ -260,7 +272,7 @@ public class AutoRight extends LinearOpMode {
         double first;
         double second;
 
-        // turning right
+        // 右转
         if (speedDirection > 0) {
             if (degrees > 10) {
                 first = (degrees - 10) + devertify(yaw);
@@ -270,7 +282,7 @@ public class AutoRight extends LinearOpMode {
             second = degrees + devertify(yaw);
         }
 
-        // turning left
+        // 左转
         else {
             if (degrees > 10) {
                 first = devertify(-(degrees - 10) + devertify(yaw));
@@ -280,24 +292,24 @@ public class AutoRight extends LinearOpMode {
             second = devertify(-degrees + devertify(yaw));
         }
 
-        // Go to position
+        // 到达位置
         double firsta = convertify(first - 5);
         double firstb = convertify(first + 5);
         turnWithEncoder(speedDirection);
 
         if (Math.abs(firsta - firstb) < 11) {
-            while (!(firsta < yaw && yaw < firstb) && opModeIsActive()) {// within range?
+            while (!(firsta < yaw && yaw < firstb) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // make this negative?
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("first before", first);
                 telemetry.addData("first after", convertify(first));
                 telemetry.update();
             }
         } else {
-            while (!((firsta < yaw && yaw < 180) || (-180 < yaw && yaw < firstb)) && opModeIsActive()) {// within range?
+            while (!((firsta < yaw && yaw < 180) || (-180 < yaw && yaw < firstb)) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // make this negative?
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("first before", first);
                 telemetry.addData("first after", convertify(first));
@@ -310,18 +322,17 @@ public class AutoRight extends LinearOpMode {
         turnWithEncoder(speedDirection / 3);
 
         if (Math.abs(seconda - secondb) < 11) {
-            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {// within range?
+            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // make this negative?
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
                 telemetry.update();
             }
-            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {// within
-                // range?
+            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // make this negative?
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
@@ -344,8 +355,8 @@ public class AutoRight extends LinearOpMode {
     }
 
     /*
-     * This function uses the encoders to strafe left or right.
-     * Negative input for inches results in left strafing.
+     * 这个函数使用编码器横移（向左或向右）。
+     * 英寸输入为负数会导致向左横移。
      */
     public void strafeToPosition(double inches, double speed) {
         int move = (int) (Math.round(inches * cpi * strafeBias));
@@ -373,8 +384,7 @@ public class AutoRight extends LinearOpMode {
     }
 
     /*
-     * These functions are used in the turnWithGyro function to ensure inputs
-     * are interpreted properly.
+     * 这些函数用于turnWithGyro函数中，以确保输入被正确解释。
      */
     public double devertify(double degrees) {
         if (degrees < 0) {
@@ -395,12 +405,11 @@ public class AutoRight extends LinearOpMode {
     }
 
     /*
-     * This function is called at the beginning of the program to activate
-     * the IMU Integrated Gyro.
+     * 这个函数在程序开始时调用，用于激活IMU集成陀螺仪。
      */
     public void initGyro() {
-        // Check the orientation of the Rev Hub
-        // more info on ftc-docs.firstinspires.org
+        // 检查Rev Hub的方向
+        // 更多信息见ftc-docs.firstinspires.org
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.UP,
@@ -411,8 +420,7 @@ public class AutoRight extends LinearOpMode {
     }
 
     /*
-     * This function is used in the turnWithGyro function to set the
-     * encoder mode and turn.
+     * 这个函数在turnWithGyro函数中使用，用于设置编码器模式并旋转。
      */
     public void turnWithEncoder(double input) {
         frontleft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
