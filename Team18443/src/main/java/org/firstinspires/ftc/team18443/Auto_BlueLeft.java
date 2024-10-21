@@ -66,7 +66,7 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         //Set starting positions of wrist & claw
         wristDown();
-        sleep(1000);
+        sleep(500);
         closeClaw();
 
         // Call functions here
