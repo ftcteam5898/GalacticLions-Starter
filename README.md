@@ -12,5 +12,5 @@ To use this Android Studio project, you will need Android Studio 2024.2.1 (coden
 To program your robot in Blocks or OnBot Java, you do not need Android Studio.
 
 ## Questions or Need Help?
-Please ask/email one of our coaches or team member.
+Please ask/email one of the coaches or team captain.
 You can also check the [FTC Documentation](https://ftc-docs.firstinspires.org/en/latest/).

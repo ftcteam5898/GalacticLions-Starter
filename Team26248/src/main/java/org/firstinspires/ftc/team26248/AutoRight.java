@@ -148,7 +148,7 @@ public class AutoRight extends LinearOpMode {
 
         // 接下来是您的自动程序，例如移动机器人
         // 例如，调用strafeRight(48, 0.9);
-        strafeRight(48, 0.9);
+        strafeRight(30, 0.9);
     }
 
     /**

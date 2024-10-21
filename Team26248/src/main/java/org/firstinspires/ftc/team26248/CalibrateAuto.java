@@ -12,7 +12,7 @@ This op mode should be used to calibrate the bias value used in the autonomous b
  Robot should travel 20 inches forward. Adjust the bias value (line 26) until the robot is consistent.
  Then copy the bias value to the autonomous base code.
  */
-@Disabled
+
 @Autonomous(name="Calibrate Auto", group="Starter Code")
 public class CalibrateAuto extends LinearOpMode{
     //
