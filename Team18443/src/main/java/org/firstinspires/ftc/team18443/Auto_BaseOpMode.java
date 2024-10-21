@@ -47,17 +47,17 @@ public class Auto_BaseOpMode extends LinearOpMode{
         initGyro();
 
         // setup motors
-        frontLeft = hardwareMap.get(DcMotor.class, "lf");
-        frontRight = hardwareMap.get(DcMotor.class, "rf");
-        backLeft = hardwareMap.get(DcMotor.class, "lb");
-        backRight = hardwareMap.get(DcMotor.class, "rb");
+        frontLeft = hardwareMap.dcMotor.get("lf");
+        frontRight = hardwareMap.dcMotor.get("rf");
+        backLeft = hardwareMap.dcMotor.get("lb");
+        backRight = hardwareMap.dcMotor.get("rb");
 
-        arm = hardwareMap.get(DcMotor.class, "arm");
+        arm = hardwareMap.dcMotor.get("arm");
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // setup servos
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        claw = hardwareMap.get(Servo.class, "claw");
+        wrist = hardwareMap.servo.get("wrist");
+        claw = hardwareMap.servo.get("claw");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
