@@ -65,7 +65,6 @@ public class Auto_StraferBase extends LinearOpMode{
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Int gets pressed
 
 
 
@@ -73,11 +72,15 @@ public class Auto_StraferBase extends LinearOpMode{
         waitForStart();
 
         // Call functions here
+        wrist(.5, .2);
         forward(20, .3);
         turnRight(-40, .6);
         back(15, .3);
         // Claw drops sample into basket
-
+        tilt(20, .2);
+        belt(10, .2);
+        wrist(.7, .2);
+        claw(.5, .2);
 
         // Getting new Sample and putting in Basket
         turnLeft(-40, .3);

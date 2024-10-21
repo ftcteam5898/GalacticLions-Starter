@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  *
  */
 
-@TeleOp(name="Strafer Tele Op", group="Starter Code")
-public class StraferTeleOp extends LinearOpMode {
+@TeleOp(name="Strafer Tele Op - Test Code", group="Starter Code")
+public class StraferTeleOpTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -38,14 +38,18 @@ public class StraferTeleOp extends LinearOpMode {
         double CLAW_CLOSE = 0.27;
         servoClaw.setPosition(CLAW_CLOSE);//close
 
+
+
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
-       // motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        // motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         //motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorBeltDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBeltDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
@@ -71,15 +75,19 @@ public class StraferTeleOp extends LinearOpMode {
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
-            if (gamepad2.dpad_up)
+            int slidePos = motorBeltDrive.getCurrentPosition();
+            telemetry.addData("Current slide position", slidePos);
+            telemetry.update();
+
+            if (gamepad2.dpad_up && slidePos <= -30)
             {
                 motorBeltDrive.setPower(.5);
             }
-            else if (gamepad2.dpad_down)
+            else if (gamepad2.dpad_down && slidePos >= 30)
             {
                 motorBeltDrive.setPower(-.5);
             }
-            else if (!gamepad2.dpad_up && !gamepad1.dpad_down)
+            else
             {
                 motorBeltDrive.setPower(0);
             }
