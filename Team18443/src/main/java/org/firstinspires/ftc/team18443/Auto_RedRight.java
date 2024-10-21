@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="Auto_Red", group="Auto", preselectTeleOp="StraferTeleOp")
-public class Auto_Red extends LinearOpMode {
+@Autonomous(name="Auto_RedRight", group="Auto Red", preselectTeleOp="StraferTeleOp")
+public class Auto_RedRight extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
     Servo wrist, claw;
