@@ -76,6 +76,8 @@ public class StraferTeleOpTest extends LinearOpMode {
             motorBackRight.setPower(backRightPower);
 
             int slidePos = motorBeltDrive.getCurrentPosition();
+            telemetry.addData("Current slide position", slidePos);
+            telemetry.update();
 
             if (gamepad2.dpad_up && slidePos <= -30)
             {
