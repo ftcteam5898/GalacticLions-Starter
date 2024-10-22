@@ -1,7 +1,5 @@
-<p align="center">
-<img src="https://github.com/user-attachments/assets/7d4935f0-3af9-420c-91f4-5da476c73c6f">
-</p>
 
+![image](https://github.com/user-attachments/assets/209a029e-211d-40fe-bc4b-fef26d3470d0)
 ___
 
 ![Android Studio](https://img.shields.io/badge/android%20studio-346ac1?style=for-the-badge&logo=android%20studio&logoColor=white)
