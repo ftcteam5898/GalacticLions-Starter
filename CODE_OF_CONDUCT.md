@@ -2,7 +2,7 @@
 
 ## School Mission and *FIRST*
 
-As students or the Lakeview Academy family, we are to remember the Honor Code at all times when in our teams or on the field. In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone.
+As students of the Lakeview Academy family, we are to remember the Honor Code at all times when in our teams or on the field. In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone.
 
 As part of *FIRST* and the FTC community, Gracious Professionalism is a top priority. The term means a way of doing things that encourages high-quality work, emphasizes the value of others, and respects individuals and the community.
 
