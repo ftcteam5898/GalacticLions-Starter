@@ -1,4 +1,6 @@
-![image](https://github.com/user-attachments/assets/7d4935f0-3af9-420c-91f4-5da476c73c6f)
+<p align="center">
+<img src="https://github.com/user-attachments/assets/7d4935f0-3af9-420c-91f4-5da476c73c6f">
+</p>
 ___
 ![Android Studio](https://img.shields.io/badge/android%20studio-346ac1?style=for-the-badge&logo=android%20studio&logoColor=white)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
