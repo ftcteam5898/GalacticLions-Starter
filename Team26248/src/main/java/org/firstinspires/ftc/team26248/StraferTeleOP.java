@@ -66,17 +66,15 @@ public class StraferTeleOP extends LinearOpMode{
             prevBackLeftPower = backLeftPower;
             prevBackRightPower = backRightPower;
 
-            // Claw Control with Position Limits
-            double clawLeftPosition = clawLeftMotor.getPosition();
-            double clawRightPosition = clawRightMotor.getPosition();
+
 
             if (gamepad2.a) {
-                clawLeftMotor.setPosition(0.3);
-                clawRightMotor.setPosition(0.3);
+                clawLeftMotor.setPosition(1);
+                clawRightMotor.setPosition(1);
             }
             else if (gamepad2.b) {
-                clawLeftMotor.setPosition(0);
-                clawRightMotor.setPosition(0);
+                clawLeftMotor.setPosition(0.625);
+                clawRightMotor.setPosition(0.625);
             }
 
             if(gamepad1.left_bumper||gamepad1.right_bumper){
