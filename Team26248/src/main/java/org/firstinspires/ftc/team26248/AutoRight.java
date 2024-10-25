@@ -58,7 +58,7 @@ public class AutoRight extends LinearOpMode {
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
-    double cpr = 1425.1;
+    double cpr = 537.7;
 
     // adjust gearRatio if you have geared up or down your motors
     double gearRatio = 1;
@@ -72,9 +72,9 @@ public class AutoRight extends LinearOpMode {
     // use calibrate auto to check this number before proceeding
     double bias = 0.94; // adjust based on calibration opMode
 
-    double strafeBias = 0.9; // change to adjust only strafing movement
+    double strafeBias = 1.0; // change to adjust only strafing movement
 
-    double conversion = cpi / bias;
+    double conversion = cpi * bias;
 
     IMU imu;
 
@@ -116,7 +116,7 @@ public class AutoRight extends LinearOpMode {
 //        int targetPosition = (int)((targetAngle / (double)maxAngle) * (countsPerRev * armGearRatio));
 //
 //        // wait for Start to be pressed
-//        waitForStart();
+         waitForStart();
 //
 //        // 提升机械臂到45度
 //        while (opModeIsActive()) {
@@ -151,7 +151,7 @@ public class AutoRight extends LinearOpMode {
 
         // 接下来是您的自动程序，例如移动机器人
         // 例如，调用strafeRight(48, 0.9);
-        strafeRight(30, 0.9);
+        strafeRight(48, 0.8);
     }
 
     /**
