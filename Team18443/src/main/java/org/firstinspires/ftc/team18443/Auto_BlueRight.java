@@ -70,7 +70,7 @@ public class Auto_BlueRight extends LinearOpMode {
         closeClaw();
 
         // Call functions here
-
+        
     }
 
 
