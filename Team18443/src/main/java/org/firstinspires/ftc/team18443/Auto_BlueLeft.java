@@ -70,7 +70,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         closeClaw();
 
         // Call functions here
-
+        strafeRight(75,1);
     }
 
 
