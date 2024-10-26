@@ -48,8 +48,11 @@ public class StraferTeleOpTest extends LinearOpMode {
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorBeltDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorArmTilt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBeltDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorArmTilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
@@ -76,10 +79,12 @@ public class StraferTeleOpTest extends LinearOpMode {
             motorBackRight.setPower(backRightPower);
 
             int slidePos = motorBeltDrive.getCurrentPosition();
+            int tiltPos = motorArmTilt.getCurrentPosition();
             telemetry.addData("Current slide position", slidePos);
+            telemetry.addData("Current arm position", tiltPos);
             telemetry.update();
 
-            if (gamepad2.dpad_up && slidePos <= -30)
+            if (gamepad2.dpad_up && slidePos <= 2300)
             {
                 motorBeltDrive.setPower(.5);
             }
