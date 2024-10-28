@@ -71,6 +71,18 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Call functions here
 
+        // Strafe right; get blue sample to Net Zone
+        strafeRight(65,1);
+        openClaw();
+        forward(5,.5);
+        closeClaw();
+        back(5,1);
+        turnLeft(25,1);
+        forward(75, 1);
+        openClaw();
+
+        // Reverse and park
+        back(75,1);
     }
 
 
