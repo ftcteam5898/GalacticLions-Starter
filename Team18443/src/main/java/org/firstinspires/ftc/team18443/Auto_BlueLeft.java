@@ -77,7 +77,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         forward(5,.5);
         closeClaw();
         back(5,1);
-        turnLeft(90,1);
+        turnLeft(25,1);
         forward(75, 1);
         openClaw();
 
