@@ -84,7 +84,7 @@ public class Auto_StraferBase extends LinearOpMode{
         servoClaw.setPosition(CLAW_OPEN);
 
         // Getting new Sample and putting in Basket
-        tilt(-3300, .4);
+        tilt(-3100, .4);
         belt(-900, .4);
         wrist(.3, .25);
         turnLeft(-40, .3);
