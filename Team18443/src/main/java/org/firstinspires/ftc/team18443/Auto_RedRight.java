@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Auto_RedRight extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo wrist, claw;
+    Servo claw;
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -56,7 +56,6 @@ public class Auto_RedRight extends LinearOpMode {
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // setup servos
-        wrist = hardwareMap.servo.get("wrist");
         claw = hardwareMap.servo.get("claw");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -64,9 +63,7 @@ public class Auto_RedRight extends LinearOpMode {
         // wait for Start to be pressed
         waitForStart();
 
-        //Set starting positions of wrist & claw
-        wristDown();
-        sleep(1000);
+        //Set starting positions of claw
         closeClaw();
 
         // Call functions here
@@ -136,20 +133,6 @@ public class Auto_RedRight extends LinearOpMode {
     public void lowerArm(int time){
         arm.setPower(1);
         sleep(time * 1000L);
-    }
-
-    /**
-     Raise the attached wrist
-     */
-    public void wristUp() {
-        wrist.setPosition(1);
-    }
-
-    /**
-     Lower the attached wrist
-     */
-    public void wristDown() {
-        wrist.setPosition(0.5);
     }
 
     /**

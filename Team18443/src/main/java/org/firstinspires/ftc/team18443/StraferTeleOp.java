@@ -25,7 +25,6 @@ public class StraferTeleOp extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and Initialize Servos
-        Servo wrist = hardwareMap.get(Servo.class, "wrist");
         Servo claw = hardwareMap.get(Servo.class, "claw");
 
         // Reverse one side of the motors
@@ -79,13 +78,6 @@ public class StraferTeleOp extends LinearOpMode {
             }
             else if (gamepad2.b) {
                 claw.setPosition(0); // close
-            }
-
-            if (gamepad2.y) {
-                wrist.setPosition(1); // raise
-            }
-            else if (gamepad2.a) {
-                wrist.setPosition(0.5); // lower
             }
 
         }
