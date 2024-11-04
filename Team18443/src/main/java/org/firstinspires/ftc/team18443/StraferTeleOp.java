@@ -39,6 +39,10 @@ public class StraferTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            int armPos = arm.getCurrentPosition();
+            telemetry.addData("Arm", armPos);
+            telemetry.update();
+
             //---------- Driver 1 ----------//
 
             // Driving controls
@@ -63,7 +67,7 @@ public class StraferTeleOp extends LinearOpMode {
 
             //---------- Driver 2 ----------//
 
-            if (gamepad2.dpad_up) { // Arm Up
+            if (gamepad2.dpad_up && armPos > -2700) { // Arm Up
                 arm.setPower(-1);
             }
             else if (gamepad2.dpad_down) { // Arm Down
@@ -79,8 +83,6 @@ public class StraferTeleOp extends LinearOpMode {
             else if (gamepad2.b) {
                 claw.setPosition(0.65); // close
             }
-            telemetry.addData("Arm", "Position (%.2f)", arm.getCurrentPosition());
-            telemetry.update();
         }
     }
 }
