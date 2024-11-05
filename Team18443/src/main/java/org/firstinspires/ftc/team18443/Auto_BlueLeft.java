@@ -68,19 +68,18 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Call functions here
 
-        // Begin with Blue sample; strafe and move forward
-        strafeLeft(5,1);
-        forward(5,1);
+        // Begin with Blue sample; move forward
+        forward(10,1);
 
-        // Raise arm and move forward more
+        // Raise arm and attach sample
         extendArm(5);
-        forward(20,.5);
-
-        // Attach sample and park
+        sleep(300);
         lowerArm(3);
         openClaw();
+
+        // Reverse and park
         back(10,1);
-        strafeLeft(75,1);
+        strafeLeft(10,1);
     }
 
 
