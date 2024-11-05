@@ -81,8 +81,7 @@ public class StraferTeleOp extends LinearOpMode {
             else if (gamepad2.b) {
                 claw.setPosition(0.65); // close
             }
-            telemetry.addData("Arm", armPosition);
-            telemetry.update();
+
         }
     }
 }

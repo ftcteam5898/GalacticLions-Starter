@@ -68,18 +68,19 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Call functions here
 
-        // Strafe right; get blue sample to Net Zone
-        strafeRight(65,1);
-        openClaw();
-        forward(5,.5);
-        closeClaw();
-        back(5,1);
-        turnLeft(25,1);
-        forward(75, 1);
-        openClaw();
+        // Begin with Blue sample; strafe and move forward
+        strafeLeft(5,1);
+        forward(5,1);
 
-        // Reverse and park
-        back(75,1);
+        // Raise arm and move forward more
+        extendArm(5);
+        forward(20,.5);
+
+        // Attach sample and park
+        lowerArm(3);
+        openClaw();
+        back(10,1);
+        strafeLeft(75,1);
     }
 
 
@@ -131,34 +132,46 @@ public class Auto_BlueLeft extends LinearOpMode {
 
     /**
      Extends the arm
-     @param time number of seconds that slide should extend
+     @param height extend the arm
      */
-    public void extendArm(int time){
-        arm.setPower(-1);
-        sleep(time * 1000L);
+    public void extendArm(double height){
+        int y = (int)(Math.round(height*conversion));
+        arm.setTargetPosition(arm.getCurrentPosition() + y);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
     }
 
     /**
      Closes the arm
-     @param time number of seconds that slide should extend
+     @param height lower the arm
      */
-    public void lowerArm(int time){
-        arm.setPower(1);
-        sleep(time * 1000L);
+    public void lowerArm(double height){
+        int y = (int)(Math.round(height*conversion));
+        arm.setTargetPosition(arm.getCurrentPosition() + y);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
     }
 
     /**
      Opens the claw on the arm of the robot
      */
     public void openClaw() {
-        claw.setPosition(0.2);
+        claw.setPosition(0.5);
     }
 
     /**
      Closes the claw on the arm of the robot
      */
     public void closeClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.65);
     }
 
    /**
