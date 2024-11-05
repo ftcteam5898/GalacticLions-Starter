@@ -72,14 +72,14 @@ public class Auto_BlueLeft extends LinearOpMode {
         forward(10,1);
 
         // Raise arm and attach sample
-        extendArm(5);
+        extendArm(10);
         sleep(300);
-        lowerArm(3);
+        lowerArm(-5);
         openClaw();
 
         // Reverse and park
         back(10,1);
-        strafeLeft(10,1);
+        strafeRight(10,1);
     }
 
 
@@ -137,6 +137,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         int y = (int)(Math.round(height*conversion));
         arm.setTargetPosition(arm.getCurrentPosition() + y);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
         while (arm.isBusy()){
             telemetry.addData("Busy...", "");
             telemetry.update();
@@ -152,6 +153,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         int y = (int)(Math.round(height*conversion));
         arm.setTargetPosition(arm.getCurrentPosition() + y);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(-1);
         while (arm.isBusy()){
             telemetry.addData("Busy...", "");
             telemetry.update();
