@@ -69,12 +69,12 @@ public class Auto_BlueLeft extends LinearOpMode {
         // Call functions here
 
         // Begin with Blue sample; move forward
-        forward(10,1);
+        forward(35,1);
 
         // Raise arm and attach sample
-        extendArm(10);
+        extendArm(2000);
         sleep(300);
-        lowerArm(-5);
+        lowerArm(-500);
         openClaw();
 
         // Reverse and park
@@ -134,7 +134,6 @@ public class Auto_BlueLeft extends LinearOpMode {
      @param ticks the number of ticks the motor needs to move
      */
     public void extendArm(int ticks){
-
         arm.setTargetPosition(arm.getCurrentPosition() + ticks);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
@@ -147,13 +146,12 @@ public class Auto_BlueLeft extends LinearOpMode {
 
     /**
      Closes the arm
-     @param height lower the arm
+     @param ticks the number of ticks the motor needs to move
      */
-    public void lowerArm(double height){
-        int y = (int)(Math.round(height*conversion));
-        arm.setTargetPosition(arm.getCurrentPosition() + y);
+    public void lowerArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(-1);
+        arm.setPower(1);
         while (arm.isBusy()){
             telemetry.addData("Busy...", "");
             telemetry.update();
