@@ -131,11 +131,11 @@ public class Auto_BlueLeft extends LinearOpMode {
 
     /**
      Extends the arm
-     @param height extend the arm
+     @param ticks the number of ticks the motor needs to move
      */
-    public void extendArm(double height){
-        int y = (int)(Math.round(height*conversion));
-        arm.setTargetPosition(arm.getCurrentPosition() + y);
+    public void extendArm(int ticks){
+
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
         while (arm.isBusy()){
