@@ -60,20 +60,20 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        // wait for Start to be pressed
-        waitForStart();
 
         //Set starting positions of claw
         closeClaw();
+        sleep(500);
+
+        // wait for Start to be pressed
+        waitForStart();
 
         // Call functions here
 
         // Begin with Blue sample; move forward
-        forward(35,1);
-
-        // Raise arm and attach sample
         extendArm(2000);
-        sleep(300);
+        forward(35,1);
+        sleep(1000);
         lowerArm(-500);
         openClaw();
 
