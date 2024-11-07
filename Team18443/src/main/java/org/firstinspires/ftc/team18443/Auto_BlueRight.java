@@ -64,7 +64,7 @@ public class Auto_BlueRight extends LinearOpMode {
         //Set starting positions of claw
         closeClaw();
         sleep(500);
-        
+
         // wait for Start to be pressed
         waitForStart();
 

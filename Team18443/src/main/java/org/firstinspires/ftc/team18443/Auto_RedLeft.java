@@ -60,11 +60,13 @@ public class Auto_RedLeft extends LinearOpMode {
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        // wait for Start to be pressed
-        waitForStart();
 
         //Set starting positions of claw
         closeClaw();
+        sleep(500);
+
+        // wait for Start to be pressed
+        waitForStart();
 
         // Call functions here
 
@@ -119,34 +121,45 @@ public class Auto_RedLeft extends LinearOpMode {
 
     /**
      Extends the arm
-     @param time number of seconds that slide should extend
+     @param ticks the number of ticks the motor needs to move
      */
-    public void extendArm(int time){
-        arm.setPower(-1);
-        sleep(time * 1000L);
+    public void extendArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
     }
 
     /**
      Closes the arm
-     @param time number of seconds that slide should extend
+     @param ticks the number of ticks the motor needs to move
      */
-    public void lowerArm(int time){
+    public void lowerArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
-        sleep(time * 1000L);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
     }
 
     /**
      Opens the claw on the arm of the robot
      */
     public void openClaw() {
-        claw.setPosition(0.2);
+        claw.setPosition(0.5);
     }
-
     /**
      Closes the claw on the arm of the robot
      */
     public void closeClaw() {
-        claw.setPosition(0);
+        claw.setPosition(0.65);
     }
 
    /**
