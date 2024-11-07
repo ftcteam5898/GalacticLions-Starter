@@ -70,8 +70,8 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Call functions here
 
-        // Begin with Blue sample
-        // Extend arm and move forward; attach sample
+        // Begin with Blue specimen
+        // Extend arm and move forward; attach specimen
         forward(25,.5);
         sleep(500);
         extendArm(-2700);
@@ -80,7 +80,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         lowerArm(500);
         openClaw();
 
-        // Reverse, grab Blue specimen, and park
+        // Reverse, grab Blue sample, and park
         back(10,1);
         strafeRight(10,1);
     }
