@@ -46,6 +46,9 @@ public class StraferTeleOp extends LinearOpMode {
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorBeltDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorArmTilt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorArmTilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
@@ -71,28 +74,57 @@ public class StraferTeleOp extends LinearOpMode {
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
 
-            if (gamepad2.dpad_up)
+            int slidePos = motorBeltDrive.getCurrentPosition();
+            int tiltPos = motorArmTilt.getCurrentPosition();
+            telemetry.addData("Current slide position", slidePos);
+            telemetry.addData("Current tilt position", tiltPos);
+            telemetry.update();
+
+            if (gamepad2.dpad_up && slidePos <= 2300)
             {
                 motorBeltDrive.setPower(.5);
             }
-            else if (gamepad2.dpad_down)
+            else if (gamepad2.dpad_down && slidePos >= 30)
             {
                 motorBeltDrive.setPower(-.5);
             }
-            else if (!gamepad2.dpad_up && !gamepad1.dpad_down)
+            else
             {
                 motorBeltDrive.setPower(0);
             }
 
+            if (gamepad2.dpad_left)
+            {
+                motorArmTilt.setPower(-.4);
+            }
+            else if (gamepad2.dpad_right)
+            {
+                motorArmTilt.setPower(.4);
+            }
+            else if (!gamepad2.dpad_left && !gamepad2.dpad_right){
+                motorArmTilt.setPower(0);
+            }
+
             if (gamepad2.left_bumper)
             {
-                motorArmTilt.setPower(-.75);
+                motorArmTilt.setTargetPosition(540);
+                motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorArmTilt.setPower(.5);
+                while (motorArmTilt.isBusy()){
+                    telemetry.addData("Busy...", "");
+                    telemetry.update();
+                }
+                motorArmTilt.setPower(0);
             }
             else if (gamepad2.right_bumper)
             {
-                motorArmTilt.setPower(.75);
-            }
-            else if (!gamepad2.right_bumper && !gamepad1.left_bumper){
+                motorArmTilt.setTargetPosition(100);
+                motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorArmTilt.setPower(.5);
+                while (motorArmTilt.isBusy()){
+                    telemetry.addData("Busy...", "");
+                    telemetry.update();
+                }
                 motorArmTilt.setPower(0);
             }
 
