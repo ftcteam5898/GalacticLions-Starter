@@ -1,0 +1,45 @@
+package org.firstinspires.ftc.team26248;
+
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+@TeleOp(name="ArmTester", group="Test")
+public class ArmTester extends LinearOpMode {
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        boolean direction = true;
+        DcMotor armMotor = hardwareMap.dcMotor.get("arm");
+        armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        waitForStart();
+
+        while(opModeIsActive()) {
+            if(direction) {
+                armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
+            else {
+                armMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+            }
+            if(gamepad1.a) {
+                direction = !direction;
+            }
+            if(gamepad1.dpad_up) {
+                armMotor.setPower(0.5);
+                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+                telemetry.update();
+            }
+            else if(gamepad1.dpad_down) {
+                armMotor.setPower(-0.5);
+                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+                telemetry.update();
+            }
+            else {
+                armMotor.setPower(0);
+                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+                telemetry.update();
+            }
+        }
+    }
+}
