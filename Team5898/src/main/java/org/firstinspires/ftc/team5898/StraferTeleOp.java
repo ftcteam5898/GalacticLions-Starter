@@ -109,23 +109,13 @@ public class StraferTeleOp extends LinearOpMode {
             {
                 motorArmTilt.setTargetPosition(540);
                 motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorArmTilt.setPower(.5);
-                while (motorArmTilt.isBusy()){
-                    telemetry.addData("Busy...", "");
-                    telemetry.update();
-                }
-                motorArmTilt.setPower(0);
+                motorArmTilt.setPower(1);
             }
             else if (gamepad2.right_bumper)
             {
                 motorArmTilt.setTargetPosition(100);
                 motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorArmTilt.setPower(.5);
-                while (motorArmTilt.isBusy()){
-                    telemetry.addData("Busy...", "");
-                    telemetry.update();
-                }
-                motorArmTilt.setPower(0);
+                motorArmTilt.setPower(1);
             }
 
             if (gamepad2.y)
