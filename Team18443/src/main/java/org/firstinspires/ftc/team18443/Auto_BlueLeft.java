@@ -76,13 +76,15 @@ public class Auto_BlueLeft extends LinearOpMode {
         sleep(500);
         extendArm(-2700);
         forward(7,.5);
-        sleep(1000);
-        lowerArm(500);
+        sleep(500);
+        lowerArm(2000);
         openClaw();
 
-        // Reverse, grab Blue sample, and park
-        back(25,1);
-        strafeRight(10,1);
+        // Reverse and park
+        back(26,1);
+        strafeRight(95,1);
+        lowerArm(700);
+
     }
 
 
