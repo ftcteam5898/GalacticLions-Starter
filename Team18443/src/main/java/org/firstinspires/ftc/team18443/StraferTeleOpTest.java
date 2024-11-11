@@ -20,7 +20,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * The Right stick rotates the robot left and right.
  *
  */
-@Disabled
 @TeleOp(name="Strafer Tele Op - Test Code", group="Starter Code")
 public class StraferTeleOpTest extends OpMode {
 
@@ -34,7 +33,7 @@ public class StraferTeleOpTest extends OpMode {
 
     final int ARM_LOW = 0;
     final int ARM_HIGH_CHAMBER = 2700;
-    final int ARM_RELEASE = 2500;
+    final int ARM_RELEASE = 2200;
     final int ARM_LOW_BASKET = 3000;
 
 
@@ -103,6 +102,7 @@ public class StraferTeleOpTest extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+
         arm.setTargetPosition(ARM_LOW);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
