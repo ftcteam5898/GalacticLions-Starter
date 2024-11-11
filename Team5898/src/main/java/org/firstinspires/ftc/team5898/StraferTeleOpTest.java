@@ -32,8 +32,8 @@ public class StraferTeleOpTest extends OpMode {
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
-    final int TILT_HIGH = 540;
-    final int TILT_LOW = 100;
+    final int TILT_HIGH = 570;
+    final int TILT_LOW = 125;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
@@ -242,7 +242,7 @@ public class StraferTeleOpTest extends OpMode {
                 motorBeltSlide.setPower(0);
             }
             // manual tilt control
-            if (gamepad2.dpad_left && tiltPos <= 550)
+            if (gamepad2.dpad_left && tiltPos <= 580)
             {
                 motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+10);
             }
