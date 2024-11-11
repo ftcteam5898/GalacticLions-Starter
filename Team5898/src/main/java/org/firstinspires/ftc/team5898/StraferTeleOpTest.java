@@ -32,8 +32,8 @@ public class StraferTeleOpTest extends OpMode {
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
-    final int TILT_HIGH = 570;
-    final int TILT_LOW = 125;
+    final int TILT_HIGH = 560;
+    final int TILT_LOW = 100;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
@@ -275,6 +275,15 @@ public class StraferTeleOpTest extends OpMode {
         else if (gamepad2.a && wristPos < .99)
         {
             wristPos += .01;
+        }
+
+        if (gamepad1.left_bumper)
+        {
+            servoClaw.setPosition(CLAW_OPEN);//open
+        }
+        else if (gamepad1.right_bumper)
+        {
+            servoClaw.setPosition(CLAW_CLOSE);//close
         }
 
 

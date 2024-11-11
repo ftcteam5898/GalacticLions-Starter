@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="TeleOp V4", group="TeleOp")
+@TeleOp(name="TeleOp V5", group="TeleOp")
 public class StraferTeleOP extends LinearOpMode{
     @Override
     public void runOpMode() {
@@ -18,6 +18,7 @@ public class StraferTeleOP extends LinearOpMode{
         DcMotor armMotor = hardwareMap.dcMotor.get("arm");
         Servo clawLeftMotor = hardwareMap.servo.get("vl");
         Servo clawRightMotor = hardwareMap.servo.get("vr");
+        DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
 
         //Set the Direction of the Motors
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -26,6 +27,7 @@ public class StraferTeleOP extends LinearOpMode{
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         clawRightMotor.setDirection(Servo.Direction.REVERSE);
         clawLeftMotor.setDirection(Servo.Direction.FORWARD);
+//        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         waitForStart();
 
         if(isStopRequested()) return;
@@ -47,6 +49,7 @@ public class StraferTeleOP extends LinearOpMode{
 
             //Arm Control
             double armPower = gamepad2.right_stick_y;
+            double slidePower = gamepad2.left_stick_y;
 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double targetFrontLeftPower = (y + x + rx) / denominator * 0.925;
@@ -69,15 +72,17 @@ public class StraferTeleOP extends LinearOpMode{
 
 
             if (gamepad2.a) {
+                //open
                 clawLeftMotor.setPosition(1);
-                clawRightMotor.setPosition(1);
+                clawRightMotor.setPosition(0);
             }
             else if (gamepad2.b) {
                 clawLeftMotor.setPosition(0.625);
                 clawRightMotor.setPosition(0.625);
             }
 
-            if(gamepad1.left_bumper||gamepad1.right_bumper){
+
+            if(gamepad1.a){
                 moveSwitch = !moveSwitch;
             }
 
@@ -87,19 +92,22 @@ public class StraferTeleOP extends LinearOpMode{
                 motorFrontRight.setPower(0);
                 motorBackLeft.setPower(0);
                 motorBackRight.setPower(0);
+                slideMotor.setPower(0);
             } else {
                 if (moveSwitch) {
-                    motorFrontLeft.setPower(-backRightPower * 0.8);
-                    motorFrontRight.setPower(-backLeftPower * 0.8);
-                    motorBackLeft.setPower(-frontRightPower * 0.8);
-                    motorBackRight.setPower(-frontLeftPower * 0.8);
+                    motorFrontLeft.setPower(-backRightPower * 0.85);
+                    motorFrontRight.setPower(-backLeftPower * 0.85);
+                    motorBackLeft.setPower(-frontRightPower * 0.85);
+                    motorBackRight.setPower(-frontLeftPower * 0.85);
+
                 } else {
-                    motorFrontLeft.setPower(frontLeftPower * 0.8);
-                    motorFrontRight.setPower(frontRightPower * 0.8);
-                    motorBackLeft.setPower(backLeftPower * 0.8);
-                    motorBackRight.setPower(backRightPower * 0.8);
+                    motorFrontLeft.setPower(frontLeftPower * 0.85);
+                    motorFrontRight.setPower(frontRightPower * 0.85);
+                    motorBackLeft.setPower(backLeftPower * 0.85);
+                    motorBackRight.setPower(backRightPower * 0.85);
                 }
                 armMotor.setPower(armPower * 0.9);
+                slideMotor.setPower(slidePower * 0.9);
             }
         }
     }
