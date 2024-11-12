@@ -84,10 +84,11 @@ public class Auto_BlueLeft extends LinearOpMode {
         back(26,1);
         strafeRight(95,1);
         lowerArm(650);
-        
+
         // Grab Blue sample and park
         strafeRight(5,1);
         forward(20,.5);
+        closeClaw();
         back(26,.5);
 
         sleep(1000);
