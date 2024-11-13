@@ -128,6 +128,9 @@ public class StraferTeleOpTest extends OpMode {
                     runtime.reset();
                     liftState = LiftState.LIFT_EXTEND;
                 }
+                if (gamepad2.x) {
+                    arm.setTargetPosition(ARM_LOW);
+                }
                 break;
             case LIFT_EXTEND:
                 // check if the claw has finished closing,
@@ -208,6 +211,29 @@ public class StraferTeleOpTest extends OpMode {
         }
         else if (gamepad2.right_bumper) {
             claw.setPosition(CLAW_OPEN);
+        }
+
+        telemetry.addData("Arm Position: ", arm.getCurrentPosition());
+        telemetry.addData("Target Position: ", arm.getTargetPosition());
+        telemetry.addData("Mode: ", arm.getMode());
+        if (gamepad2.dpad_up && arm.getCurrentPosition() < 2600)
+        {
+            telemetry.addLine("Going up");
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setPower(1);
+            arm.setTargetPosition(arm.getCurrentPosition());
+        }
+        else if (gamepad2.dpad_down && arm.getCurrentPosition() > 0)
+        {
+            telemetry.addLine("Going down");
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setPower(-1);
+            //arm.setTargetPosition(arm.getCurrentPosition()-20);
+        }
+        else if (!gamepad2.dpad_up && !gamepad2.dpad_down)
+        {
+
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
 
 
