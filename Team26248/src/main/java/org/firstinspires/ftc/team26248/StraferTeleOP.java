@@ -28,11 +28,16 @@ public class StraferTeleOP extends LinearOpMode{
         clawRightMotor.setDirection(Servo.Direction.REVERSE);
         clawLeftMotor.setDirection(Servo.Direction.FORWARD);
 //        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         waitForStart();
 
         if(isStopRequested()) return;
 
         // Variables for smooth movement
+
         double prevFrontLeftPower = 0;
         double prevFrontRightPower = 0;
         double prevBackLeftPower = 0;
@@ -73,12 +78,12 @@ public class StraferTeleOP extends LinearOpMode{
 
             if (gamepad2.a) {
                 //open
-                clawLeftMotor.setPosition(1);
-                clawRightMotor.setPosition(0);
+                clawLeftMotor.setPosition(0.5);
+                clawRightMotor.setPosition(0.5);
             }
             else if (gamepad2.b) {
-                clawLeftMotor.setPosition(0.625);
-                clawRightMotor.setPosition(0.625);
+                clawLeftMotor.setPosition(.25);
+                clawRightMotor.setPosition(.75);
             }
 
 
@@ -86,7 +91,7 @@ public class StraferTeleOP extends LinearOpMode{
                 moveSwitch = !moveSwitch;
             }
 
-            // SecuritySwitch
+            // SafetySwitch
             if (gamepad2.left_trigger > 0.1 || gamepad2.right_trigger > 0.1 || gamepad1.left_trigger > 0.1 || gamepad1.right_trigger > 0.1) {
                 motorFrontLeft.setPower(0);
                 motorFrontRight.setPower(0);
@@ -107,7 +112,23 @@ public class StraferTeleOP extends LinearOpMode{
                     motorBackRight.setPower(backRightPower * 0.85);
                 }
                 armMotor.setPower(armPower * 0.9);
-                slideMotor.setPower(slidePower * 0.9);
+                if(armMotor.getCurrentPosition()>=2600){
+                    if(slideMotor.getCurrentPosition()>=1700){
+                        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        slideMotor.setPower(0);
+                    } else if (slideMotor.getCurrentPosition()<1700) {
+                        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        slideMotor.setPower(slidePower * 0.9);
+
+                    }
+                }
+                else if(armMotor.getCurrentPosition()<2600||armMotor.getCurrentPosition()>1300){
+                    slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    slideMotor.setPower(slidePower * 0.9);
+                }
+                if(armPower==0){
+                    armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                }
             }
         }
     }

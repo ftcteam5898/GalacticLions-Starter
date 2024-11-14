@@ -16,6 +16,8 @@ public class ArmTester extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
+
+
             if(direction) {
                 armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
             }
@@ -27,19 +29,18 @@ public class ArmTester extends LinearOpMode {
             }
             if(gamepad1.dpad_up) {
                 armMotor.setPower(0.5);
-                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
-                telemetry.update();
+
             }
             else if(gamepad1.dpad_down) {
                 armMotor.setPower(-0.5);
-                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
-                telemetry.update();
+
             }
             else {
                 armMotor.setPower(0);
-                telemetry.addData("Arm Position", armMotor.getCurrentPosition());
-                telemetry.update();
+
             }
+            telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+            telemetry.update();
         }
     }
 }
