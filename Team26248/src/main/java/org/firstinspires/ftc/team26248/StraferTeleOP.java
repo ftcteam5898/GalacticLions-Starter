@@ -15,10 +15,11 @@ public class StraferTeleOP extends LinearOpMode{
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("fr");
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("bl");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("br");
+
         DcMotor armMotor = hardwareMap.dcMotor.get("arm");
+        DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
         Servo clawLeftMotor = hardwareMap.servo.get("vl");
         Servo clawRightMotor = hardwareMap.servo.get("vr");
-        DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
 
         //Set the Direction of the Motors
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -78,12 +79,12 @@ public class StraferTeleOP extends LinearOpMode{
 
             if (gamepad2.a) {
                 //open
-                clawLeftMotor.setPosition(0.5);
+                clawLeftMotor.setPosition(0.25);
                 clawRightMotor.setPosition(0.5);
             }
             else if (gamepad2.b) {
-                clawLeftMotor.setPosition(.25);
-                clawRightMotor.setPosition(.75);
+                clawLeftMotor.setPosition(0.5);
+                clawRightMotor.setPosition(0.75);
             }
 
 
