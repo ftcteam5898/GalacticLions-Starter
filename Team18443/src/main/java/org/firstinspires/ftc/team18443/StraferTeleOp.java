@@ -68,7 +68,17 @@ public class StraferTeleOp extends LinearOpMode {
             if (gamepad2.dpad_up && armPosition >= -2700) { // Arm Up
                 arm.setPower(-1);
             }
-            else if (gamepad2.dpad_down) { // Arm Down
+            else if (gamepad2.left_bumper) { // Arm Up - Sticky
+                arm.setTargetPosition(-2700);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setPower(1);
+            }
+            else if (gamepad2.dpad_down && armPosition <= 0) { // Arm Down
+                arm.setPower(1);
+            }
+            else if (gamepad2.right_bumper) { // Arm Down - Sticky
+                arm.setTargetPosition(0);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 arm.setPower(1);
             }
             else {
