@@ -26,11 +26,15 @@ public class StraferTeleOp extends LinearOpMode {
 
         // Define and Initialize Servos
         Servo claw = hardwareMap.get(Servo.class, "claw");
+        Servo stupid = hardwareMap.get(Servo.class, "stupid");
 
         // Reverse one side of the motors
         // If it goes in reverse, reverse the other side
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        stupid.setPosition(1);
+        boolean stupid_bool = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -90,6 +94,16 @@ public class StraferTeleOp extends LinearOpMode {
             }
             else if (gamepad2.b) {
                 claw.setPosition(0.65); // close
+            }
+            else if (gamepad2.a){
+                if (!stupid_bool){
+                    stupid.setPosition(.87); // move the stupid servo to "ascend"
+                    stupid_bool = true;
+                }
+                else if (stupid_bool){
+                    stupid.setPosition(1);
+                    stupid_bool = false;
+                }
             }
 
         }
