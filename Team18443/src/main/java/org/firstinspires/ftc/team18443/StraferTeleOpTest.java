@@ -103,8 +103,8 @@ public class StraferTeleOpTest extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-
-        arm.setTargetPosition(ARM_LOW);
+        imu.resetYaw();
+        arm.setTargetPosition(ARM_LOW); 
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         stupid.setPosition(1);
