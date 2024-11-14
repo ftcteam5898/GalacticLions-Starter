@@ -3,13 +3,16 @@ package org.firstinspires.ftc.team18443;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
+
+
 
 
 /**
@@ -20,8 +23,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * The Right stick rotates the robot left and right.
  *
  */
-@TeleOp(name="Strafer Tele Op - Test Code", group="Starter Code")
-public class StraferTeleOpTest extends OpMode {
+@TeleOp(name="TeleOp Test Code SOLO", group="Starter Code")
+public class StraferTeleOpSoloTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -70,7 +73,7 @@ public class StraferTeleOpTest extends OpMode {
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         claw = hardwareMap.get(Servo.class, "claw");
-        stupid = hardwareMap.get(Servo.class, "stupid");
+        stupid  = hardwareMap.get(Servo.class, "stupid");
 
         // Reverse the left side motors
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -126,12 +129,12 @@ public class StraferTeleOpTest extends OpMode {
                 // wait for input
                 // b grab and go up
                 // x drop and go down
-                if (gamepad2.b) {
+                if (gamepad1.b) {
                     claw.setPosition(CLAW_CLOSE);
                     runtime.reset();
                     liftState = LiftState.LIFT_EXTEND;
                 }
-                if (gamepad2.x) {
+                if (gamepad1.x) {
                     arm.setTargetPosition(ARM_LOW);
                 }
                 break;
@@ -142,7 +145,7 @@ public class StraferTeleOpTest extends OpMode {
                     arm.setTargetPosition(ARM_HIGH_CHAMBER);
                 }
 
-                if (gamepad2.x) {
+                if (gamepad1.x) {
                     arm.setTargetPosition(ARM_RELEASE);
                     liftState = LiftState.LIFT_RELEASE;
                     runtime.reset();
@@ -171,7 +174,7 @@ public class StraferTeleOpTest extends OpMode {
         // small optimization, instead of repeating ourselves in each
         // lift state case besides LIFT_START for the cancel action,
         // it's just handled here
-        if (gamepad2.guide && liftState != LiftState.LIFT_START) {
+        if (gamepad1.guide && liftState != LiftState.LIFT_START) {
             liftState = LiftState.LIFT_START;
         }
 
@@ -208,25 +211,25 @@ public class StraferTeleOpTest extends OpMode {
         frontRight.setPower(frontRightPower);
         backRight.setPower(backRightPower);
 
-        if (gamepad2.left_bumper)
+        if (gamepad1.left_bumper)
         {
             claw.setPosition(CLAW_CLOSE);
         }
-        else if (gamepad2.right_bumper) {
+        else if (gamepad1.right_bumper) {
             claw.setPosition(CLAW_OPEN);
         }
 
-        if (gamepad2.a){
+        if (gamepad1.a){
             stupid.setPosition(.87);
         }
-        else if (gamepad2.y){
+        else if (gamepad1.y){
             stupid.setPosition(1);
         }
 
         telemetry.addData("Arm Position: ", arm.getCurrentPosition());
         telemetry.addData("Target Position: ", arm.getTargetPosition());
         telemetry.addData("Mode: ", arm.getMode());
-        if (gamepad2.dpad_up && arm.getCurrentPosition() < 2600)
+        if (gamepad1.dpad_up && arm.getCurrentPosition() < 2600)
         {
             telemetry.addLine("Going up");
             arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -258,3 +261,4 @@ public class StraferTeleOpTest extends OpMode {
     }
 
 }
+

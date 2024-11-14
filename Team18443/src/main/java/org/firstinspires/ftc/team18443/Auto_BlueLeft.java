@@ -15,7 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Auto_BlueLeft extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo claw;
+    Servo claw, stupid;
+
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -57,12 +58,15 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // setup servos
         claw = hardwareMap.servo.get("claw");
+        stupid = hardwareMap.get(Servo.class, "stupid");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //Set starting positions of claw
         closeClaw();
+        // please delete stupid once we remove the stupid servo.
+        stupid.setPosition(1);
         sleep(500);
 
         // wait for Start to be pressed
@@ -76,13 +80,22 @@ public class Auto_BlueLeft extends LinearOpMode {
         sleep(500);
         extendArm(-2700);
         forward(7,.5);
-        sleep(1000);
-        lowerArm(500);
+        sleep(500);
+        lowerArm(2000);
         openClaw();
 
-        // Reverse, grab Blue sample, and park
-        back(25,1);
-        strafeRight(10,1);
+        // Reverse and strafe to Observation Zone
+        back(26,1);
+        strafeRight(65,1);
+        lowerArm(540);
+
+        // Grab Blue sample and park
+        forward(25,.5);
+        closeClaw();
+        sleep(200);
+        back(35,.5);
+
+        sleep(1000);
     }
 
 
