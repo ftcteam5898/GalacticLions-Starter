@@ -23,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * The Right stick rotates the robot left and right.
  *
  */
-@TeleOp(name="Strafer Tele Op - Test Code", group="Starter Code")
+@TeleOp(name="TeleOp Test Code SOLO", group="Starter Code")
 public class StraferTeleOpSoloTest extends OpMode {
 
     // Declare OpMode members.
