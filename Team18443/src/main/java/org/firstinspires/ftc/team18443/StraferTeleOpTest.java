@@ -26,7 +26,7 @@ public class StraferTeleOpTest extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontLeft, backLeft, frontRight, backRight, arm;
-    private Servo claw;
+    private Servo claw, stupid;
     private IMU imu;
     final double CLAW_OPEN = 0.5;
     final double CLAW_CLOSE = 0.65;
@@ -70,6 +70,7 @@ public class StraferTeleOpTest extends OpMode {
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         claw = hardwareMap.get(Servo.class, "claw");
+        stupid = hardwareMap.get(Servo.class, "stupid");
 
         // Reverse the left side motors
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -105,6 +106,8 @@ public class StraferTeleOpTest extends OpMode {
 
         arm.setTargetPosition(ARM_LOW);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        stupid.setPosition(1);
 
     }
 
@@ -211,6 +214,13 @@ public class StraferTeleOpTest extends OpMode {
         }
         else if (gamepad2.right_bumper) {
             claw.setPosition(CLAW_OPEN);
+        }
+
+        if (gamepad2.a){
+            stupid.setPosition(.87);
+        }
+        else if (gamepad2.y){
+            stupid.setPosition(1);
         }
 
         telemetry.addData("Arm Position: ", arm.getCurrentPosition());
