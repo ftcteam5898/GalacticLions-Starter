@@ -65,6 +65,7 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         //Set starting positions of claw
         closeClaw();
+        // please delete stupid once we remove the stupid servo.
         stupid.setPosition(1);
         sleep(500);
 
