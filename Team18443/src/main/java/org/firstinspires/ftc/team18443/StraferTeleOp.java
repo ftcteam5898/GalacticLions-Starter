@@ -34,7 +34,6 @@ public class StraferTeleOp extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         stupid.setPosition(1);
-        boolean stupid_bool = false;
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -96,16 +95,11 @@ public class StraferTeleOp extends LinearOpMode {
                 claw.setPosition(0.65); // close
             }
             else if (gamepad2.a){
-                if (!stupid_bool){
-                    stupid.setPosition(.87); // move the stupid servo to "ascend"
-                    stupid_bool = true;
-                }
-                else if (stupid_bool){
-                    stupid.setPosition(1);
-                    stupid_bool = false;
-                }
+                stupid.setPosition(.87); // move the stupid servo to "ascend"
             }
-
+            else if (gamepad2.y){
+                stupid.setPosition(1); // move the stupid servo back.
+            }
         }
     }
 }
