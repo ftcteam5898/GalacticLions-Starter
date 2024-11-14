@@ -13,6 +13,8 @@ public class ArmTester extends LinearOpMode {
         boolean direction = true;
         DcMotor armMotor = hardwareMap.dcMotor.get("arm");
         armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
 
         while(opModeIsActive()) {
