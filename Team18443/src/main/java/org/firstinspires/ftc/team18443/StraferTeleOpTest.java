@@ -31,7 +31,7 @@ public class StraferTeleOpTest extends OpMode {
     final double CLAW_OPEN = 0.5;
     final double CLAW_CLOSE = 0.65;
 
-    final int ARM_LOW = 10;
+    final int ARM_LOW = 5;
     final int ARM_HIGH_CHAMBER = 2700;
     final int ARM_RELEASE = 2200;
     final int ARM_LOW_BASKET = 3000;
@@ -104,7 +104,7 @@ public class StraferTeleOpTest extends OpMode {
     public void start() {
         runtime.reset();
         imu.resetYaw();
-        arm.setTargetPosition(ARM_LOW); 
+        arm.setTargetPosition(ARM_LOW);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         stupid.setPosition(1);
