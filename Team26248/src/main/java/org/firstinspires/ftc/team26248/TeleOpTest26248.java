@@ -189,7 +189,7 @@ public class TeleOpTest26248 extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (slidePos > -400 && gamepad2.left_stick_y < 0)
+            if (slidePos > -1300 && gamepad2.left_stick_y < 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
             else if (slidePos < -50 && gamepad2.left_stick_y > 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
