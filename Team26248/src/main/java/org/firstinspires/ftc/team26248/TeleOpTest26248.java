@@ -189,9 +189,9 @@ public class TeleOpTest26248 extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (slidePos > -400 && gamepad2.left_stick_y < 0)
+            if (slidePos > -1400 && gamepad2.left_stick_y < 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
-            else if (slidePos < -50 && gamepad2.left_stick_y > 0)
+            else if (slidePos < -10 && gamepad2.left_stick_y > 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
             else
             {
@@ -200,7 +200,14 @@ public class TeleOpTest26248 extends OpMode {
 
         }
         else{
-            slideMotor.setPower(gamepad2.left_stick_y * .5);
+            if (slidePos > -3100 && gamepad2.left_stick_y < 0)
+                slideMotor.setPower(gamepad2.left_stick_y * .5);
+            else if (slidePos < -10 && gamepad2.left_stick_y > 0)
+                slideMotor.setPower(gamepad2.left_stick_y * .5);
+            else
+            {
+                slideMotor.setPower(0);
+            }
         }
 
         if (gamepad2.a) {
