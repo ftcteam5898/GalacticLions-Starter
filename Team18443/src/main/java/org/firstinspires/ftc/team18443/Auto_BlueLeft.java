@@ -76,7 +76,7 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Begin with Blue specimen
         // Extend arm and move forward; attach specimen
-        forward(25,.5);
+        forward(25,0.4);
         sleep(500);
         extendArm(-2700);
         forward(7,.5);
@@ -85,16 +85,26 @@ public class Auto_BlueLeft extends LinearOpMode {
         openClaw();
 
         // Reverse and strafe to Observation Zone
-        back(26,1);
-        strafeRight(65,1);
+        back(13,0.3);
+        strafeRight(47,0.3);
         lowerArm(540);
 
-        // Grab Blue sample and park
-        forward(25,.5);
-        closeClaw();
-        sleep(200);
-        back(35,.5);
+        // Go forward, move right, push blue sample into ob zone
+        forward(30,0.2);
+        sleep(500);
+        strafeRight(10,0.3);
+        back(48,0.4);
+        // Do it again for second sample
+        forward(46,0.3);
+        strafeRight(11,0.3);
+        back(44,0.3);
 
+        // do it again for third sample
+        forward(42,0.3);
+        strafeRight(18,0.3);
+        strafeLeft(1,0.2);
+        back(50,0.5);
+        
         sleep(1000);
     }
 
