@@ -6,9 +6,9 @@ labels: 'Kind: Bug'
 assignees: ''
 ---
 
-#### Expected Behaviour
+## Expected Behaviour
 
-#### Actual Behaviour
+## Actual Behaviour
 
-#### Potential Fix(es)
+## Potential Fix(es)
 -
