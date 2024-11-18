@@ -7,10 +7,10 @@ assignees: ''
 ---
 <!--- Provide a general summary of the issue in the Title above -->
 
-## Expected Behaviour
+## Expected Behavior
 A clear and concise description of what you expected to happen (or code).
 
-## Actual Behaviour
+## Actual Behavior
 A clear and concise description of the behavior. If applicable, add screenshots to help explain.
 
 ## Potential Fix(es)
