@@ -6,6 +6,8 @@ labels: 'Enhancement'
 assignees: ''
 ---
 
+<!--- Provide a general summary of the request in the Title above -->
+
 ## Feature Scope 
 A clear and concise description of the feature proposal. Please provide any relevant links to papers, code, or other resources that support your proposal.
 
