@@ -1,7 +1,7 @@
 ---
-name: 🚀 Feature/Improvment Request
+name: ✨ Feature/Improvment Request
 about: Submit a proposal/request for a new feature to your code
-title: '[🚀]'
+title: '[✨]'
 labels: 'Enhancement'
 assignees: ''
 ---
