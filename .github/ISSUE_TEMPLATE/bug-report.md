@@ -2,7 +2,7 @@
 name: 🐞 Bug Report
 about: Report something that is broken or not working as intended
 title: '[🐞]'
-labels: 'Kind: Bug'
+labels: 'Kind: Bug', 'Needs-Topic'
 assignees: ''
 ---
 
