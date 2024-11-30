@@ -61,7 +61,7 @@ public class AutoLeft_Net extends LinearOpMode {
     double gearRatio = 1;
 
     // wheel diameter in inches
-    double diameter = 3.779;
+    double diameter = 4.094;
 
     // counts per inch: cpr * gear ratio / (pi * diameter (in inches))
     double cpi = (cpr * gearRatio) / (Math.PI * diameter);
