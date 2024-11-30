@@ -1,12 +1,8 @@
-/*
-TODO: Pick up sample on the field [ ]
- */
-
-
 package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,11 +12,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoLeft_net",group = "Autonomous")
-public class Auto_High extends LinearOpMode {
+@Disabled
+@Autonomous(name = "",group = "Autonomous")
+public class Autonomous_Template extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
+
+    //DO NOT CHANGE
     double cpr = 537.7; //312 RPM Gobilda
     double gearRatio = 1;
     double diameter = 4.094; //for Gobilda 104mm Mecanum wheel
@@ -30,11 +29,15 @@ public class Auto_High extends LinearOpMode {
     double conversion = cpi * bias;
     Claw claw;
     Slide slide;
+    Arm arm;
     IMU imu;
 
+    //Modules for Claw, Slide, and Arm
     public class Claw {
         private Servo clawLeft = hardwareMap.servo.get("vl");
         private Servo clawRight = hardwareMap.servo.get("vr");
+
+        //Change Claw Status Here
         private final double CLAW_LEFT_OPEN = 0.25;
         private final double CLAW_RIGHT_OPEN = 0.5;
         private final double CLAW_LEFT_CLOSE = 0.5;
@@ -54,7 +57,9 @@ public class Auto_High extends LinearOpMode {
     }
 
     public class Slide{
-        private DcMotor slideMotor;
+        private DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
+
+        //Change Slide Status Here
         private final int slide_expanded = 0; //TODO:need to change
         private final int slide_contracted = 0;//TODO:need to change
 
@@ -68,6 +73,24 @@ public class Auto_High extends LinearOpMode {
             slideMotor.setTargetPosition(slide_contracted);
         }
     }
+
+    public class Arm{
+        private DcMotor armMotor = hardwareMap.dcMotor.get("arm");
+
+        //Change Arm Status Here
+        private final int arm_up = 0; //TODO:need to change
+        private final int arm_down = 0;//TODO:need to change
+
+        public Arm(DcMotor armMotor){
+            this.armMotor = armMotor;
+        }
+        public void up(){
+            armMotor.setTargetPosition(arm_up);
+        }
+        public void down(){
+            armMotor.setTargetPosition(arm_down);
+        }
+    }
     @Override
     public void runOpMode() {
         clawLeft = hardwareMap.servo.get("vl");
@@ -76,7 +99,8 @@ public class Auto_High extends LinearOpMode {
         backLeft = hardwareMap.dcMotor.get("bl");
         backRight = hardwareMap.dcMotor.get("br");
 
-
+        clawRight = hardwareMap.servo.get("vr");
+        clawLeft = hardwareMap.servo.get("vl");
         armMotor = hardwareMap.dcMotor.get("arm");
         slideMotor = hardwareMap.dcMotor.get("slide");
 
@@ -93,26 +117,16 @@ public class Auto_High extends LinearOpMode {
         claw = new Claw(clawLeft,clawRight);
         slide = new Slide(slideMotor);
 
-        claw.open();
+        arm.down();
+        //Optional:claw.open();
 
         initGyro();
 
         waitForStart();
 
-        claw.close();
-        sleep(500);
-        
-        claw.close();
-        
-        sleep(100);
-        armMotor.setTargetPosition(-3000);
+        //Code Here
 
-        forward(24,0.5);
-        turnWithGyro(225,-0.6);
-        forward(10,0.45); //TODO:need to change (Distance)
-        slide.expand();
 
-        
     }
     public void forward(double inches, double speed) {
         moveToPosition(inches, speed);
