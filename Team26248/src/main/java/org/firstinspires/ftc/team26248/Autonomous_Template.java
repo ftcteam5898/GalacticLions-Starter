@@ -91,9 +91,12 @@ public class Autonomous_Template extends LinearOpMode {
             armMotor.setTargetPosition(arm_down);
         }
     }
+
+
     @Override
     public void runOpMode() {
-        clawLeft = hardwareMap.servo.get("vl");
+
+        //Initialization for motors
         frontLeft = hardwareMap.dcMotor.get("fl");
         frontRight = hardwareMap.dcMotor.get("fr");
         backLeft = hardwareMap.dcMotor.get("bl");
@@ -104,6 +107,7 @@ public class Autonomous_Template extends LinearOpMode {
         armMotor = hardwareMap.dcMotor.get("arm");
         slideMotor = hardwareMap.dcMotor.get("slide");
 
+        //Initialization for Encoders
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -114,8 +118,11 @@ public class Autonomous_Template extends LinearOpMode {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        //Initialization for Modules
         claw = new Claw(clawLeft,clawRight);
         slide = new Slide(slideMotor);
+        arm = new Arm(armMotor);
 
         arm.down();
         //Optional:claw.open();

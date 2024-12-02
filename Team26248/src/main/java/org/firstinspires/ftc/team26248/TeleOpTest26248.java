@@ -20,10 +20,10 @@ public class TeleOpTest26248 extends OpMode {
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, armMotor, slideMotor;
     private Servo clawLeftMotor, clawRightMotor;
     private IMU imu;
-    private final double CLAW_LEFT_OPEN = 0.25;
-    private final double CLAW_RIGHT_OPEN = 0.5;
-    private final double CLAW_LEFT_CLOSE = 0.5;
-    private final double CLAW_RIGHT_CLOSE = 0.75;
+    private final double CLAW_LEFT_OPEN = 0.4;
+    private final double CLAW_RIGHT_OPEN = 0.4;
+    private final double CLAW_LEFT_CLOSE = 0.6;
+    private final double CLAW_RIGHT_CLOSE = 0.6;
     final int TILT_HIGH = 2000;
     final int TILT_LOW = 500;
 
@@ -171,10 +171,10 @@ public class TeleOpTest26248 extends OpMode {
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        double frontLeftPower = (rotY + rotX + rx) / denominator * 0.875;
+        double backLeftPower = (rotY - rotX + rx) / denominator * 0.875;
+        double frontRightPower = (rotY - rotX - rx) / denominator *0.875;
+        double backRightPower = (rotY + rotX - rx) / denominator * 0.875;
 
         motorFrontLeft.setPower(frontLeftPower);
         motorBackLeft.setPower(backLeftPower);
@@ -189,7 +189,7 @@ public class TeleOpTest26248 extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (slidePos > -1400 && gamepad2.left_stick_y < 0)
+            if (slidePos > -1520 && gamepad2.left_stick_y < 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
             else if (slidePos < -10 && gamepad2.left_stick_y > 0)
                 slideMotor.setPower(gamepad2.left_stick_y * .5);
