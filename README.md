@@ -5,6 +5,8 @@ ___
 ![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 
+![GitHub License](https://img.shields.io/github/license/ftcteam5898/GalacticLions-Starter)
+
 # Galactic Lions TeamCode - 2024-2025 IntoTheDeep Season
 **Welcome to the Lakeview Robotics Code Respiratory! This space is primarily built for our dedicated programmers of our teams.**
 
