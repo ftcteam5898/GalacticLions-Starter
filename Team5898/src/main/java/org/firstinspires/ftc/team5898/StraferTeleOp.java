@@ -24,9 +24,9 @@ public class StraferTeleOp extends LinearOpMode {
         // Declare our motors
         // Make sure your ID's match your configuration
         DcMotor motorFrontLeft = hardwareMap.dcMotor.get("FL");
-        DcMotor motorBackLeft = hardwareMap.dcMotor.get("RL");
+        DcMotor motorBackLeft = hardwareMap.dcMotor.get("BL");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("FR");
-        DcMotor motorBackRight = hardwareMap.dcMotor.get("RR");
+        DcMotor motorBackRight = hardwareMap.dcMotor.get("BR");
         // These are the extra moving parts
         DcMotor motorArmTilt = hardwareMap.dcMotor.get("Arm");
         DcMotor motorBeltDrive = hardwareMap.dcMotor.get("Belt");

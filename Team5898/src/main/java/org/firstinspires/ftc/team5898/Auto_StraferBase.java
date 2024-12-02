@@ -50,8 +50,8 @@ public class Auto_StraferBase extends LinearOpMode{
         // make sure names match what is in the config on Driver Hub
         frontleft = hardwareMap.dcMotor.get("FL");
         frontright = hardwareMap.dcMotor.get("FR");
-        backleft = hardwareMap.dcMotor.get("RL");
-        backright = hardwareMap.dcMotor.get("RR");
+        backleft = hardwareMap.dcMotor.get("BL");
+        backright = hardwareMap.dcMotor.get("BR");
         motorArmTilt = hardwareMap.dcMotor.get("Arm");
         motorBeltDrive = hardwareMap.dcMotor.get("Belt");
         servoClaw = hardwareMap.servo.get("Claw");
@@ -366,4 +366,5 @@ public class Auto_StraferBase extends LinearOpMode{
     public void wrist(double position, double speed){
         servoWrist.setPosition(Servo.Direction.values().length);
     }
+
 }
