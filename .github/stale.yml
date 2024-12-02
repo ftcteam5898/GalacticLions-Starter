@@ -30,8 +30,8 @@ markComment: >
   recent activity. The issue will be closed if no further activity occurs.
 
 # Comment to post when closing a stale Issue or Pull Request.
-# closeComment: >
-#   Closed due to inactivity. Thank you for your contributions.
+closeComment: >
+   Closed due to inactivity. Thank you for your contributions.
 
 # Limit the number of actions per hour, from 1-30. Default is 30
 limitPerRun: 30
