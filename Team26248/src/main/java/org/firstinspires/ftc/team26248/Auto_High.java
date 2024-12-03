@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoLeft_net",group = "Autonomous")
+@Autonomous(name = "AutoHigh",group = "Autonomous")
 public class Auto_High extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
@@ -35,10 +35,10 @@ public class Auto_High extends LinearOpMode {
     public class Claw {
         private Servo clawLeft = hardwareMap.servo.get("vl");
         private Servo clawRight = hardwareMap.servo.get("vr");
-        private final double CLAW_LEFT_OPEN = 0.25;
-        private final double CLAW_RIGHT_OPEN = 0.5;
-        private final double CLAW_LEFT_CLOSE = 0.5;
-        private final double CLAW_RIGHT_CLOSE = 0.75;
+        private final double CLAW_LEFT_OPEN = 0.4;
+        private final double CLAW_RIGHT_OPEN = 0.4;
+        private final double CLAW_LEFT_CLOSE = 0.6;
+        private final double CLAW_RIGHT_CLOSE = 0.6;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -55,17 +55,21 @@ public class Auto_High extends LinearOpMode {
 
     public class Slide{
         private DcMotor slideMotor;
-        private final int slide_expanded = 0; //TODO:need to change
+        private final int slide_expanded_down = -1545; //TODO:need to change
         private final int slide_contracted = 0;//TODO:need to change
+        private final int slide_expanded_up = -2883;//TODO:need to change
 
         public Slide(DcMotor slideMotor){
             this.slideMotor = slideMotor;
         }
-        public void expand(){
-            slideMotor.setTargetPosition(slide_expanded);
+        public void expandDown(){
+            slideMotor.setTargetPosition(slide_expanded_down);
         }
         public void contract(){
             slideMotor.setTargetPosition(slide_contracted);
+        }
+        public void expandUP(){
+            slideMotor.setTargetPosition(slide_expanded_up);
         }
     }
     @Override
@@ -110,7 +114,8 @@ public class Auto_High extends LinearOpMode {
         forward(24,0.5);
         turnWithGyro(225,-0.6);
         forward(10,0.45); //TODO:need to change (Distance)
-        slide.expand();
+
+        slide.expandDown();
 
         
     }

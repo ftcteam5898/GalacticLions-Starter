@@ -125,13 +125,20 @@ public class Autonomous_Template extends LinearOpMode {
         arm = new Arm(armMotor);
 
         arm.down();
+
         //Optional:claw.open();
 
         initGyro();
 
         waitForStart();
 
+
         //Code Here
+        //Example: forward(12,0.5);
+        //Turn Example: turnWithGyro(90,0.5); Clock wise 90 degrees
+        //Strafe Example: strafeRight(12,0.5);
+
+
 
 
     }
