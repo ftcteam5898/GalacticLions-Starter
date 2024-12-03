@@ -23,11 +23,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
           # Number of days of inactivity before an Issue/Pull Request becomes stale
-          days-before-stale: 15
+          days-before-stale: 1
           
           # Number of days of inactivity before an Issue/Pull Request with the stale label is closed.
           # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
-          days-before-close: 6
+          days-before-close: 2
           
           stale-issue-label: 'Lifecycle: Stale'
           
