@@ -22,19 +22,20 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
-          # Number of days of inactivity before an Issue becomes stale
-          days-before-issue-stale: 15
-          days-before-issue-close: 6
+          # Number of days of inactivity before an Issue/Pull Request becomes stale
+          days-before-stale: 15
           
-          # Number of days of inactivity before an Pull Request becomes stale
-          days-before-pr-stale: 30
-          days-before-pr-close: 10
+          # Number of days of inactivity before an Issue/Pull Request with the stale label is closed.
+          # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
+          days-before-close: 6
           
           stale-issue-label: 'Lifecycle: Stale'
           
           # Issues with these labels will never be considered stale. Set to `[]` to disable
           exempt-issue-labels: 'Lifecycle: Frozen'
 
+          labels-to-remove-when-stale: 'Lifecycle: Active'
+          
           # Comment to post when marking as stale.
           stale-issue-message: >
               This issue has been automatically marked as stale because it has not had
