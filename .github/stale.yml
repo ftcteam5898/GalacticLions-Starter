@@ -25,7 +25,7 @@ exemptAssignees: false
 staleLabel: "Lifecycle: Stale"
 
 # Remove a label when marking as stale
-abels-to-remove-when-stale: "Lifecycle: Active"
+labels-to-remove-when-stale: "Lifecycle: Active"
 
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
