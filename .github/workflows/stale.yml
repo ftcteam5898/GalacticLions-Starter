@@ -35,11 +35,12 @@ jobs:
           exempt-issue-labels: 'Lifecycle: Frozen'
 
           labels-to-remove-when-stale: 'Lifecycle: Active'
+          labels-to-add-when-unstale: 'Lifecycle: Active'
           
           # Comment to post when marking as stale.
           stale-issue-message: >
               This issue has been automatically marked as stale because it has not had
-              recent activity. The issue will be closed if no further activity occurs.
+              any recent activity. The issue will be closed if no further activity occurs.
 
           # Comment to post when closing a stale Issue
           close-issue-message: >
