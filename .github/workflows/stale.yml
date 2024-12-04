@@ -22,12 +22,15 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
-          # Number of days of inactivity before an Issue/Pull Request becomes stale
-          days-before-stale: 1
+          # Number of days of inactivity before an Issue becomes stale
+          days-before-issue-stale: 15
+
+          # Number of days of inactivity before a Pull Request becomes stale
+          days-before-pr-stale: 30
           
           # Number of days of inactivity before an Issue/Pull Request with the stale label is closed.
           # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
-          days-before-close: 2
+          days-before-close: 7
           
           stale-issue-label: 'Lifecycle: Stale'
           
@@ -40,7 +43,7 @@ jobs:
           # Comment to post when marking as stale.
           stale-issue-message: >
               This issue has been automatically marked as stale because it has not had
-              any recent activity. The issue will be closed if no further activity occurs.
+              any recent activity. The issue will be auto-closed if no further activity occurs.
 
           # Comment to post when closing a stale Issue
           close-issue-message: >
