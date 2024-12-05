@@ -1,20 +1,23 @@
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team5898;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@Disabled
-@Autonomous(name="Auto_StraferBase", group="Starter Code")
-public class Auto_StraferBase extends LinearOpMode{
+
+@Autonomous(name="Auto_Odo_Test", group="Starter Code")
+public class Auto_Odo_Test extends LinearOpMode{
     // variable declaration & setup
-    DcMotor frontleft, frontright, backleft, backright;
+    DcMotor frontleft, frontright, backleft, backright, motorArmTilt, motorBeltDrive;
+    Servo servoClaw, servoWrist;
+
+    GoBildaPinpointDriver odo; // Declare OpMode member for the Odometry Computer
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -32,7 +35,7 @@ public class Auto_StraferBase extends LinearOpMode{
     double cpi = (cpr * gearRatio)/(Math.PI * diameter);
 
     // use calibrate auto to check this number before proceeding
-    double bias = 0.94; // adjust based on calibration opMode
+    double bias = 1.0; // adjust based on calibration opMode
     
     double strafeBias = 0.9;//change to adjust only strafing movement
     //
@@ -47,19 +50,94 @@ public class Auto_StraferBase extends LinearOpMode{
 
         // setup motors
         // make sure names match what is in the config on Driver Hub
-        frontleft = hardwareMap.dcMotor.get("lf");
-        frontright = hardwareMap.dcMotor.get("rf");
-        backleft = hardwareMap.dcMotor.get("lb");
-        backright = hardwareMap.dcMotor.get("rb");
+        frontleft = hardwareMap.dcMotor.get("FL");
+        frontright = hardwareMap.dcMotor.get("FR");
+        backleft = hardwareMap.dcMotor.get("RL");
+        backright = hardwareMap.dcMotor.get("RR");
+        motorArmTilt = hardwareMap.dcMotor.get("Arm");
+        motorBeltDrive = hardwareMap.dcMotor.get("Belt");
+        servoClaw = hardwareMap.servo.get("Claw");
+        servoWrist = hardwareMap.servo.get("Wrist");
+        double wristPos = .7;
+        servoWrist.setPosition(wristPos);
+        sleep(1000);
+        double CLAW_CLOSE = 0.27;
+        double CLAW_OPEN = 0.4;
+        servoClaw.setPosition(CLAW_CLOSE);//close
 
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+
+        /*
+        Set the odometry pod positions relative to the point that the odometry computer tracks around.
+        The X pod offset refers to how far sideways from the tracking point the
+        X (forward) odometry pod is. Left of the center is a positive number,
+        right of center is a negative number. the Y pod offset refers to how far forwards from
+        the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
+        backwards is a negative number.
+         */
+        odo.setOffsets(-84.0, -168.0); //these are tuned for 3110-0002-0001 Product Insight #1
+
+        /*
+        Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
+        the goBILDA_SWINGARM_POD, or the goBILDA_4_BAR_POD.
+        If you're using another kind of odometry pod, uncomment setEncoderResolution and input the
+        number of ticks per mm of your odometry pod.
+         */
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        /*
+        Set the direction that each of the two odometry pods count. The X (forward) pod should
+        increase when you move the robot forward. And the Y (strafe) pod should increase when
+        you move the robot to the left.
+         */
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
         // wait for Start to be pressed
         waitForStart();
+        /*
+        Before running the robot, recalibrate the IMU. This needs to happen when the robot is stationary
+        The IMU will automatically calibrate when first powered on, but recalibrating before running
+        the robot is a good idea to ensure that the calibration is "good".
+        resetPosAndIMU will reset the position to 0,0,0 and also recalibrate the IMU.
+        This is recommended before you run your autonomous, as a bad initial calibration can cause
+        an incorrect starting value for x, y, and heading.
+         */
+        odo.recalibrateIMU();
+        //odo.resetPosAndIMU();
 
         // Call functions here
+        wrist(.5, .2);
+        forward(22, .3);
+        turnRight(-45, .6);
+        back(17, .3);
+        // Claw drops sample into basket
+        tilt(2700, .4);
+        belt(2000, .4);
+        wrist(.6, .25);
+        servoClaw.setPosition(CLAW_OPEN);
+
+        // Getting new Sample and putting in Basket
+        tilt(-3100, .4);
+        belt(-900, .4);
+        wrist(.3, .25);
+        turnLeft(-40, .3);
+        forward(10, .3);
+        strafeLeft(20, .3);
+        strafeRight(7, .3);
+        //Getting Sample
+        belt(200, .4);
+        double wristPos2 = .2;
+        servoWrist.setPosition(wristPos2);
+        servoClaw.setPosition(CLAW_CLOSE);
+        // Going to basket
+        // back(15, .3);
+        // turnRight(-40, .6);
+
+        sleep(1000);
+
     }
 
 
@@ -122,6 +200,8 @@ public class Auto_StraferBase extends LinearOpMode{
      */
     public void moveToPosition(double inches, double speed){
         int move = (int)(Math.round(inches*conversion));
+        motorBeltDrive.setTargetPosition(motorBeltDrive.getCurrentPosition() + move);
+        motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition() + move);
         backleft.setTargetPosition(backleft.getCurrentPosition() + move);
         frontleft.setTargetPosition(frontleft.getCurrentPosition() + move);
         backright.setTargetPosition(backright.getCurrentPosition() + move);
@@ -302,8 +382,8 @@ public class Auto_StraferBase extends LinearOpMode{
         // more info on ftc-docs.firstinspires.org
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
                 )
         );
 
@@ -325,5 +405,31 @@ public class Auto_StraferBase extends LinearOpMode{
         backleft.setPower(input);
         frontright.setPower(-input);
         backright.setPower(-input);
+    }
+    public void belt(int ticks, double speed){
+        // ticks are how many ticks around the motor it should move
+        motorBeltDrive.setTargetPosition(motorBeltDrive.getCurrentPosition() + ticks);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBeltDrive.setPower(speed);
+        while (motorBeltDrive.isBusy()){
+            telemetry.addData("Busy...", " ");
+            telemetry.update();}
+        motorBeltDrive.setPower(0);
+    }
+    public void tilt(int ticks, double speed){
+        // ticks are how many ticks around the motor it should move
+        motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition() + ticks);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorArmTilt.setPower(speed);
+        while (motorArmTilt.isBusy()){
+            telemetry.addData("Busy...", " ");
+            telemetry.update();}
+        motorArmTilt.setPower(0);
+    }
+    public void claw(double position, double speed){
+        servoClaw.setPosition(Servo.Direction.values().length);
+    }
+    public void wrist(double position, double speed){
+        servoWrist.setPosition(Servo.Direction.values().length);
     }
 }

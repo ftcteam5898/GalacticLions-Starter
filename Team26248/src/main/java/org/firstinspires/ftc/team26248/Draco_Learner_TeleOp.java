@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,8 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  *
  */
 
-@TeleOp(name="Strafer Tele Op", group="Starter Code")
-public class StraferTeleOp extends LinearOpMode {
+@TeleOp(name="Draco Learner TeleOp", group="Starter Code")
+public class Draco_Learner_TeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
@@ -26,6 +26,9 @@ public class StraferTeleOp extends LinearOpMode {
         DcMotor motorBackLeft = hardwareMap.dcMotor.get("bl");
         DcMotor motorFrontRight = hardwareMap.dcMotor.get("fr");
         DcMotor motorBackRight = hardwareMap.dcMotor.get("br");
+
+        // starting up the arm motor
+        DcMotor armMotor = hardwareMap.dcMotor.get("arm");
 
         // Reverse the right side motors
         // Reverse left motors if you are using NeveRests
@@ -39,7 +42,7 @@ public class StraferTeleOp extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-
+            // This happens when we press play
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
@@ -57,6 +60,19 @@ public class StraferTeleOp extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
+
+            // List the arm up when we press a
+            if (gamepad1.a){
+                armMotor.setPower(0.2);
+            }
+            else if (gamepad1.b){
+                armMotor.setPower(-0.2);
+            }
+            else {
+                armMotor.setPower(0);
+            }
+
+
 
         }
     }

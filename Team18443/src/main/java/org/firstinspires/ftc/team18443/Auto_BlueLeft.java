@@ -4,18 +4,19 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="Auto_BaseOp", group="Auto")
-public class Auto_BaseOpMode extends LinearOpMode{
+@Autonomous(name="Auto_BlueLeft", group="Auto Blue", preselectTeleOp="StraferTeleOp")
+public class Auto_BlueLeft extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo wrist, claw;
+    Servo claw, stupid;
+
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -56,22 +57,147 @@ public class Auto_BaseOpMode extends LinearOpMode{
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // setup servos
-        wrist = hardwareMap.servo.get("wrist");
         claw = hardwareMap.servo.get("claw");
+        stupid = hardwareMap.get(Servo.class, "stupid");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Set starting positions of claw
+        closeClaw();
+        // please delete stupid once we remove the stupid servo.
+        stupid.setPosition(1);
+        sleep(500);
+
         // wait for Start to be pressed
         waitForStart();
 
         // Call functions here
 
+        // Begin with Blue specimen
+        // Extend arm and move forward; attach specimen
+        forward(25,.5);
+        sleep(500);
+        extendArm(-2700);
+        forward(7,.5);
+        sleep(500);
+        lowerArm(2000);
+        openClaw();
+
+        // Reverse and strafe to Observation Zone
+        back(13,.3);
+        strafeRight(47,.5);
+        lowerArm(540);
+
+        // Go forward, move right, push blue sample into ob zone
+        forward(30,.2);
+        sleep(500);
+        strafeRight(10,.3);
+        back(48,.4);
+        // Do it again for second sample
+        forward(46,.3);
+        strafeRight(11,.3);
+        back(44,.3);
+
+        // do it again for third sample
+        forward(42,.3);
+        strafeRight(18,.3);
+        strafeLeft(1,.2);
+        back(50,.5);
+
+        sleep(1000);
     }
 
 
 
 
 
+
+    /**
+     * Use to make the robot go forward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
+     */
+    public void forward(double inches, double speed){ moveToPosition(inches, speed); }
+
+    /**
+     * Use to make the robot go backward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
+     */
+    public void back(double inches, double speed){ moveToPosition(-inches, speed); }
+
+    /**
+     Rotate the robot left
+     @param degrees the amount of degrees to rotate
+     @param speed has a range of [0,1]
+     */
+    public void turnLeft(double degrees, double speed){ turnWithGyro(degrees, -speed); }
+
+    /**
+     Rotate the robot right
+     @param degrees the amount of degrees to rotate
+     @param speed has a range of [0,1]
+     */
+    public void turnRight(double degrees, double speed){ turnWithGyro(degrees, speed); }
+
+    /**
+     Strafe left
+     @param inches the distance in inches to strafe
+     @param speed has a range of [0,1]
+     */
+    public void strafeLeft(double inches, double speed){ strafeToPosition(-inches, speed); }
+
+    /**
+     Strafe right
+     @param inches the distance in inches to strafe
+     @param speed has a range of [0,1]
+     */
+    public void strafeRight(double inches, double speed){ strafeToPosition(inches, speed); }
+
+    /**
+     Extends the arm
+     @param ticks the number of ticks the motor needs to move
+     */
+    public void extendArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
+    }
+
+    /**
+     Closes the arm
+     @param ticks the number of ticks the motor needs to move
+     */
+    public void lowerArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
+    }
+
+    /**
+     Opens the claw on the arm of the robot
+     */
+    public void openClaw() {
+        claw.setPosition(0.5);
+    }
+
+    /**
+     Closes the claw on the arm of the robot
+     */
+    public void closeClaw() {
+        claw.setPosition(0.65);
+    }
 
    /**
      This function's purpose is simply to drive forward or backward.
@@ -263,8 +389,8 @@ public class Auto_BaseOpMode extends LinearOpMode{
         // more info on ftc-docs.firstinspires.org
         IMU.Parameters parameters = new IMU.Parameters(
                 new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
 

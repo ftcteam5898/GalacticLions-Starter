@@ -4,18 +4,18 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="Auto_BaseOp", group="Auto")
-public class Auto_BaseOpMode extends LinearOpMode{
+@Autonomous(name="Auto_RedRight", group="Auto Red", preselectTeleOp="StraferTeleOp")
+public class Auto_RedRight extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo wrist, claw;
+    Servo claw;
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -56,11 +56,15 @@ public class Auto_BaseOpMode extends LinearOpMode{
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // setup servos
-        wrist = hardwareMap.servo.get("wrist");
         claw = hardwareMap.servo.get("claw");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        //Set starting positions of claw
+        closeClaw();
+        sleep(500);
+        
         // wait for Start to be pressed
         waitForStart();
 
@@ -72,6 +76,91 @@ public class Auto_BaseOpMode extends LinearOpMode{
 
 
 
+
+    /**
+     * Use to make the robot go forward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
+     */
+    public void forward(double inches, double speed){ moveToPosition(inches, speed); }
+
+    /**
+     * Use to make the robot go backward a number of inches
+     * @param inches distance to travel in inches
+     * @param speed has a range of [0,1]
+     */
+    public void back(double inches, double speed){ moveToPosition(-inches, speed); }
+
+    /**
+     Rotate the robot left
+     @param degrees the amount of degrees to rotate
+     @param speed has a range of [0,1]
+     */
+    public void turnLeft(double degrees, double speed){ turnWithGyro(degrees, -speed); }
+
+    /**
+     Rotate the robot right
+     @param degrees the amount of degrees to rotate
+     @param speed has a range of [0,1]
+     */
+    public void turnRight(double degrees, double speed){ turnWithGyro(degrees, speed); }
+
+    /**
+     Strafe left
+     @param inches the distance in inches to strafe
+     @param speed has a range of [0,1]
+     */
+    public void strafeLeft(double inches, double speed){ strafeToPosition(-inches, speed); }
+
+    /**
+     Strafe right
+     @param inches the distance in inches to strafe
+     @param speed has a range of [0,1]
+     */
+    public void strafeRight(double inches, double speed){ strafeToPosition(inches, speed); }
+
+    /**
+     Extends the arm
+     @param ticks the number of ticks the motor needs to move
+     */
+    public void extendArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
+    }
+
+    /**
+     Closes the arm
+     @param ticks the number of ticks the motor needs to move
+     */
+    public void lowerArm(int ticks){
+        arm.setTargetPosition(arm.getCurrentPosition() + ticks);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(1);
+        while (arm.isBusy()){
+            telemetry.addData("Busy...", "");
+            telemetry.update();
+        }
+        arm.setPower(0);
+    }
+
+    /**
+     Opens the claw on the arm of the robot
+     */
+    public void openClaw() {
+        claw.setPosition(0.5);
+    }
+    /**
+     Closes the claw on the arm of the robot
+     */
+    public void closeClaw() {
+        claw.setPosition(0.65);
+    }
 
    /**
      This function's purpose is simply to drive forward or backward.

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team5898;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -29,15 +30,25 @@ public class StraferFieldCentric extends LinearOpMode {
     public void runOpMode() {
         // Declare our motors
         // Make sure your ID's match your configuration
-        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("lf");
-        DcMotor motorBackLeft = hardwareMap.dcMotor.get("lb");
-        DcMotor motorFrontRight = hardwareMap.dcMotor.get("rf");
-        DcMotor motorBackRight = hardwareMap.dcMotor.get("rb");
+        DcMotor motorFrontLeft = hardwareMap.dcMotor.get("FL");
+        DcMotor motorBackLeft = hardwareMap.dcMotor.get("RL");
+        DcMotor motorFrontRight = hardwareMap.dcMotor.get("FR");
+        DcMotor motorBackRight = hardwareMap.dcMotor.get("RR");
+
+        // These are the extra moving parts
+        DcMotor motorArmTilt = hardwareMap.dcMotor.get("Arm");
+        DcMotor motorBeltDrive = hardwareMap.dcMotor.get("Belt");
+        Servo servoClaw = hardwareMap.servo.get("Claw");
+        Servo servoWrist = hardwareMap.servo.get("Wrist");
+        double wristPos = 1.0;
+        servoWrist.setPosition(wristPos);
+        sleep(1000);
+        double CLAW_CLOSE = 0.27;
+        servoClaw.setPosition(CLAW_CLOSE);//close
 
         // funny drive
 
-        // Reverse the right side motors
-        // Reverse left motors if you are using NeveRests
+        // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -45,10 +56,17 @@ public class StraferFieldCentric extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
+
+        motorBeltDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorArmTilt.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBeltDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorArmTilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
@@ -85,6 +103,57 @@ public class StraferFieldCentric extends LinearOpMode {
             motorBackLeft.setPower(backLeftPower);
             motorFrontRight.setPower(frontRightPower);
             motorBackRight.setPower(backRightPower);
+
+            int slidePos = motorBeltDrive.getCurrentPosition();
+            int tiltPos = motorArmTilt.getCurrentPosition();
+            telemetry.addData("Current slide position", slidePos);
+            telemetry.addData("Current arm position", tiltPos);
+            telemetry.update();
+
+            if (gamepad2.dpad_up && slidePos <= 2300)
+            {
+                motorBeltDrive.setPower(.5);
+            }
+            else if (gamepad2.dpad_down && slidePos >= 30)
+            {
+                motorBeltDrive.setPower(-.5);
+            }
+            else
+            {
+                motorBeltDrive.setPower(0);
+            }
+
+            if (gamepad2.left_bumper)
+            {
+                motorArmTilt.setPower(-.75);
+            }
+            else if (gamepad2.right_bumper)
+            {
+                motorArmTilt.setPower(.75);
+            }
+            else if (!gamepad2.right_bumper && !gamepad1.left_bumper){
+                motorArmTilt.setPower(0);
+            }
+
+            if (gamepad2.y)
+            {
+                wristPos -= .001;
+                servoWrist.setPosition(wristPos);
+            }
+            else if (gamepad2.a)
+            {
+                wristPos += .001;
+                servoWrist.setPosition(wristPos);
+            }
+
+            if (gamepad1.left_bumper)
+            {
+                servoClaw.setPosition(.4);//open
+            }
+            else if (gamepad1.right_bumper)
+            {
+                servoClaw.setPosition(CLAW_CLOSE);//close
+            }
         }
     }
 }
