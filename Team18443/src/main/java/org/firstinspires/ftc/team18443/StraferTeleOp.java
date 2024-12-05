@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team18443;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -25,13 +25,15 @@ public class StraferTeleOp extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and Initialize Servos
-        Servo wrist = hardwareMap.get(Servo.class, "wrist");
         Servo claw = hardwareMap.get(Servo.class, "claw");
+        Servo ascend = hardwareMap.get(Servo.class, "ascend");
 
         // Reverse one side of the motors
         // If it goes in reverse, reverse the other side
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        ascend.setPosition(1);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -64,10 +66,22 @@ public class StraferTeleOp extends LinearOpMode {
 
             //---------- Driver 2 ----------//
 
-            if (gamepad2.dpad_up) { // Arm Up
+            int armPosition = arm.getCurrentPosition();
+
+            if (gamepad2.dpad_up && armPosition >= -2700) { // Arm Up
                 arm.setPower(-1);
             }
-            else if (gamepad2.dpad_down) { // Arm Down
+            else if (gamepad2.left_bumper) { // Arm Up - Sticky
+                arm.setTargetPosition(-2700);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setPower(1);
+            }
+            else if (gamepad2.dpad_down && armPosition <= 0) { // Arm Down
+                arm.setPower(1);
+            }
+            else if (gamepad2.right_bumper) { // Arm Down - Sticky
+                arm.setTargetPosition(0);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 arm.setPower(1);
             }
             else {
@@ -75,19 +89,17 @@ public class StraferTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                claw.setPosition(0.2); // open
+                claw.setPosition(0.5); // open
             }
             else if (gamepad2.b) {
-                claw.setPosition(0); // close
+                claw.setPosition(0.65); // close
             }
-
-            if (gamepad2.y) {
-                wrist.setPosition(1); // raise
+            else if (gamepad2.a){
+                ascend.setPosition(.87); // move the ascend servo to "ascend"
             }
-            else if (gamepad2.a) {
-                wrist.setPosition(0.5); // lower
+            else if (gamepad2.y){
+                ascend.setPosition(1); // move the ascend servo back.
             }
-
         }
     }
 }

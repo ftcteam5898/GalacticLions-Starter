@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.team26248;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -23,18 +24,17 @@ public class CalibrateAuto extends LinearOpMode{
     double cpi = (cpr * gearRatio) / (Math.PI * diameter); //counts per inch -> counts per rotation / circumference
 
     //
-    double bias = 0.94;//adjust until your robot goes 25 inches
-    //
+    double bias = 0.94; //Adjust until the robot travels 25 inches
 
 
     double conversion = cpi * bias;
 
     @Override
     public void runOpMode() {
-        frontleft = hardwareMap.dcMotor.get("lf");
-        frontright = hardwareMap.dcMotor.get("rf");
-        backleft = hardwareMap.dcMotor.get("lb");
-        backright = hardwareMap.dcMotor.get("rb");
+        frontleft = hardwareMap.dcMotor.get("fl");
+        frontright = hardwareMap.dcMotor.get("fr");
+        backleft = hardwareMap.dcMotor.get("bl");
+        backright = hardwareMap.dcMotor.get("br");
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
         waitForStart();
