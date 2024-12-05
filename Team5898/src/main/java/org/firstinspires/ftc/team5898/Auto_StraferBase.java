@@ -60,12 +60,12 @@ public class Auto_StraferBase extends LinearOpMode{
         servoWrist.setPosition(wristPos);
         sleep(1000);
         double CLAW_CLOSE = 0.27;
-        double CLAW_OPEN = 0.4;
         servoClaw.setPosition(CLAW_CLOSE);//close
 
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Int gets pressed
 
 
 
@@ -73,33 +73,19 @@ public class Auto_StraferBase extends LinearOpMode{
         waitForStart();
 
         // Call functions here
-        wrist(.5, .2);
-        forward(22, .3);
-        turnRight(-45, .6);
-        back(17, .3);
+        forward(20, .3);
+        turnRight(-40, .6);
+        back(15, .3);
         // Claw drops sample into basket
-        tilt(2700, .4);
-        belt(2000, .4);
-        wrist(.6, .25);
-        servoClaw.setPosition(CLAW_OPEN);
+
 
         // Getting new Sample and putting in Basket
-        tilt(-3100, .4);
-        belt(-900, .4);
-        wrist(.3, .25);
         turnLeft(-40, .3);
         forward(10, .3);
         strafeLeft(20, .3);
         strafeRight(7, .3);
-        //Getting Sample
-        belt(200, .4);
-        double wristPos2 = .2;
-        servoWrist.setPosition(wristPos2);
-        servoClaw.setPosition(CLAW_CLOSE);
-        // Going to basket
-        // back(15, .3);
-        // turnRight(-40, .6);
-
+        back(15, .3);
+        turnRight(-40, .6);
         sleep(1000);
 
     }
@@ -164,8 +150,6 @@ public class Auto_StraferBase extends LinearOpMode{
      */
     public void moveToPosition(double inches, double speed){
         int move = (int)(Math.round(inches*conversion));
-        motorBeltDrive.setTargetPosition(motorBeltDrive.getCurrentPosition() + move);
-        motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition() + move);
         backleft.setTargetPosition(backleft.getCurrentPosition() + move);
         frontleft.setTargetPosition(frontleft.getCurrentPosition() + move);
         backright.setTargetPosition(backright.getCurrentPosition() + move);
@@ -370,25 +354,11 @@ public class Auto_StraferBase extends LinearOpMode{
         frontright.setPower(-input);
         backright.setPower(-input);
     }
-    public void belt(int ticks, double speed){
-        // ticks are how many ticks around the motor it should move
-        motorBeltDrive.setTargetPosition(motorBeltDrive.getCurrentPosition() + ticks);
+    public void belt(double inches, double speed){
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorBeltDrive.setPower(speed);
-        while (motorBeltDrive.isBusy()){
-            telemetry.addData("Busy...", " ");
-            telemetry.update();}
-        motorBeltDrive.setPower(0);
     }
-    public void tilt(int ticks, double speed){
-        // ticks are how many ticks around the motor it should move
-        motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition() + ticks);
+    public void tilt(double degrees, double speed){
         motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorArmTilt.setPower(speed);
-        while (motorArmTilt.isBusy()){
-            telemetry.addData("Busy...", " ");
-            telemetry.update();}
-        motorArmTilt.setPower(0);
     }
     public void claw(double position, double speed){
         servoClaw.setPosition(Servo.Direction.values().length);

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team18443;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -47,17 +47,17 @@ public class Auto_BaseOpMode extends LinearOpMode{
         initGyro();
 
         // setup motors
-        frontLeft = hardwareMap.dcMotor.get("lf");
-        frontRight = hardwareMap.dcMotor.get("rf");
-        backLeft = hardwareMap.dcMotor.get("lb");
-        backRight = hardwareMap.dcMotor.get("rb");
+        frontLeft = hardwareMap.get(DcMotor.class, "lf");
+        frontRight = hardwareMap.get(DcMotor.class, "rf");
+        backLeft = hardwareMap.get(DcMotor.class, "lb");
+        backRight = hardwareMap.get(DcMotor.class, "rb");
 
-        arm = hardwareMap.dcMotor.get("arm");
+        arm = hardwareMap.get(DcMotor.class, "arm");
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // setup servos
-        wrist = hardwareMap.servo.get("wrist");
-        claw = hardwareMap.servo.get("claw");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);

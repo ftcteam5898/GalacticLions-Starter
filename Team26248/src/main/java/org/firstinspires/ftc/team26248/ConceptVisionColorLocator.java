@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 
