@@ -38,10 +38,10 @@ public class Auto_High extends LinearOpMode {
     public class Claw {
         private Servo clawLeft = hardwareMap.servo.get("vl");
         private Servo clawRight = hardwareMap.servo.get("vr");
-        private final double CLAW_LEFT_OPEN = 0.4;
-        private final double CLAW_RIGHT_OPEN = 0.4;
-        private final double CLAW_LEFT_CLOSE = 0.6;
-        private final double CLAW_RIGHT_CLOSE = 0.6;
+        private final double CLAW_LEFT_OPEN = 0.4; //TODO:need update for new claw
+        private final double CLAW_RIGHT_OPEN = 0.4; //TODO:need update for new claw
+        private final double CLAW_LEFT_CLOSE = 0.6; //TODO:need update for new claw
+        private final double CLAW_RIGHT_CLOSE = 0.6; //TODO:need update for new claw
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -64,13 +64,13 @@ public class Auto_High extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(1545);
+            slideMotor.setTargetPosition(-1540);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void contract(){
-            slideMotor.setTargetPosition(0);
+            slideMotor.setTargetPosition(-100);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -135,30 +135,23 @@ public class Auto_High extends LinearOpMode {
         claw = new Claw(clawLeft,clawRight);
         slide = new Slide(slideMotor);
         arm = new Arm(armMotor);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
 
         initGyro();
-
+        arm.down();
+        slide.contract();
         waitForStart();
 
-        arm.down();
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(0.5);
-        claw.open();
-
         sleep(500);
-        
-        claw.close();
-        
-        sleep(100);
+        //Code Here
 
 
-        forward(14,0.5);
-        turnWithGyro(225,-0.6);
-        forward(10,0.45);
 
-        slide.expandDown();
+
+
 
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
@@ -167,6 +160,10 @@ public class Auto_High extends LinearOpMode {
             if(!slideMotor.isBusy()){
                 slideMotor.setPower(0.5);
             }
+
+            telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+            telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
+            telemetry.update();
         }
     }
     public void forward(double inches, double speed) {
