@@ -32,7 +32,7 @@ public class StraferTeleOpTest extends OpMode {
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
-    final int TILT_HIGH = 560;
+    final int TILT_HIGH = 1870;
     final int TILT_LOW = 100;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
@@ -221,11 +221,11 @@ public class StraferTeleOpTest extends OpMode {
             // manual tilt control
             if (gamepad2.dpad_left)
             {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+10);
+                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
             }
             else if (gamepad2.dpad_right && tiltPos > 10)
             {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-10);
+                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
             }
         }
         else{
@@ -242,13 +242,13 @@ public class StraferTeleOpTest extends OpMode {
                 motorBeltSlide.setPower(0);
             }
             // manual tilt control
-            if (gamepad2.dpad_left && tiltPos <= 580)
+            if (gamepad2.dpad_left && tiltPos <= 3100)
             {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+10);
+                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
             }
             else if (gamepad2.dpad_right)
             {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-10);
+                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
             }
         }
 
@@ -268,11 +268,11 @@ public class StraferTeleOpTest extends OpMode {
         // wrist control
         telemetry.addData("Wrist Current Position: ", servoWrist.getPosition());
         telemetry.addData("WristPOS: ", wristPos);
-        if (gamepad2.y && wristPos > 0.01)
+        if (gamepad2.a && wristPos > 0.01)
         {
             wristPos -= .01;
         }
-        else if (gamepad2.a && wristPos < .99)
+        else if (gamepad2.y && wristPos < .99)
         {
             wristPos += .01;
         }
