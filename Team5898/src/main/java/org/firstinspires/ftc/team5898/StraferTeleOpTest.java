@@ -27,7 +27,7 @@ public class StraferTeleOpTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide;
+    private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide, motorLeftHanging, motorRightHanging;
     private Servo servoClaw, servoWrist;
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
@@ -66,13 +66,15 @@ public class StraferTeleOpTest extends OpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         motorFrontLeft = hardwareMap.dcMotor.get("FL");
-        motorBackLeft = hardwareMap.dcMotor.get("RL");
+        motorBackLeft = hardwareMap.dcMotor.get("BL");
         motorFrontRight = hardwareMap.dcMotor.get("FR");
-        motorBackRight = hardwareMap.dcMotor.get("RR");
+        motorBackRight = hardwareMap.dcMotor.get("BR");
 
         // These are the extra moving parts
-        motorArmTilt = hardwareMap.dcMotor.get("Arm");
-        motorBeltSlide = hardwareMap.dcMotor.get("Belt");
+        motorArmTilt = hardwareMap.dcMotor.get("ARM");
+        motorBeltSlide = hardwareMap.dcMotor.get("BELT");
+        motorLeftHanging = hardwareMap.dcMotor.get("LH");
+        motorRightHanging = hardwareMap.dcMotor.get("RH");
         servoClaw = hardwareMap.servo.get("Claw");
         servoWrist = hardwareMap.servo.get("Wrist");
 
@@ -82,6 +84,7 @@ public class StraferTeleOpTest extends OpMode {
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorLeftHanging.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -192,11 +195,15 @@ public class StraferTeleOpTest extends OpMode {
         double backLeftPower = (rotY - rotX + rx) / denominator;
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
+        double leftHangPower = (rotY + rotX - rx) / denominator;
+        double rightHangPower = (rotY + rotX - rx) / denominator;
 
         motorFrontLeft.setPower(frontLeftPower);
         motorBackLeft.setPower(backLeftPower);
         motorFrontRight.setPower(frontRightPower);
         motorBackRight.setPower(backRightPower);
+        motorLeftHanging.setPower(leftHangPower);
+        motorRightHanging.setPower(rightHangPower);
 
         int slidePos = motorBeltSlide.getCurrentPosition();
         int tiltPos = motorArmTilt.getCurrentPosition();
@@ -287,6 +294,22 @@ public class StraferTeleOpTest extends OpMode {
         }
 
 
+        // Hanging
+        if (gamepad1.a)
+        {
+            motorLeftHanging.setPower(.5);
+            motorRightHanging.setPower(.5);
+        }
+        else if (gamepad1.b)
+        {
+            motorLeftHanging.setPower(-.5);
+            motorRightHanging.setPower(-.5);
+        }
+        else
+        {
+            motorLeftHanging.setPower(0);
+            motorRightHanging.setPower(0);
+        }
 
         telemetry.update();
     }
