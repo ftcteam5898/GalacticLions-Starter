@@ -34,6 +34,7 @@ public class Auto_High extends LinearOpMode {
     IMU imu;
 
 
+
     public class Claw {
         private Servo clawLeft = hardwareMap.servo.get("vl");
         private Servo clawRight = hardwareMap.servo.get("vr");
@@ -55,21 +56,7 @@ public class Auto_High extends LinearOpMode {
         }
     }
 
-    public enum SlidePosition {
-        EXPANDED_DOWN(-1545), // TODO: need to change
-        CONTRACTED(0), // TODO: need to change
-        EXPANDED_UP(-2883); // TODO: need to change
 
-        private final int position;
-
-        SlidePosition(int position) {
-            this.position = position;
-        }
-
-        public int getPosition() {
-            return position;
-        }
-    }
     public class Slide{
         private DcMotor slideMotor;
 
@@ -77,19 +64,19 @@ public class Auto_High extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(SlidePosition.EXPANDED_DOWN.getPosition());
+            slideMotor.setTargetPosition(1545);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void contract(){
-            slideMotor.setTargetPosition(SlidePosition.CONTRACTED.getPosition());
+            slideMotor.setTargetPosition(0);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
-            slideMotor.setTargetPosition(SlidePosition.EXPANDED_UP.getPosition());
+            slideMotor.setTargetPosition(-2900);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -106,7 +93,6 @@ public class Auto_High extends LinearOpMode {
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
-            this.armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             this.armMotor.setPower(.5);
             this.armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
@@ -157,7 +143,8 @@ public class Auto_High extends LinearOpMode {
         waitForStart();
 
         arm.down();
-
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setPower(0.5);
         claw.open();
 
         sleep(500);
@@ -165,15 +152,22 @@ public class Auto_High extends LinearOpMode {
         claw.close();
         
         sleep(100);
-        armMotor.setTargetPosition(-3000);
 
-        forward(24,0.5);
+
+        forward(14,0.5);
         turnWithGyro(225,-0.6);
-        forward(10,0.45); //TODO:need to change (Distance)
+        forward(10,0.45);
 
         slide.expandDown();
 
-        
+        while(opModeIsActive()){
+            if(!armMotor.isBusy()){
+                armMotor.setPower(0.5);
+            }
+            if(!slideMotor.isBusy()){
+                slideMotor.setPower(0.5);
+            }
+        }
     }
     public void forward(double inches, double speed) {
         moveToPosition(inches, speed);
