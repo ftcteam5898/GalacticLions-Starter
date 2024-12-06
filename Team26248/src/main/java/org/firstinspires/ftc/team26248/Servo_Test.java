@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+
 @TeleOp(name="Servo Test", group="Test")
 public class Servo_Test extends LinearOpMode {
     @Override
@@ -11,6 +12,8 @@ public class Servo_Test extends LinearOpMode {
 
         Servo rightServo = hardwareMap.servo.get("vr");
         Servo leftServo = hardwareMap.servo.get("vl");
+        rightServo.setPosition(rightServo.getPosition());
+        leftServo.setPosition(leftServo.getPosition());
         waitForStart();
         if (isStopRequested()) return;
 

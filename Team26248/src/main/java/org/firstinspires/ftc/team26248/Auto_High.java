@@ -38,10 +38,10 @@ public class Auto_High extends LinearOpMode {
     public class Claw {
         private Servo clawLeft = hardwareMap.servo.get("vl");
         private Servo clawRight = hardwareMap.servo.get("vr");
-        private final double CLAW_LEFT_OPEN = 0.4; //TODO:need update for new claw
-        private final double CLAW_RIGHT_OPEN = 0.4; //TODO:need update for new claw
-        private final double CLAW_LEFT_CLOSE = 0.6; //TODO:need update for new claw
-        private final double CLAW_RIGHT_CLOSE = 0.6; //TODO:need update for new claw
+        private final double CLAW_LEFT_OPEN = 0.5;
+        private final double CLAW_RIGHT_OPEN = 0.6;
+        private final double CLAW_LEFT_CLOSE = 0.6;
+        private final double CLAW_RIGHT_CLOSE = 0.75;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
