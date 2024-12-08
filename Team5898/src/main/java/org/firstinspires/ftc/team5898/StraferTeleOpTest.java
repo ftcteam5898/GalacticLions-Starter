@@ -3,8 +3,10 @@ package org.firstinspires.ftc.team5898;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -27,8 +29,14 @@ public class StraferTeleOpTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+<<<<<<< Updated upstream
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide, motorLeftHanging, motorRightHanging;
     private Servo servoClaw, servoWrist;
+=======
+    private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide;
+    private Servo servoWrist;
+    private CRServo servoClaw;
+>>>>>>> Stashed changes
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
@@ -37,6 +45,8 @@ public class StraferTeleOpTest extends OpMode {
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
+
+    public CRServo clawPos;
 
     private boolean slideLimit;
 
@@ -71,11 +81,17 @@ public class StraferTeleOpTest extends OpMode {
         motorBackRight = hardwareMap.dcMotor.get("BR");
 
         // These are the extra moving parts
+<<<<<<< Updated upstream
         motorArmTilt = hardwareMap.dcMotor.get("ARM");
         motorBeltSlide = hardwareMap.dcMotor.get("BELT");
         motorLeftHanging = hardwareMap.dcMotor.get("LH");
         motorRightHanging = hardwareMap.dcMotor.get("RH");
         servoClaw = hardwareMap.servo.get("Claw");
+=======
+        motorArmTilt = hardwareMap.dcMotor.get("Arm");
+        motorBeltSlide = hardwareMap.dcMotor.get("Belt");
+        servoClaw = hardwareMap.crservo.get("Claw");
+>>>>>>> Stashed changes
         servoWrist = hardwareMap.servo.get("Wrist");
 
 
@@ -213,13 +229,13 @@ public class StraferTeleOpTest extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (gamepad2.dpad_up && slidePos <= 1800)
-            {
-                motorBeltSlide.setPower(.5);
-            }
-            else if (gamepad2.dpad_down && slidePos > 10)
+            if (gamepad2.dpad_up && slidePos >= -1800)
             {
                 motorBeltSlide.setPower(-.5);
+            }
+            else if (gamepad2.dpad_down && slidePos < -10)
+            {
+                motorBeltSlide.setPower(.5);
             }
             else
             {
@@ -238,11 +254,11 @@ public class StraferTeleOpTest extends OpMode {
         else{
             if (gamepad2.dpad_up)
             {
-                motorBeltSlide.setPower(.5);
-            }
-            else if (gamepad2.dpad_down && slidePos > 10)
-            {
                 motorBeltSlide.setPower(-.5);
+            }
+            else if (gamepad2.dpad_down && slidePos > -10)
+            {
+                motorBeltSlide.setPower(.5);
             }
             else
             {
@@ -286,11 +302,11 @@ public class StraferTeleOpTest extends OpMode {
 
         if (gamepad1.left_bumper)
         {
-            servoClaw.setPosition(CLAW_OPEN);//open
+            servoClaw.setPower(.5);
         }
         else if (gamepad1.right_bumper)
         {
-            servoClaw.setPosition(CLAW_CLOSE);//close
+            servoClaw.setPower(-.5);
         }
 
 
