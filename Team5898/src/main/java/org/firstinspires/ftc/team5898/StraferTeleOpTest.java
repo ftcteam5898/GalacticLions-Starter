@@ -29,14 +29,11 @@ public class StraferTeleOpTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-<<<<<<< Updated upstream
-    private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide, motorLeftHanging, motorRightHanging;
-    private Servo servoClaw, servoWrist;
-=======
+
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide;
     private Servo servoWrist;
     private CRServo servoClaw;
->>>>>>> Stashed changes
+
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
@@ -81,17 +78,11 @@ public class StraferTeleOpTest extends OpMode {
         motorBackRight = hardwareMap.dcMotor.get("BR");
 
         // These are the extra moving parts
-<<<<<<< Updated upstream
-        motorArmTilt = hardwareMap.dcMotor.get("ARM");
-        motorBeltSlide = hardwareMap.dcMotor.get("BELT");
-        motorLeftHanging = hardwareMap.dcMotor.get("LH");
-        motorRightHanging = hardwareMap.dcMotor.get("RH");
-        servoClaw = hardwareMap.servo.get("Claw");
-=======
+
         motorArmTilt = hardwareMap.dcMotor.get("Arm");
         motorBeltSlide = hardwareMap.dcMotor.get("Belt");
         servoClaw = hardwareMap.crservo.get("Claw");
->>>>>>> Stashed changes
+
         servoWrist = hardwareMap.servo.get("Wrist");
 
 
@@ -100,7 +91,7 @@ public class StraferTeleOpTest extends OpMode {
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorLeftHanging.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -218,8 +209,7 @@ public class StraferTeleOpTest extends OpMode {
         motorBackLeft.setPower(backLeftPower);
         motorFrontRight.setPower(frontRightPower);
         motorBackRight.setPower(backRightPower);
-        motorLeftHanging.setPower(leftHangPower);
-        motorRightHanging.setPower(rightHangPower);
+
 
         int slidePos = motorBeltSlide.getCurrentPosition();
         int tiltPos = motorArmTilt.getCurrentPosition();
@@ -307,24 +297,6 @@ public class StraferTeleOpTest extends OpMode {
         else if (gamepad1.right_bumper)
         {
             servoClaw.setPower(-.5);
-        }
-
-
-        // Hanging
-        if (gamepad1.a)
-        {
-            motorLeftHanging.setPower(.5);
-            motorRightHanging.setPower(.5);
-        }
-        else if (gamepad1.b)
-        {
-            motorLeftHanging.setPower(-.5);
-            motorRightHanging.setPower(-.5);
-        }
-        else
-        {
-            motorLeftHanging.setPower(0);
-            motorRightHanging.setPower(0);
         }
 
         telemetry.update();
