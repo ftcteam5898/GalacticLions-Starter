@@ -25,8 +25,8 @@ public class StraferTeleOpTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontLeft, backLeft, frontRight, backRight, arm;
-    private Servo claw, stupid;
+    private DcMotor frontLeft, backLeft, frontRight, backRight, arm, intakeSlide;
+    private Servo claw, stupid, intakeClaw, intakeWrist;
     private IMU imu;
     final double CLAW_OPEN = 0.5;
     final double CLAW_CLOSE = 0.65;
@@ -71,6 +71,8 @@ public class StraferTeleOpTest extends OpMode {
 
         claw = hardwareMap.get(Servo.class, "claw");
         stupid = hardwareMap.get(Servo.class, "stupid");
+        intakeClaw = hardwareMap.get(Servo.class, "Intake Claw");
+        intakeWrist = hardwareMap.get(Servo.class, "Intake Wrist");
 
         // Reverse the left side motors
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);

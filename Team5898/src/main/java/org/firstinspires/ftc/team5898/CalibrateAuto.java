@@ -33,8 +33,8 @@ public class CalibrateAuto extends LinearOpMode{
     public void runOpMode() {
         frontleft = hardwareMap.dcMotor.get("FL");
         frontright = hardwareMap.dcMotor.get("FR");
-        backleft = hardwareMap.dcMotor.get("RL");
-        backright = hardwareMap.dcMotor.get("RR");
+        backleft = hardwareMap.dcMotor.get("BL");
+        backright = hardwareMap.dcMotor.get("BR");
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);//If your robot goes backward, switch this from right to left
         waitForStart();

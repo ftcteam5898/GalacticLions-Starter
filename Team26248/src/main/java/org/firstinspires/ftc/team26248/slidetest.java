@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @TeleOp(name="SlidePositionTest", group="Test")
 public class slidetest extends LinearOpMode {
     @Override
+
     public void runOpMode() {
         boolean direction = true;
         DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
