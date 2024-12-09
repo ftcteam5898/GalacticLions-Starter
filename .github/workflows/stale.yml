@@ -36,8 +36,11 @@ jobs:
           
           # Issues with these labels will never be considered stale. Set to `[]` to disable
           exempt-issue-labels: 'Lifecycle: Frozen'
-
+          
+          # Label to remove when stale
           labels-to-remove-when-stale: 'Lifecycle: Active'
+
+          # Label to remove when unstale
           labels-to-add-when-unstale: 'Lifecycle: Active'
           
           # Comment to post when marking as stale.
