@@ -16,5 +16,3 @@ Please outline the motivation for the proposal. Is your feature request related 
 
 ## Implementation Plan
 Outline your plan for implementing this feature or improvement.
-
-## Your Contribution
