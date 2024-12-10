@@ -1,5 +1,3 @@
-> Before issuing a pull request, please see the contributing page.
-
 ## Description
 Please include a summary of the changes and the related issue.
 
