@@ -23,7 +23,7 @@ public class Auto_High extends LinearOpMode {
 
     double cpr = 537.7; //312 RPM Gobilda
     double gearRatio = 1;
-    double diameter = 4.094; //for Gobilda 104mm Mecanum wheel
+    double diameter = 3.779; //for Gobilda 104mm Mecanum wheel
     double cpi = (cpr*gearRatio) / (Math.PI * diameter);
     double bias = 0.94;
     double strafeBias = 1.0;
@@ -36,11 +36,11 @@ public class Auto_High extends LinearOpMode {
 
 
     public class Claw {
-        private Servo clawLeft = hardwareMap.servo.get("vl");
-        private Servo clawRight = hardwareMap.servo.get("vr");
-        private final double CLAW_LEFT_OPEN = 0.5;
-        private final double CLAW_RIGHT_OPEN = 0.6;
-        private final double CLAW_LEFT_CLOSE = 0.6;
+        private Servo clawLeft;
+        private Servo clawRight;
+        private final double CLAW_LEFT_OPEN = 0.25;
+        private final double CLAW_RIGHT_OPEN = 0.5;
+        private final double CLAW_LEFT_CLOSE = 0.5;
         private final double CLAW_RIGHT_CLOSE = 0.75;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
@@ -147,6 +147,13 @@ public class Auto_High extends LinearOpMode {
 
         sleep(500);
         //Code Here
+        back(82,0.6);
+        strafeRight(10,0.6);
+        claw.open();
+        slide.expandDown();
+        claw.close();
+        sleep(500);
+
 
 
 

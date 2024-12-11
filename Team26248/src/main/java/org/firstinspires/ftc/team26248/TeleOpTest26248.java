@@ -20,9 +20,9 @@ public class TeleOpTest26248 extends OpMode {
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, armMotor, slideMotor;
     private Servo clawLeftMotor, clawRightMotor;
     private IMU imu;
-    private final double CLAW_LEFT_OPEN = 0.5;
-    private final double CLAW_RIGHT_OPEN = 0.6;
-    private final double CLAW_LEFT_CLOSE = 0.6;
+    private final double CLAW_LEFT_OPEN = 0.25;
+    private final double CLAW_RIGHT_OPEN = 0.5;
+    private final double CLAW_LEFT_CLOSE = 0.5;
     private final double CLAW_RIGHT_CLOSE = 0.75;
     final int TILT_HIGH = 2000;
     final int TILT_LOW = 500;
