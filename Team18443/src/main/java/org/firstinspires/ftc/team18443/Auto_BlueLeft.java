@@ -87,7 +87,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         // Reverse and strafe to Observation Zone
         back(13,.3);
         strafeRight(47,.5);
-        lowerArm(540);
+        //lowerArm(500);
 
         // Go forward, move right, push blue sample into ob zone
         forward(30,.2);

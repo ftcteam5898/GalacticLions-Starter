@@ -3,8 +3,10 @@ package org.firstinspires.ftc.team5898;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -27,8 +29,11 @@ public class StraferTeleOpTest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorArmTilt, motorBeltSlide;
-    private Servo servoClaw, servoWrist;
+    private Servo servoWrist;
+    private CRServo servoClaw;
+
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
@@ -37,6 +42,8 @@ public class StraferTeleOpTest extends OpMode {
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
+
+    public CRServo clawPos;
 
     private boolean slideLimit;
 
@@ -66,14 +73,16 @@ public class StraferTeleOpTest extends OpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         motorFrontLeft = hardwareMap.dcMotor.get("FL");
-        motorBackLeft = hardwareMap.dcMotor.get("RL");
+        motorBackLeft = hardwareMap.dcMotor.get("BL");
         motorFrontRight = hardwareMap.dcMotor.get("FR");
-        motorBackRight = hardwareMap.dcMotor.get("RR");
+        motorBackRight = hardwareMap.dcMotor.get("BR");
 
         // These are the extra moving parts
+
         motorArmTilt = hardwareMap.dcMotor.get("Arm");
         motorBeltSlide = hardwareMap.dcMotor.get("Belt");
-        servoClaw = hardwareMap.servo.get("Claw");
+        servoClaw = hardwareMap.crservo.get("Claw");
+
         servoWrist = hardwareMap.servo.get("Wrist");
 
 
@@ -82,6 +91,7 @@ public class StraferTeleOpTest extends OpMode {
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -192,11 +202,14 @@ public class StraferTeleOpTest extends OpMode {
         double backLeftPower = (rotY - rotX + rx) / denominator;
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
+        double leftHangPower = (rotY + rotX - rx) / denominator;
+        double rightHangPower = (rotY + rotX - rx) / denominator;
 
         motorFrontLeft.setPower(frontLeftPower);
         motorBackLeft.setPower(backLeftPower);
         motorFrontRight.setPower(frontRightPower);
         motorBackRight.setPower(backRightPower);
+
 
         int slidePos = motorBeltSlide.getCurrentPosition();
         int tiltPos = motorArmTilt.getCurrentPosition();
@@ -206,13 +219,13 @@ public class StraferTeleOpTest extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (gamepad2.dpad_up && slidePos <= 1800)
-            {
-                motorBeltSlide.setPower(.5);
-            }
-            else if (gamepad2.dpad_down && slidePos > 10)
+            if (gamepad2.dpad_up && slidePos >= -1800)
             {
                 motorBeltSlide.setPower(-.5);
+            }
+            else if (gamepad2.dpad_down && slidePos < -10)
+            {
+                motorBeltSlide.setPower(.5);
             }
             else
             {
@@ -231,11 +244,11 @@ public class StraferTeleOpTest extends OpMode {
         else{
             if (gamepad2.dpad_up)
             {
-                motorBeltSlide.setPower(.5);
-            }
-            else if (gamepad2.dpad_down && slidePos > 10)
-            {
                 motorBeltSlide.setPower(-.5);
+            }
+            else if (gamepad2.dpad_down && slidePos > -10)
+            {
+                motorBeltSlide.setPower(.5);
             }
             else
             {
@@ -279,14 +292,12 @@ public class StraferTeleOpTest extends OpMode {
 
         if (gamepad1.left_bumper)
         {
-            servoClaw.setPosition(CLAW_OPEN);//open
+            servoClaw.setPower(.5);
         }
         else if (gamepad1.right_bumper)
         {
-            servoClaw.setPosition(CLAW_CLOSE);//close
+            servoClaw.setPower(-.5);
         }
-
-
 
         telemetry.update();
     }
