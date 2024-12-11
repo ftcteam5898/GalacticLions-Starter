@@ -147,12 +147,21 @@ public class Auto_High extends LinearOpMode {
 
         sleep(500);
         //Code Here
-        back(82,0.6);
-        strafeRight(10,0.6);
+        forward(82,0.6);
+        sleep(250);
+        strafeLeft(10,0.6);
         claw.open();
         slide.expandDown();
         claw.close();
         sleep(500);
+        forward(30, 0.6);
+        turnWithGyro(45, 0.6);
+        arm.up();
+        sleep(1000);
+        slide.expandUP();
+
+
+
 
 
 

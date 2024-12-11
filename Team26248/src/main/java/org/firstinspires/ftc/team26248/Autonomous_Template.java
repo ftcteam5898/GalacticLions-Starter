@@ -141,6 +141,8 @@ public class Autonomous_Template extends LinearOpMode {
         slide.contract();
         waitForStart();
 
+
+
         sleep(500);
         //Code Here
 
