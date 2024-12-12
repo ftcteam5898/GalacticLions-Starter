@@ -1,9 +1,3 @@
-/*
-TODO: New Claw Positioning
- */
-
-//Remember to change class name after copying the template
-
 package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -19,12 +13,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name = "AutoHigh",group = "Autonomous")
 public class Autonomous_Template extends LinearOpMode {
+    //Remember to change the class name
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
     double cpr = 537.7; //312 RPM Gobilda
     double gearRatio = 1;
-    double diameter = 4.094; //for Gobilda 104mm Mecanum wheel
+    double diameter = 3.779; //for Gobilda Mecanum wheel
     double cpi = (cpr*gearRatio) / (Math.PI * diameter);
     double bias = 0.94;
     double strafeBias = 1.0;
@@ -37,12 +32,12 @@ public class Autonomous_Template extends LinearOpMode {
 
 
     public class Claw {
-        private Servo clawLeft = hardwareMap.servo.get("vl");
-        private Servo clawRight = hardwareMap.servo.get("vr");
-        private final double CLAW_LEFT_OPEN = 0.4; //TODO:need update for new claw
-        private final double CLAW_RIGHT_OPEN = 0.4; //TODO:need update for new claw
-        private final double CLAW_LEFT_CLOSE = 0.6; //TODO:need update for new claw
-        private final double CLAW_RIGHT_CLOSE = 0.6; //TODO:need update for new claw
+        private Servo clawLeft;
+        private Servo clawRight;
+        private final double CLAW_LEFT_OPEN = 0.25;
+        private final double CLAW_RIGHT_OPEN = 0.5;
+        private final double CLAW_LEFT_CLOSE = 0.5;
+        private final double CLAW_RIGHT_CLOSE = 0.75;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -89,8 +84,8 @@ public class Autonomous_Template extends LinearOpMode {
         private DcMotor armMotor;
 
         //Change Arm Status Here
-        private final int arm_up = 2000;
-        private final int arm_down = 500;
+        private final int arm_up = 2000; //TODO:need to change
+        private final int arm_down = 500;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
@@ -147,7 +142,13 @@ public class Autonomous_Template extends LinearOpMode {
         waitForStart();
 
 
+
+        sleep(500);
         //Code Here
+
+
+
+
 
 
 
