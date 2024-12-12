@@ -24,8 +24,12 @@ public class StraferTeleOp extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        DcMotor intakeSlide = hardwareMap.get(DcMotor.class, "intakeSlide");
+
         // Define and Initialize Servos
         Servo claw = hardwareMap.get(Servo.class, "claw");
+
+        Servo intake = hardwareMap.get(Servo.class, "intake");
 
         // Reverse one side of the motors
         // If it goes in reverse, reverse the other side
