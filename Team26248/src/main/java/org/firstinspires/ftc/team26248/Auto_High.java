@@ -38,10 +38,10 @@ public class Auto_High extends LinearOpMode {
     public class Claw {
         private Servo clawLeft;
         private Servo clawRight;
-        private final double CLAW_LEFT_OPEN = 0.25;
-        private final double CLAW_RIGHT_OPEN = 0.5;
-        private final double CLAW_LEFT_CLOSE = 0.5;
-        private final double CLAW_RIGHT_CLOSE = 0.75;
+        private final double CLAW_LEFT_OPEN = 0.3;
+        private final double CLAW_RIGHT_OPEN = 0.7;
+        private final double CLAW_LEFT_CLOSE = 0.75;
+        private final double CLAW_RIGHT_CLOSE = 0.25;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -89,7 +89,7 @@ public class Auto_High extends LinearOpMode {
 
         //Change Arm Status Here
         private final int arm_up = 2000; //TODO:need to change
-        private final int arm_down = 500;//TODO:need to change
+        private final int arm_down = 400;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
@@ -124,8 +124,8 @@ public class Auto_High extends LinearOpMode {
         armMotor = hardwareMap.dcMotor.get("arm");
         slideMotor = hardwareMap.dcMotor.get("slide");
 
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -143,22 +143,31 @@ public class Auto_High extends LinearOpMode {
         initGyro();
         arm.down();
         slide.contract();
+        claw.open();
         waitForStart();
 
-        sleep(500);
-        //Code Here
-        forward(82,0.6);
-        sleep(250);
-        strafeLeft(10,0.6);
-        claw.open();
+        strafeLeft(12,0.6);
+        arm.down();
         slide.expandDown();
+        forward(13,0.6);
+        sleep(1000);
         claw.close();
         sleep(500);
-        forward(30, 0.6);
-        turnWithGyro(45, 0.6);
+        slide.contract();
+        sleep(250);
+        turnLeft(-90,0.6);
+        sleep(250);
+        turnLeft(-40,0.6);
+        forward(8,0.5);
+        sleep(200);
         arm.up();
         sleep(1000);
         slide.expandUP();
+        sleep(3000);
+        claw.open();
+        sleep(250);
+        slide.contract();
+        arm.down();
 
 
 
@@ -169,6 +178,8 @@ public class Auto_High extends LinearOpMode {
 
 
 
+
+        //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
                 armMotor.setPower(0.5);
@@ -176,6 +187,9 @@ public class Auto_High extends LinearOpMode {
             if(!slideMotor.isBusy()){
                 slideMotor.setPower(0.5);
             }
+
+            telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.update();
 
             telemetry.addData("Arm Position", armMotor.getCurrentPosition());
             telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
@@ -226,40 +240,29 @@ public class Auto_High extends LinearOpMode {
     }
 
 
-    public void moveToPosition(double inches, double speed) {
-        int move = (int) (Math.round(inches * conversion));
-        int targetBackLeft = backLeft.getCurrentPosition() + move;
-        int targetFrontLeft = frontLeft.getCurrentPosition() + move;
-        int targetBackRight = backRight.getCurrentPosition() + move;
-        int targetFrontRight = frontRight.getCurrentPosition() + move;
-
-        backLeft.setTargetPosition(targetBackLeft);
-        frontLeft.setTargetPosition(targetFrontLeft);
-        backRight.setTargetPosition(targetBackRight);
-        frontRight.setTargetPosition(targetFrontRight);
-
-        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void moveToPosition(double inches, double speed){
+        int move = (int)(Math.round(inches*conversion));
+        backLeft.setTargetPosition(backLeft.getCurrentPosition() + move);
+        frontLeft.setTargetPosition(frontLeft.getCurrentPosition() + move);
+        backRight.setTargetPosition(backRight.getCurrentPosition() + move);
+        frontRight.setTargetPosition(frontRight.getCurrentPosition() + move);
         frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         frontLeft.setPower(speed);
         backLeft.setPower(speed);
         frontRight.setPower(speed);
         backRight.setPower(speed);
-
-        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()) {
-            telemetry.addData("Moving to position", "In Progress");
+        while (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()){
+            telemetry.addData("Busy...", "");
             telemetry.update();
         }
-
-        // Stop all motors
         frontRight.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         backLeft.setPower(0);
     }
-
 
     public void turnWithGyro(double degrees, double speedDirection) {
 
