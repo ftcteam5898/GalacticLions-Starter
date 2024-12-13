@@ -76,7 +76,7 @@ public class Auto_High extends LinearOpMode {
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
-            slideMotor.setTargetPosition(-2900);
+            slideMotor.setTargetPosition(-3050);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -88,7 +88,7 @@ public class Auto_High extends LinearOpMode {
         private DcMotor armMotor;
 
         //Change Arm Status Here
-        private final int arm_up = 2000; //TODO:need to change
+        private final int arm_up = 2100; //TODO:need to change
         private final int arm_down = 400;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
@@ -146,10 +146,10 @@ public class Auto_High extends LinearOpMode {
         claw.open();
         waitForStart();
 
-        strafeLeft(12,0.6);
+        strafeLeft(12,0.5);
         arm.down();
         slide.expandDown();
-        forward(13,0.6);
+        forward(13,0.5);
         sleep(1000);
         claw.close();
         sleep(500);
@@ -158,19 +158,27 @@ public class Auto_High extends LinearOpMode {
         turnLeft(-90,0.6);
         sleep(250);
         turnLeft(-40,0.6);
-        forward(8,0.5);
+        forward(9.5,0.5);
         sleep(200);
         arm.up();
         sleep(1000);
         slide.expandUP();
-        sleep(3000);
+        sleep(3250);
+
         claw.open();
         sleep(250);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 25);
+        back(2,0.3);
+        sleep(1000);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 20);
+        sleep(250);
         slide.contract();
+        sleep(2500);
         arm.down();
-        turnRight(40,0.6);
+        sleep(2000);
+        turnRight(-40,0.6);
         strafeLeft(20,0.6);
-        back(132,0.8);
+        back(132,0.7);
 
 
 
@@ -185,10 +193,10 @@ public class Auto_High extends LinearOpMode {
         //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
-                armMotor.setPower(0.5);
+                armMotor.setPower(0.8);
             }
             if(!slideMotor.isBusy()){
-                slideMotor.setPower(0.5);
+                slideMotor.setPower(0.7);
             }
 
             telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));

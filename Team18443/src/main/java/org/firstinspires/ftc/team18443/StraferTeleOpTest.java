@@ -241,7 +241,13 @@ public class StraferTeleOpTest extends OpMode {
             intakeWrist.setPosition(.55);
         }
         else {
-            intakeWrist.setPosition(.4);
+            intakeWrist.setPosition(0);
+        }
+        if (gamepad2.left_bumper){
+            intakeClaw.setPosition(.4);
+        }
+        else {
+            intakeClaw.setPosition(.66);
         }
 
 //        if (gamepad2.y){
