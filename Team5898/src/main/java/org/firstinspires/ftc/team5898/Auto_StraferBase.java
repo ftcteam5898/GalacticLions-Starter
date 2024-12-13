@@ -51,7 +51,7 @@ public class Auto_StraferBase extends LinearOpMode{
 
     final int BELT_OUT = 3000;
 
-    final int BELT_PARK = 1500;
+    final int BELT_PARK = 2000;
 
     final int BELT_IN = 0;
     IMU imu;
@@ -131,8 +131,13 @@ public class Auto_StraferBase extends LinearOpMode{
         wrist(.5, .25);
         sleep(2000);
         turnLeft(-30, .6);
-        forward(56, 1);
-        turnRight(70, .6);
+        strafeLeft(25, .6);
+        strafeRight(10, .6);
+        servoClaw.setPower(-1);
+        forward(45, 1);
+        servoClaw.setPower(0);
+        turnRight(-70, .6);
+        forward(15, .6);
         sleep(500);
         motorArmTilt.setPower(1);
         motorArmTilt.setTargetPosition(TILT_PARK);
@@ -141,6 +146,7 @@ public class Auto_StraferBase extends LinearOpMode{
         motorBeltDrive.setPower(1);
         motorBeltDrive.setTargetPosition(BELT_PARK);
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(2000);
 //        strafeLeft(20, .6);
 //        strafeRight(7, .6);
 //        //Getting Sample
