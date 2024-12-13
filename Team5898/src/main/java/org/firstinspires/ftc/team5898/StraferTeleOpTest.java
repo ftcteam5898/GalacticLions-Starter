@@ -246,7 +246,7 @@ public class StraferTeleOpTest extends OpMode {
             {
                 motorBeltSlide.setPower(-.5);
             }
-            else if (gamepad2.dpad_down && slidePos > -10)
+            else if (gamepad2.dpad_down && slidePos < -10)
             {
                 motorBeltSlide.setPower(.5);
             }
@@ -267,7 +267,7 @@ public class StraferTeleOpTest extends OpMode {
 
         if (gamepad2.right_trigger > 0.3)
         {
-            motorBeltSlide.setPower(-.5);
+            motorBeltSlide.setPower(.5);
         }
 
         if (gamepad2.back) {
@@ -298,6 +298,8 @@ public class StraferTeleOpTest extends OpMode {
         {
             servoClaw.setPower(-.5);
         }
+        else
+            servoClaw.setPower(0);
 
         telemetry.update();
     }
