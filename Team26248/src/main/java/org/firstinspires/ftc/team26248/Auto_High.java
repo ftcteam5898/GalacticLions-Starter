@@ -168,6 +168,9 @@ public class Auto_High extends LinearOpMode {
         sleep(250);
         slide.contract();
         arm.down();
+        turnRight(40,0.6);
+        strafeLeft(20,0.6);
+        back(132,0.8);
 
 
 
