@@ -240,6 +240,9 @@ public class StraferTeleOpTest extends OpMode {
         if (gamepad2.x){
             intakeWrist.setPosition(.55);
         }
+        else if (gamepad2.dpad_left){
+            intakeWrist.setPosition(.2);
+        }
         else {
             intakeWrist.setPosition(0);
         }
@@ -249,6 +252,7 @@ public class StraferTeleOpTest extends OpMode {
         else {
             intakeClaw.setPosition(.66);
         }
+
 
 //        if (gamepad2.y){
 //            intakeClaw.setPosition(.5);
