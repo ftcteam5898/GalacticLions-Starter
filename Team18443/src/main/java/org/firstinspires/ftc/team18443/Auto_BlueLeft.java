@@ -104,6 +104,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         strafeRight(18,.3);
         strafeLeft(1,.2);
         back(50,.5);
+        lowerArm(600);
 
         sleep(1000);
     }
