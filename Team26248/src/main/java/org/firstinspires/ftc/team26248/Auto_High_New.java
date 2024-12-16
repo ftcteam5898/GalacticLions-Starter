@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoHigh",group = "Autonomous")
-public class Auto_High extends LinearOpMode {
+@Autonomous(name = "AutoHigh (Use this,No Parking)",group = "Autonomous")
+public class Auto_High_New extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
@@ -158,8 +158,8 @@ public class Auto_High extends LinearOpMode {
         turnLeft(-90,0.6);
         sleep(250);
         turnLeft(-40,0.6);
-        sleep(250);
-        forward(8.75,0.5);
+        sleep(500);
+        forward(9,0.5);
         sleep(200);
         arm.up();
         sleep(1000);
@@ -169,8 +169,8 @@ public class Auto_High extends LinearOpMode {
         claw.open();
         sleep(250);
         armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
-        back(2,0.3);
-        sleep(750);
+        back(2,0.5);
+        sleep(550);
         armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
         sleep(250);
         slide.contract();
@@ -179,18 +179,9 @@ public class Auto_High extends LinearOpMode {
         sleep(1500);
         turnRight(-40,0.7);
         sleep(250);
-        turnLeft(-90,1);
-        strafeLeft(15,0.7);
-        back(132,1);
+        turnRight(-90,0.7);
         sleep(500);
-        slideMotor.setTargetPosition(100);
-        sleep(500);
-        claw.close();
-        sleep(250);
-        armMotor.setTargetPosition(100);
-        sleep(250);
-        stop();
-
+        back(5,0.6);
 
 
 
@@ -204,10 +195,10 @@ public class Auto_High extends LinearOpMode {
         //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
-                armMotor.setPower(0.7);
+                armMotor.setPower(1);
             }
             if(!slideMotor.isBusy()){
-                slideMotor.setPower(0.7);
+                slideMotor.setPower(1);
             }
 
             telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
