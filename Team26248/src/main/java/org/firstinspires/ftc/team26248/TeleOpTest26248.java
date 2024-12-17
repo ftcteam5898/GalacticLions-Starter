@@ -25,7 +25,7 @@ public class TeleOpTest26248 extends OpMode {
     private final double CLAW_LEFT_CLOSE = 0.5;
     private final double CLAW_RIGHT_CLOSE = 0.75;
     final int TILT_HIGH = 2000;
-    final int TILT_LOW = 420;
+    final int TILT_LOW = 410;
 
     private boolean slideLimit;
 
