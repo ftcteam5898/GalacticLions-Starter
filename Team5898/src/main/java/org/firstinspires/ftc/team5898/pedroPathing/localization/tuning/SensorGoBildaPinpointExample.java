@@ -1,5 +1,3 @@
-package org.firstinspires.ftc.team5898;
-
 /*   MIT License
  *   Copyright (c) [2024] [Base 10 Assets, LLC]
  *
@@ -22,6 +20,8 @@ package org.firstinspires.ftc.team5898;
  *   SOFTWARE.
  */
 
+package org.firstinspires.ftc.team5898.pedroPathing.localization.tuning;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.team5898.pedroPathing.localization.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
@@ -58,8 +59,9 @@ For support, contact tech@gobilda.com
 -Ethan Doak
  */
 
+//TODO: If tuning comment out the @Disabled
 @TeleOp(name="goBILDA® PinPoint Odometry Example", group="Linear OpMode")
-
+@Disabled
 
 public class SensorGoBildaPinpointExample extends LinearOpMode {
 
@@ -84,7 +86,7 @@ public class SensorGoBildaPinpointExample extends LinearOpMode {
         the tracking point the Y (strafe) odometry pod is. forward of center is a positive number,
         backwards is a negative number.
          */
-        odo.setOffsets(-84.0, -168.0); //these are tuned for 3110-0002-0001 Product Insight #1
+        odo.setOffsets(11.4, 9.5); //these are tuned for 3110-0002-0001 Product Insight #1
 
         /*
         Set the kind of pods used by your robot. If you're using goBILDA odometry pods, select either
