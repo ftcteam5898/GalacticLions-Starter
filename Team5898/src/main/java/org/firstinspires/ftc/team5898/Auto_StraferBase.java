@@ -41,7 +41,7 @@ public class Auto_StraferBase extends LinearOpMode{
     //
     double conversion = cpi * bias;
     //
-    final int TILT_HIGH = 1900;
+    final int TILT_HIGH = 1850;
 
     final int TILT_LOW = 200;
 
@@ -135,7 +135,7 @@ public class Auto_StraferBase extends LinearOpMode{
         sleep(2000);
         turnLeft(-45, .6);
         strafeLeft(14, .6);
-        strafeRight(8, .4);
+        strafeRight(7, .4);
         motorBeltDrive.setPower(1);
         motorBeltDrive.setTargetPosition(BELT_SAMPLE);
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -158,7 +158,7 @@ public class Auto_StraferBase extends LinearOpMode{
         back(10, .4);
         turnRight(-45, .4);
         forward(2, .4);
-        strafeRight(6, .4);
+        strafeRight(4, .4);
         motorArmTilt.setPower(1);
         motorArmTilt.setTargetPosition(TILT_HIGH);
         motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
