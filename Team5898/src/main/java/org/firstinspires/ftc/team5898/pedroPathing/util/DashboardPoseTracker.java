@@ -41,8 +41,6 @@ public class DashboardPoseTracker {
         lastUpdateTime = System.currentTimeMillis() - UPDATE_TIME;
     }
 
-    public DashboardPoseTracker(PoseUpdater poseUpdater) {
-    }
 
     /**
      * This updates the DashboardPoseTracker. When the specified update time has passed from the last
