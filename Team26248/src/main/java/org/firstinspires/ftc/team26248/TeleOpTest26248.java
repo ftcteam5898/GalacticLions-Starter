@@ -25,7 +25,7 @@ public class TeleOpTest26248 extends OpMode {
     private final double CLAW_LEFT_CLOSE = 0.5;
     private final double CLAW_RIGHT_CLOSE = 0.75;
     final int TILT_HIGH = 2000;
-    final int TILT_LOW = 500;
+    final int TILT_LOW = 420;
 
     private boolean slideLimit;
 
@@ -77,9 +77,7 @@ public class TeleOpTest26248 extends OpMode {
 
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Tell the driver that initialization is complete.
@@ -113,7 +111,7 @@ public class TeleOpTest26248 extends OpMode {
      */
     @Override
     public void loop() {
-        armMotor.setPower(0.5);
+        armMotor.setPower(0.8);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
 
@@ -171,10 +169,10 @@ public class TeleOpTest26248 extends OpMode {
         // This ensures all the powers maintain the same ratio, but only when
         // at least one is out of the range [-1, 1]
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator * 0.875;
-        double backLeftPower = (rotY - rotX + rx) / denominator * 0.875;
-        double frontRightPower = (rotY - rotX - rx) / denominator *0.875;
-        double backRightPower = (rotY + rotX - rx) / denominator * 0.875;
+        double frontLeftPower = (rotY + rotX + rx) / denominator;
+        double backLeftPower = (rotY - rotX + rx) / denominator;
+        double frontRightPower = (rotY - rotX - rx) / denominator;
+        double backRightPower = (rotY + rotX - rx) / denominator;
 
         motorFrontLeft.setPower(frontLeftPower);
         motorBackLeft.setPower(backLeftPower);
@@ -190,9 +188,9 @@ public class TeleOpTest26248 extends OpMode {
         if (slideLimit)
         {
             if (slidePos > -1520 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .5);
+                slideMotor.setPower(gamepad2.left_stick_y * .65);
             else if (slidePos < -10 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .5);
+                slideMotor.setPower(gamepad2.left_stick_y * .65);
             else
             {
                 slideMotor.setPower(0);
@@ -201,9 +199,9 @@ public class TeleOpTest26248 extends OpMode {
         }
         else{
             if (slidePos > -3100 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .5);
+                slideMotor.setPower(gamepad2.left_stick_y * .65);
             else if (slidePos < -10 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .5);
+                slideMotor.setPower(gamepad2.left_stick_y * .65);
             else
             {
                 slideMotor.setPower(0);

@@ -37,8 +37,10 @@ public class StraferTeleOpTest extends OpMode {
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
-    final int TILT_HIGH = 1870;
-    final int TILT_LOW = 100;
+    final int TILT_HIGH = 1900;
+    final int TILT_LOW = 200;
+    final int BELT_IN = 0;
+    final int BELT_OUT = 3000;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
@@ -149,20 +151,55 @@ public class StraferTeleOpTest extends OpMode {
             case ARM_START:
                 // wait for input
                 if (gamepad2.left_bumper) {
-                    motorArmTilt.setTargetPosition(TILT_HIGH);
                     armState = ArmState.ARM_EXTEND;
-                    slideLimit = false;
+                    runtime.reset();
                 }
                 break;
             case ARM_EXTEND:
-                // check if the arm has finished tilting,
-                // otherwise do nothing.
-                if (gamepad2.right_bumper) {
+                motorArmTilt.setPower(1);
+                motorArmTilt.setTargetPosition(TILT_HIGH);
+                motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                if (runtime.seconds() == 0.5)
+                {
+                    double wrist_drop = .4;
+                    servoWrist.setPosition(wrist_drop);
+                    motorBeltSlide.setPower(1);
+                    motorBeltSlide.setTargetPosition(BELT_OUT);
+                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+                else if (runtime.seconds() == 2)
+                {
+                    telemetry.addData("Auto:","extending belt");
+                    telemetry.update();
+                    servoWrist.setPosition(.9);
+                }
+                else if (runtime.seconds() == 2.6)
+                {
+                    servoClaw.setPower(1);
+                }
+                else if (runtime.seconds() == 3.6)
+                {
+                    servoClaw.setPower(0);
+                    servoWrist.setPosition(.4);
+                }
+                else if (runtime.seconds() == 4.2)
+                {
+                    motorBeltSlide.setPower(1);
+                    motorBeltSlide.setTargetPosition(BELT_IN);
+                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+                else if (runtime.seconds() == 5.2)
+                {
+                    motorArmTilt.setPower(1);
                     motorArmTilt.setTargetPosition(TILT_LOW);
+                    motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     armState = ArmState.ARM_START;
                     slideLimit = true;
                 }
-                break;
+
+
+
             default:
                 // should never be reached, as armState should never be null
                 armState = ArmState.ARM_START;
@@ -246,7 +283,7 @@ public class StraferTeleOpTest extends OpMode {
             {
                 motorBeltSlide.setPower(-.5);
             }
-            else if (gamepad2.dpad_down && slidePos > -10)
+            else if (gamepad2.dpad_down && slidePos < -10)
             {
                 motorBeltSlide.setPower(.5);
             }
@@ -267,7 +304,7 @@ public class StraferTeleOpTest extends OpMode {
 
         if (gamepad2.right_trigger > 0.3)
         {
-            motorBeltSlide.setPower(-.5);
+            motorBeltSlide.setPower(.5);
         }
 
         if (gamepad2.back) {
@@ -298,6 +335,8 @@ public class StraferTeleOpTest extends OpMode {
         {
             servoClaw.setPower(-.5);
         }
+        else
+            servoClaw.setPower(0);
 
         telemetry.update();
     }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.team5898;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,7 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Auto_StraferBase extends LinearOpMode{
     // variable declaration & setup
     DcMotor frontleft, frontright, backleft, backright, motorArmTilt, motorBeltDrive;
-    Servo servoClaw, servoWrist;
+    Servo servoWrist;
+    CRServo servoClaw;
 
     // motor counts per rotation (ticks/pulses per rotation)
     // check motor specs from manufacturer
@@ -39,12 +41,26 @@ public class Auto_StraferBase extends LinearOpMode{
     //
     double conversion = cpi * bias;
     //
+    final int TILT_HIGH = 1850;
+
+    final int TILT_LOW = 200;
+
+    final int TILT_MID = 1000;
+
+    final int TILT_PARK = 1300;
+    final int TILT_SAMPLE_UP = 800;
+    final int TILT_SAMPLE_DOWN = 510;
+
+    final int BELT_OUT = 3000;
+
+    final int BELT_PARK = 2000;
+    final int BELT_SAMPLE = 1070;
+
+    final int BELT_IN = 0;
     IMU imu;
 
     @Override
     public void runOpMode(){
-
-        initGyro();
 
         // setup motors
         // make sure names match what is in the config on Driver Hub
@@ -54,57 +70,142 @@ public class Auto_StraferBase extends LinearOpMode{
         backright = hardwareMap.dcMotor.get("BR");
         motorArmTilt = hardwareMap.dcMotor.get("Arm");
         motorBeltDrive = hardwareMap.dcMotor.get("Belt");
-        servoClaw = hardwareMap.servo.get("Claw");
+        servoClaw = hardwareMap.crservo.get("Claw");
         servoWrist = hardwareMap.servo.get("Wrist");
-        double wristPos = .7;
-        servoWrist.setPosition(wristPos);
-        sleep(1000);
-        double CLAW_CLOSE = 0.27;
-        double CLAW_OPEN = 0.4;
-        servoClaw.setPosition(CLAW_CLOSE);
+
+        motorArmTilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBeltDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorArmTilt.setPower(.5);
+        motorArmTilt.setTargetPosition(TILT_MID);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
 
         // reverse the left side motors
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBeltDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        motorBeltDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         // wait for Start to be pressed
         waitForStart();
+        initGyro();;
+        motorArmTilt.setPower(.5);
+        motorArmTilt.setTargetPosition(TILT_MID);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Call functions here
-
+        servoWrist.setPosition(.6);
+        sleep(1000);
         forward(22, .3);
         turnRight(-48, .3);
         back(19, .3);
         // Claw drops sample into basket
-        tilt(1950, .3);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_HIGH);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
         double wrist_drop = .4;
         servoWrist.setPosition(wrist_drop);
-        belt(3100, .45);
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_OUT);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1500);
         telemetry.addData("Auto:","extending belt");
         telemetry.update();
-        double wrist_in = .9;
-        servoWrist.setPosition(wrist_in);
-        sleep(500);
-        servoClaw.setPosition(CLAW_OPEN);
+        servoWrist.setPosition(.9);
+        sleep(600);
+        servoClaw.setPower(1);
+        sleep(1000);
+        servoClaw.setPower(0);
         servoWrist.setPosition(.4);
-        sleep(2000);
+        sleep(600);
 
         // Getting new Sample and putting in Basket
-        belt(-2100, .6);
-        tilt(-1900, .6);
-        wrist(.3, .25);
-        turnLeft(-40, .6);
-        forward(10, .6);
-        strafeLeft(20, .6);
-        strafeRight(7, .6);
-        //Getting Sample
-        belt(200, .6);
-        double wristPos2 = .2;
-        servoWrist.setPosition(wristPos2);
-        servoClaw.setPosition(CLAW_CLOSE);
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_IN);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_LOW);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wrist(.5, .25);
+        sleep(2000);
+        turnLeft(-45, .6);
+        strafeLeft(14, .6);
+        strafeRight(7, .4);
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_SAMPLE);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_SAMPLE_UP);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        servoWrist.setPosition(.26);
+        sleep(500);
+        forward(9, .4);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_SAMPLE_DOWN);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        servoClaw.setPower(-1);
+        sleep(1000);
+        servoClaw.setPower(0);
+        servoWrist.setPosition(.5);
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_IN);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back(10, .4);
+        turnRight(-45, .4);
+        forward(2, .4);
+        strafeRight(4, .4);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_HIGH);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        servoWrist.setPosition(.4);
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_OUT);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        telemetry.addData("Auto:","extending belt");
+        telemetry.update();
+        servoWrist.setPosition(.9);
+        sleep(1000);
+        servoClaw.setPower(1);
+        sleep(1000);
+        servoClaw.setPower(0);
+        servoWrist.setPosition(.4);
+        sleep(1000);
+
+        // Getting new Sample and putting in Basket
+        motorBeltDrive.setPower(1);
+        motorBeltDrive.setTargetPosition(BELT_IN);
+        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(1000);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_LOW);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wrist(.5, .25);
+//        forward(45, 1);
+//        turnRight(-70, .6);
+//        forward(15, .6);
+//        sleep(500);
+//        motorArmTilt.setPower(1);
+//        motorArmTilt.setTargetPosition(TILT_PARK);
+//        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        sleep(1000);
+//        motorBeltDrive.setPower(1);
+//        motorBeltDrive.setTargetPosition(BELT_PARK);
+//        motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        sleep(2000);
+//        strafeLeft(20, .6);
+//        strafeRight(7, .6);
+//        //Getting Sample
+//        belt(200, .6);
+//        double wristPos2 = .2;
+//        servoWrist.setPosition(wristPos2);
+
         // Going to basket
         // back(15, .3);
         // turnRight(-40, .6);
@@ -173,8 +274,6 @@ public class Auto_StraferBase extends LinearOpMode{
      */
     public void moveToPosition(double inches, double speed){
         int move = (int)(Math.round(inches*conversion));
-        motorBeltDrive.setTargetPosition(motorBeltDrive.getCurrentPosition() + move);
-        motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition() + move);
         backleft.setTargetPosition(backleft.getCurrentPosition() + move);
         frontleft.setTargetPosition(frontleft.getCurrentPosition() + move);
         backright.setTargetPosition(backright.getCurrentPosition() + move);
@@ -400,8 +499,8 @@ public class Auto_StraferBase extends LinearOpMode{
             telemetry.update();}
         motorArmTilt.setPower(0);
     }
-    public void claw(double position, double speed){
-        servoClaw.setPosition(Servo.Direction.values().length);
+    public void claw(double seconds){
+        servoClaw.setPower(1);
     }
     public void wrist(double position, double speed){
         servoWrist.setPosition(Servo.Direction.values().length);

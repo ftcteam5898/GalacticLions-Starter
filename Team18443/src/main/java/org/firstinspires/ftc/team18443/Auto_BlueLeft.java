@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Auto_BlueLeft extends LinearOpMode {
     // variable declaration & setup
     DcMotor frontLeft, frontRight, backLeft, backRight, arm;
-    Servo claw, stupid;
+    Servo claw, stupid, intakeWrist;
 
 
     // motor counts per rotation (ticks/pulses per rotation)
@@ -59,6 +59,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         // setup servos
         claw = hardwareMap.servo.get("claw");
         stupid = hardwareMap.get(Servo.class, "stupid");
+        intakeWrist = hardwareMap.get(Servo.class, "Intake Wrist");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -67,6 +68,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         closeClaw();
         // please delete stupid once we remove the stupid servo.
         stupid.setPosition(1);
+        intakeWrist.setPosition(0);
         sleep(500);
 
         // wait for Start to be pressed
@@ -85,27 +87,53 @@ public class Auto_BlueLeft extends LinearOpMode {
         openClaw();
 
         // Reverse and strafe to Observation Zone
-        back(13,.3);
-        strafeRight(47,.5);
+        back(20,.3);
+        turnRight(90, .3);
+        claw.setPosition(0.65);
+        sleep(200);
+        lowerArm(410);
+        forward(40,.3);
+        strafeRight(20, .3);
+        strafeLeft(5.25,.3);
+        openClaw();
+        forward(26,.3);
+        sleep(200);
+        claw.setPosition(0.65);
+        sleep(300);
+        back(63,.3);
+        turnLeft(90, .3);
+        forward(18,.5);
+        sleep(500);
+        extendArm(-2800);
+        sleep(200);
+        forward(10,.5);
+        sleep(500);
+        lowerArm(2100);
+        sleep(500);
+        openClaw();
+        back(5,.3);
+        lowerArm(700);
+        //strafeRight(47,.5);
         //lowerArm(500);
 
         // Go forward, move right, push blue sample into ob zone
-        forward(30,.2);
-        sleep(500);
-        strafeRight(10,.3);
-        back(48,.4);
+        //forward(30,.2);
+        //sleep(500);
+        //strafeRight(10,.3);
+        //back(48,.4);
         // Do it again for second sample
-        forward(46,.3);
-        strafeRight(11,.3);
-        back(44,.3);
+        //forward(46,.3);
+        //strafeRight(11,.3);
+        //back(44,.3);
 
         // do it again for third sample
-        forward(42,.3);
-        strafeRight(18,.3);
-        strafeLeft(1,.2);
-        back(50,.5);
+        //forward(42,.3);
+        //strafeRight(18,.3);
+        //strafeLeft(1,.2);
+        //back(50,.5);
+        //lowerArm(600);
 
-        sleep(1000);
+        //sleep(1000);
     }
 
 
