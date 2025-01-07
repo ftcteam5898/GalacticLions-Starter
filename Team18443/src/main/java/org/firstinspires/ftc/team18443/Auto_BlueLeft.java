@@ -89,12 +89,30 @@ public class Auto_BlueLeft extends LinearOpMode {
         // Reverse and strafe to Observation Zone
         back(20,.3);
         turnRight(90, .3);
-        lowerArm(500);
+        claw.setPosition(0.65);
+        sleep(200);
+        lowerArm(410);
         forward(40,.3);
         strafeRight(20, .3);
         strafeLeft(5.25,.3);
-        forward(25,.3);
-        closeClaw();
+        openClaw();
+        forward(26,.3);
+        sleep(200);
+        claw.setPosition(0.65);
+        sleep(300);
+        back(63,.3);
+        turnLeft(90, .3);
+        forward(18,.5);
+        sleep(500);
+        extendArm(-2800);
+        sleep(200);
+        forward(10,.5);
+        sleep(500);
+        lowerArm(2100);
+        sleep(500);
+        openClaw();
+        back(5,.3);
+        lowerArm(700);
         //strafeRight(47,.5);
         //lowerArm(500);
 
