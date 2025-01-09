@@ -40,7 +40,7 @@ public class StraferTeleOpTest extends OpMode {
     final int TILT_HIGH = 1900;
     final int TILT_LOW = 200;
     final int BELT_IN = 0;
-    final int BELT_OUT = 3000;
+    final int BELT_OUT = -2900;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
@@ -57,7 +57,13 @@ public class StraferTeleOpTest extends OpMode {
     // (This is one thing enums are designed to do)
     public enum ArmState {
         ARM_START,
+        ARM_TILT,
         ARM_EXTEND,
+        INTAKE_POS_1,
+        INTAKE_IN,
+        INTAKE_OUT,
+        ARM_IN,
+        ARM_TILT_IN,
         ARM_DUMP,
         ARM_RETURN_CLAW,
         ARM_RETRACT
@@ -145,56 +151,74 @@ public class StraferTeleOpTest extends OpMode {
         servoWrist.setPosition(wristPos);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
+        telemetry.addData("Elapsed Time", runtime.seconds());
 
 
         switch (armState) {
             case ARM_START:
                 // wait for input
                 if (gamepad2.left_bumper) {
-                    armState = ArmState.ARM_EXTEND;
+                    motorArmTilt.setPower(1);
+                    motorArmTilt.setTargetPosition(TILT_HIGH);
+                    motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     runtime.reset();
+                    armState = ArmState.ARM_TILT;
+                }
+                break;
+            case ARM_TILT:
+                if (runtime.seconds() >= 5) {
+                    motorBeltSlide.setPower(-1);
+                    motorBeltSlide.setTargetPosition(-2900);
+                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
                 }
                 break;
             case ARM_EXTEND:
-                motorArmTilt.setPower(1);
-                motorArmTilt.setTargetPosition(TILT_HIGH);
-                motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                if (runtime.seconds() == 0.5)
-                {
+                if (runtime.seconds() == 5) {
+                    armState = ArmState.INTAKE_POS_1;
+                    runtime.reset();
                     double wrist_drop = .4;
                     servoWrist.setPosition(wrist_drop);
                     motorBeltSlide.setPower(1);
-                    motorBeltSlide.setTargetPosition(BELT_OUT);
-                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
-                else if (runtime.seconds() == 2)
-                {
-                    telemetry.addData("Auto:","extending belt");
-                    telemetry.update();
+                break;
+            case INTAKE_POS_1:
+                if (runtime.seconds() == 5) {
+                    armState = ArmState.INTAKE_IN;
+                    runtime.reset();
                     servoWrist.setPosition(.9);
                 }
-                else if (runtime.seconds() == 2.6)
-                {
+                break;
+            case INTAKE_IN:
+                if (runtime.seconds() == 5);{
+                    armState = ArmState.INTAKE_OUT;
+                    runtime.reset();
                     servoClaw.setPower(1);
                 }
-                else if (runtime.seconds() == 3.6)
-                {
+                break;
+            case INTAKE_OUT:
+                if (runtime.seconds() == 5);{
+                    armState = ArmState.ARM_IN;
+                    runtime.reset();
                     servoClaw.setPower(0);
                     servoWrist.setPosition(.4);
                 }
-                else if (runtime.seconds() == 4.2)
-                {
+                break;
+
+            case ARM_IN:
+                if (runtime.seconds() == 5){
+                    armState = ArmState.ARM_TILT_IN;
+                    runtime.reset();
                     motorBeltSlide.setPower(1);
                     motorBeltSlide.setTargetPosition(BELT_IN);
                     motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
-                else if (runtime.seconds() == 5.2)
-                {
+                break;
+            case ARM_TILT_IN:
+                if(runtime.seconds() == 5){
                     motorArmTilt.setPower(1);
                     motorArmTilt.setTargetPosition(TILT_LOW);
                     motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    armState = ArmState.ARM_START;
                     slideLimit = true;
                 }
 
