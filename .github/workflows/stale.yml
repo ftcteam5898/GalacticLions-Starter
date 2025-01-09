@@ -35,7 +35,7 @@ jobs:
           stale-issue-label: 'Lifecycle: Stale'
           
           # Issues with these labels will never be considered stale. Set to `[]` to disable
-          exempt-issue-labels: 'Lifecycle: Frozen'
+          exempt-issue-labels: 'Lifecycle: Frozen, PR - Review Status: Passed'
           
           # Label to remove when stale
           labels-to-remove-when-stale: 'Lifecycle: Active'

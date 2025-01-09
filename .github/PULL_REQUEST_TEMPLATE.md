@@ -5,6 +5,8 @@ Please include a summary of the changes and the related issue.
 
 Fixes # (issue)
 
+<!-- Include any relevant screenshots or code snippets that help visualize the changes made -->
+
 ## Motivation and Context
 Why is this change required? What problem does it solve?
 
