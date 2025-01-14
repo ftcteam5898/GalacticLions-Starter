@@ -12,6 +12,15 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+/**
+ * This particular OpMode executes a POV Teleop for a mecanum robot
+ * The code is structured as a LinearOpMode
+ *
+ * In this mode the left stick moves the robot FWD and back and strafes left & right.
+ * The Right stick rotates the robot left and right.
+ *
+ */
+
 @TeleOp(name="Strafer_Controls", group="Tele")
 public class StraferTeleOp extends LinearOpMode {
     @Override
