@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @TeleOp(name="Strafer_Controls", group="Tele")
 public class StraferTeleOp extends LinearOpMode {
     @Override
@@ -26,12 +28,8 @@ public class StraferTeleOp extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        DcMotor intakeSlide = hardwareMap.get(DcMotor.class, "intakeSlide");
-
         // Define and Initialize Servos
         Servo claw = hardwareMap.get(Servo.class, "claw");
-
-        Servo intake = hardwareMap.get(Servo.class, "intake");
 
         // Reverse one side of the motors
         // If it goes in reverse, reverse the other side
@@ -57,23 +55,29 @@ public class StraferTeleOp extends LinearOpMode {
 
             //---------- Driver 1 ----------//
 
-            if (gamepad1.guide) {
-                imu.resetYaw();
-            }
-
             // Driving controls
             double y = -gamepad1.left_stick_y; // Note: pushing stick forward gives negative value
             double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
             double rx = gamepad1.right_stick_x;
 
+            if (gamepad1.guide) {
+                imu.resetYaw();
+            }
+
+            double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+            // Rotate the movement direction counter to the bot's rotation
+            double X = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+            double Y = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio, but only when
             // at least one is out of the range [-1, 1]
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
+            double denominator = Math.max(Math.abs(Y) + Math.abs(X) + Math.abs(rx), 1);
+            double frontLeftPower = (Y + X + rx) / denominator;
+            double backLeftPower = (Y - X + rx) / denominator;
+            double frontRightPower = (Y - X - rx) / denominator;
+            double backRightPower = (Y + X - rx) / denominator;
 
             frontLeft.setPower(frontLeftPower);
             frontRight.setPower(frontRightPower);
