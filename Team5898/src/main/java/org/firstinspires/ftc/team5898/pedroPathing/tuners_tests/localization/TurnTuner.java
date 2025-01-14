@@ -12,8 +12,8 @@ import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.util.DashboardPoseTracker;
 import com.pedropathing.util.Drawing;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import org.firstinspires.ftc.team5898.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
 
 /**
  * This is the TurnTuner OpMode. This tracks the turning movement of the robot and displays the
@@ -29,7 +29,7 @@ import pedroPathing.constants.LConstants;
  * @version 1.0, 5/6/2024
  */
 @Config
-@Autonomous(name = "Turn Localizer Tuner", group = ".Localization")
+@Autonomous(name = "TUNE TESTS - Turn Localizer Tuner", group = ".Localization")
 public class TurnTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

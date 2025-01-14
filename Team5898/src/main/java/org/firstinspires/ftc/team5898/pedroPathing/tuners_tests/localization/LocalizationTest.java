@@ -27,7 +27,7 @@ import com.pedropathing.util.Drawing;
 import java.util.Arrays;
 import java.util.List;
 
-import pedroPathing.constants.*;
+import org.firstinspires.ftc.team5898.pedroPathing.constants.*;
 
 /**
  * This is the LocalizationTest OpMode. This is basically just a simple mecanum drive attached to a
@@ -38,7 +38,7 @@ import pedroPathing.constants.*;
  * @version 1.0, 5/6/2024
  */
 @Config
-@TeleOp(group = "Teleop Test", name = "Localization Test")
+@TeleOp(group = "TUNE TESTS - Teleop Test", name = "Localization Test")
 public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

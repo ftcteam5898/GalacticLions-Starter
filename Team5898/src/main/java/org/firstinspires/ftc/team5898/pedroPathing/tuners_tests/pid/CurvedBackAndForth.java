@@ -13,8 +13,8 @@ import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.Point;
 
-import pedroPathing.constants.FConstants;
-import pedroPathing.constants.LConstants;
+import org.firstinspires.ftc.team5898.pedroPathing.constants.FConstants;
+import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
 
 /**
  * This is the CurvedBackAndForth autonomous OpMode. It runs the robot in a specified distance
@@ -30,7 +30,7 @@ import pedroPathing.constants.LConstants;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous (name = "Curved Back And Forth", group = "PIDF Testing")
+@Autonomous (name = "TUNE TESTS - Curved Back And Forth", group = "PIDF Testing")
 public class CurvedBackAndForth extends OpMode {
     private Telemetry telemetryA;
 
