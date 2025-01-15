@@ -1,4 +1,4 @@
-package pedroPathing.tuners_tests.automatic;
+package org.firstinspires.ftc.team5898.pedroPathing.tuners_tests.automatic;
 
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
 import static com.pedropathing.follower.FollowerConstants.leftRearMotorName;
@@ -60,7 +60,7 @@ public class ForwardZeroPowerAccelerationTuner extends OpMode {
 
     private PoseUpdater poseUpdater;
 
-    public static double VELOCITY = 30;
+    public static double VELOCITY = 28;
 
     private double previousVelocity;
 

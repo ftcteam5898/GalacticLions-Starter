@@ -38,8 +38,8 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.*;
  * @version 1.0, 5/6/2024
  */
 @Config
-@TeleOp(group = "TUNE TESTS - Teleop Test", name = "Localization Test")
-public class LocalizationTest extends OpMode {
+@TeleOp(group = "Teleop Test", name = "TUNE TESTS - Localization Test")
+public class TuningLocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
     private Telemetry telemetryA;
