@@ -219,7 +219,7 @@ public class StraferTeleOp extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (gamepad2.dpad_up && slidePos >= -1800)
+            if (gamepad2.dpad_up && slidePos >= -1250)
             {
                 motorBeltSlide.setPower(-.5);
             }
@@ -255,7 +255,7 @@ public class StraferTeleOp extends OpMode {
                 motorBeltSlide.setPower(0);
             }
             // manual tilt control
-            if (gamepad2.dpad_left && tiltPos <= 3100)
+            if (gamepad2.dpad_left && tiltPos <= 2050)
             {
                 motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
             }

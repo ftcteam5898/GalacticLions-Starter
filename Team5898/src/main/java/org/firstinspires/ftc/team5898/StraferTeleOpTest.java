@@ -40,7 +40,7 @@ public class StraferTeleOpTest extends OpMode {
     final int TILT_HIGH = 1900;
     final int TILT_LOW = 200;
     final int BELT_IN = 0;
-    final int BELT_OUT = 3000;
+    final int BELT_OUT = -2900;
     final int SLIDE_HIGH_BASKET = 2000;
     final int SLIDE_RETURN = 1100;
     private double wristPos;
@@ -57,10 +57,14 @@ public class StraferTeleOpTest extends OpMode {
     // (This is one thing enums are designed to do)
     public enum ArmState {
         ARM_START,
+        ARM_TILT,
         ARM_EXTEND,
-        ARM_DUMP,
-        ARM_RETURN_CLAW,
-        ARM_RETRACT
+        FLIP_OUT,
+        SPIT_OUT,
+        INTAKE_IN,
+        INTAKE_OUT,
+        ARM_IN,
+        ARM_TILT_IN
     };
 
     ArmState armState = ArmState.ARM_START;
@@ -145,60 +149,163 @@ public class StraferTeleOpTest extends OpMode {
         servoWrist.setPosition(wristPos);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
+        telemetry.addData("Elapsed Time", runtime.seconds());
+        telemetry.addData("Tilt encoder: ", motorArmTilt.getCurrentPosition());
+        telemetry.addData("Slide encoder: ", motorBeltSlide.getCurrentPosition());
 
 
         switch (armState) {
             case ARM_START:
                 // wait for input
+                motorBeltSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 if (gamepad2.left_bumper) {
+                    motorArmTilt.setPower(1);
+                    motorArmTilt.setTargetPosition(TILT_HIGH);
+                    motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    wristPos = .4;
+                    armState = ArmState.ARM_TILT;
+                }
+                else {
+                    //all manual control
+                    int slidePos = motorBeltSlide.getCurrentPosition();
+                    int tiltPos = motorArmTilt.getCurrentPosition();
+                    telemetry.addData("Current slide position", slidePos);
+                    telemetry.addData("Current tilt position", tiltPos);
+
+
+                    // manual slide control
+                    if (slideLimit)
+                    {
+                        if (gamepad2.dpad_up && slidePos >= -1800)
+                        {
+                            motorBeltSlide.setPower(-.5);
+                        }
+                        else if (gamepad2.dpad_down && slidePos < -10)
+                        {
+                            motorBeltSlide.setPower(.5);
+                        }
+                        else
+                        {
+                            motorBeltSlide.setPower(0);
+                        }
+                        // manual tilt control
+                        if (gamepad2.dpad_left)
+                        {
+                            motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
+                        }
+                        else if (gamepad2.dpad_right && tiltPos > 10)
+                        {
+                            motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
+                        }
+                    }
+                    else{
+                        if (gamepad2.dpad_up)
+                        {
+                            motorBeltSlide.setPower(-.5);
+                        }
+                        else if (gamepad2.dpad_down && slidePos < -10)
+                        {
+                            motorBeltSlide.setPower(.5);
+                        }
+                        else
+                        {
+                            motorBeltSlide.setPower(0);
+                        }
+                        // manual tilt control
+                        if (gamepad2.dpad_left && tiltPos <= 3100)
+                        {
+                            motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
+                        }
+                        else if (gamepad2.dpad_right)
+                        {
+                            motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
+                        }
+                    }
+
+                    if (gamepad2.right_trigger > 0.3)
+                    {
+                        motorBeltSlide.setPower(.5);
+                    }
+
+                    if (gamepad2.back) {
+                        motorBeltSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        motorBeltSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER );
+                    }
+
+                    // wrist control
+                    telemetry.addData("Wrist Current Position: ", servoWrist.getPosition());
+                    telemetry.addData("WristPOS: ", wristPos);
+                    if (gamepad2.a && wristPos > 0.01)
+                    {
+                        wristPos -= .01;
+                    }
+                    else if (gamepad2.y && wristPos < .99)
+                    {
+                        wristPos += .01;
+                    }
+
+
+                    // manual claw control
+                    if (gamepad1.left_bumper)
+                    {
+                        servoClaw.setPower(.5);
+                    }
+                    else if (gamepad1.right_bumper)
+                    {
+                        servoClaw.setPower(-.5);
+                    }
+                    else
+                        servoClaw.setPower(0);
+
+
+                }
+                break;
+            case ARM_TILT:
+                if (motorArmTilt.getCurrentPosition()> TILT_HIGH - 50) {
+                    motorBeltSlide.setPower(-1);
+                    motorBeltSlide.setTargetPosition(-3000);
+                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     armState = ArmState.ARM_EXTEND;
-                    runtime.reset();
                 }
                 break;
             case ARM_EXTEND:
-                motorArmTilt.setPower(1);
-                motorArmTilt.setTargetPosition(TILT_HIGH);
-                motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                if (runtime.seconds() == 0.5)
-                {
-                    double wrist_drop = .4;
-                    servoWrist.setPosition(wrist_drop);
+                if (motorBeltSlide.getCurrentPosition() < -2800) {
+                    wristPos = .9;
+                    armState = ArmState.FLIP_OUT;
+                    runtime.reset();
                     motorBeltSlide.setPower(1);
-                    motorBeltSlide.setTargetPosition(BELT_OUT);
-                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
-                else if (runtime.seconds() == 2)
-                {
-                    telemetry.addData("Auto:","extending belt");
-                    telemetry.update();
-                    servoWrist.setPosition(.9);
-                }
-                else if (runtime.seconds() == 2.6)
-                {
+                break;
+            case FLIP_OUT:
+                if (runtime.seconds()>=2) {
                     servoClaw.setPower(1);
+                    armState = ArmState.SPIT_OUT;
+                    runtime.reset();
                 }
-                else if (runtime.seconds() == 3.6)
-                {
+                break;
+            case SPIT_OUT:
+                if (runtime.seconds() >= 1) {
                     servoClaw.setPower(0);
-                    servoWrist.setPosition(.4);
+                    wristPos = .7;
+                    armState = ArmState.INTAKE_IN;
+                    runtime.reset();
                 }
-                else if (runtime.seconds() == 4.2)
-                {
-                    motorBeltSlide.setPower(1);
+                break;
+            case INTAKE_IN:
+                if (servoWrist.getPosition() < .55);{
+                    armState = ArmState.ARM_IN;
+                    runtime.reset();
                     motorBeltSlide.setTargetPosition(BELT_IN);
-                    motorBeltSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
-                else if (runtime.seconds() == 5.2)
-                {
-                    motorArmTilt.setPower(1);
+                break;
+            case ARM_IN:
+                if (motorBeltSlide.getCurrentPosition() >= -10){
+                    armState = ArmState.ARM_TILT_IN;
                     motorArmTilt.setTargetPosition(TILT_LOW);
-                    motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    armState = ArmState.ARM_START;
                     slideLimit = true;
+                    armState = ArmState.ARM_START;
                 }
-
-
+                break;
 
             default:
                 // should never be reached, as armState should never be null
@@ -248,95 +355,7 @@ public class StraferTeleOpTest extends OpMode {
         motorBackRight.setPower(backRightPower);
 
 
-        int slidePos = motorBeltSlide.getCurrentPosition();
-        int tiltPos = motorArmTilt.getCurrentPosition();
-        telemetry.addData("Current slide position", slidePos);
-        telemetry.addData("Current tilt position", tiltPos);
 
-        // slide control
-        if (slideLimit)
-        {
-            if (gamepad2.dpad_up && slidePos >= -1800)
-            {
-                motorBeltSlide.setPower(-.5);
-            }
-            else if (gamepad2.dpad_down && slidePos < -10)
-            {
-                motorBeltSlide.setPower(.5);
-            }
-            else
-            {
-                motorBeltSlide.setPower(0);
-            }
-            // manual tilt control
-            if (gamepad2.dpad_left)
-            {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
-            }
-            else if (gamepad2.dpad_right && tiltPos > 10)
-            {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
-            }
-        }
-        else{
-            if (gamepad2.dpad_up)
-            {
-                motorBeltSlide.setPower(-.5);
-            }
-            else if (gamepad2.dpad_down && slidePos < -10)
-            {
-                motorBeltSlide.setPower(.5);
-            }
-            else
-            {
-                motorBeltSlide.setPower(0);
-            }
-            // manual tilt control
-            if (gamepad2.dpad_left && tiltPos <= 3100)
-            {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
-            }
-            else if (gamepad2.dpad_right)
-            {
-                motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()-50);
-            }
-        }
-
-        if (gamepad2.right_trigger > 0.3)
-        {
-            motorBeltSlide.setPower(.5);
-        }
-
-        if (gamepad2.back) {
-            motorBeltSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motorBeltSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER );
-        }
-
-
-
-
-        // wrist control
-        telemetry.addData("Wrist Current Position: ", servoWrist.getPosition());
-        telemetry.addData("WristPOS: ", wristPos);
-        if (gamepad2.a && wristPos > 0.01)
-        {
-            wristPos -= .01;
-        }
-        else if (gamepad2.y && wristPos < .99)
-        {
-            wristPos += .01;
-        }
-
-        if (gamepad1.left_bumper)
-        {
-            servoClaw.setPower(.5);
-        }
-        else if (gamepad1.right_bumper)
-        {
-            servoClaw.setPower(-.5);
-        }
-        else
-            servoClaw.setPower(0);
 
         telemetry.update();
     }
