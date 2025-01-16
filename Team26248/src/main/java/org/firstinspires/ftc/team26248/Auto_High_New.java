@@ -32,11 +32,7 @@ public class Auto_High_New extends LinearOpMode {
     Slide slide;
     Arm arm;
     IMU imu;
-    public enum Slide_Position {
-        DOWN,
-        MID,
-        UP
-    }
+
 
 
     public class Claw {
@@ -58,68 +54,42 @@ public class Auto_High_New extends LinearOpMode {
             clawLeft.setPosition(CLAW_LEFT_CLOSE);
             clawRight.setPosition(CLAW_RIGHT_CLOSE);
         }
-
     }
 
 
     public class Slide{
+        private DcMotor slideMotor;
 
-
-        private final DcMotor slideMotor;
-
-
-
-        private final int POSITION_DOWN = 0;
-        private final int POSITION_MID = -1540;
-        private final int POSITION_UP = -3050;
-
-        public Slide(DcMotor slideMotor) {
+        public Slide(DcMotor slideMotor){
             this.slideMotor = slideMotor;
-            this.slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            this.slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-        public void expandToPosition(Slide_Position position) {
-            int targetPosition = 0;
-
-
-            switch (position) {
-                case DOWN:
-                    targetPosition = POSITION_DOWN;
-                    break;
-                case MID:
-                    targetPosition = POSITION_MID;
-                    break;
-                case UP:
-                    targetPosition = POSITION_UP;
-                    break;
-            }
-
-            slideMotor.setTargetPosition(targetPosition);
+        public void expandDown(){
+            slideMotor.setTargetPosition(-1540);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(0.5);
+            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-
-        public void contract() {
-            expandToPosition(Slide_Position.DOWN);
+        public void contract(){
+            slideMotor.setTargetPosition(0);
+            slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slideMotor.setPower(0.5);
+            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
+        public void expandUP(){
+            slideMotor.setTargetPosition(-3050);
+            slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slideMotor.setPower(0.5);
+            slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        public void expandDown() {
-            expandToPosition(Slide_Position.MID);
-        }
-
-        public void expandUP() {
-            expandToPosition(Slide_Position.UP);
         }
 
     }
-
-
     public class Arm{
         private DcMotor armMotor;
 
         //Change Arm Status Here
-        private final int arm_up = 2100;
-        private final int arm_down = 430;
+        private final int arm_up = 2100; //TODO:need to change
+        private final int arm_down = 400;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
@@ -138,88 +108,80 @@ public class Auto_High_New extends LinearOpMode {
             armMotor.setPower(.5);
             armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
-
     }
 
-    public void setMotorMode(DcMotor.RunMode mode){
-        armMotor.setMode(mode);
-        frontLeft.setMode(mode);
-        backLeft.setMode(mode);
-        frontRight.setMode(mode);
-        backRight.setMode(mode);
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-    }
-    public void stopAllMotors() {
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-    }
-
-    private void waitForMotors() {
-        long startTime = System.currentTimeMillis();
-        long timeout = 3250;
-
-        while (opModeIsActive() &&
-                (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy() ||
-                        armMotor.isBusy() || slideMotor.isBusy())) {
-
-            if (System.currentTimeMillis() - startTime > timeout) {
-                telemetry.addData("Warning", "Motor timeout!");
-                telemetry.update();
-                break;
-            }
-
-            telemetry.addData("Status", "Motors Running...");
-            telemetry.update();
-        }
-    }
 
     @Override
     public void runOpMode() {
-        inithardware();
+        clawLeft = hardwareMap.servo.get("vl");
+        frontLeft = hardwareMap.dcMotor.get("fl");
+        frontRight = hardwareMap.dcMotor.get("fr");
+        backLeft = hardwareMap.dcMotor.get("bl");
+        backRight = hardwareMap.dcMotor.get("br");
+        clawRight = hardwareMap.servo.get("vr");
+
+
+        armMotor = hardwareMap.dcMotor.get("arm");
+        slideMotor = hardwareMap.dcMotor.get("slide");
+
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        claw = new Claw(clawLeft,clawRight);
+        slide = new Slide(slideMotor);
+        arm = new Arm(armMotor);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
+        initGyro();
+        arm.down();
+        slide.contract();
+        claw.open();
         waitForStart();
 
         strafeLeft(12,0.5);
         arm.down();
         slide.expandDown();
         forward(13.5,0.6);
-        waitForMotors();
+        sleep(1000);
         claw.close();
-        waitForMotors();
+        sleep(500);
         slide.contract();
-        waitForMotors();
+        sleep(250);
         turnLeft(-90,0.6);
-        waitForMotors();
+        sleep(250);
         turnLeft(-40,0.6);
-        waitForMotors();
+        sleep(500);
         forward(9,0.5);
-        waitForMotors();
+        sleep(200);
         arm.up();
-        waitForMotors();
+        sleep(1000);
         slide.expandUP();
-        waitForMotors();
-        claw.open();
-        waitForMotors();
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
-        waitForMotors();
-        back(2,0.5);
-        waitForMotors();
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
-        waitForMotors();
-        slide.contract();
-        waitForMotors();
-        arm.down();
-        waitForMotors();
-        turnRight(-40,0.7);
-        waitForMotors();
-        turnRight(-90,0.7);
-        waitForMotors();
-        back(5,0.6);
-        waitForMotors();
-        stop();
+        sleep(3250);
 
+        claw.open();
+        sleep(250);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
+        back(2,0.5);
+        sleep(550);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
+        sleep(250);
+        slide.contract();
+        sleep(2500);
+        arm.down();
+        sleep(1500);
+        turnRight(-40,0.7);
+        sleep(250);
+        turnRight(-90,0.7);
+        sleep(500);
+        back(5,0.6);
 
 
 
@@ -246,44 +208,6 @@ public class Auto_High_New extends LinearOpMode {
             telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
             telemetry.update();
         }
-        waitForMotors();
-    }
-    private void inithardware(){
-        clawLeft = hardwareMap.servo.get("vl");
-        frontLeft = hardwareMap.dcMotor.get("fl");
-        frontRight = hardwareMap.dcMotor.get("fr");
-        backLeft = hardwareMap.dcMotor.get("bl");
-        backRight = hardwareMap.dcMotor.get("br");
-        clawRight = hardwareMap.servo.get("vr");
-
-        DcMotor slideMotor = hardwareMap.get(DcMotor.class, "slide");
-        armMotor = hardwareMap.dcMotor.get("arm");
-
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        claw = new Claw(clawLeft,clawRight);
-        slide = new Slide(slideMotor);
-        arm = new Arm(armMotor);
-        setMotorMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        telemetry.addData("Front Left", frontLeft != null ? "Initialized" : "Not Initialized");
-        telemetry.addData("Front Right", frontRight != null ? "Initialized" : "Not Initialized");
-        telemetry.addData("Back Left", backLeft != null ? "Initialized" : "Not Initialized");
-        telemetry.addData("Back Right", backRight != null ? "Initialized" : "Not Initialized");
-        telemetry.addData("Arm Motor", armMotor != null ? "Initialized" : "Not Initialized");
-        telemetry.addData("Slide Motor", slideMotor != null ? "Initialized" : "Not Initialized");
-        telemetry.update();
-
-        initGyro();
-        arm.down();
-        slide.contract();
-        claw.open();
     }
     public void forward(double inches, double speed) {
         moveToPosition(inches, speed);
@@ -331,10 +255,6 @@ public class Auto_High_New extends LinearOpMode {
 
     public void moveToPosition(double inches, double speed){
         int move = (int)(Math.round(inches*conversion));
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setTargetPosition(backLeft.getCurrentPosition() + move);
         frontLeft.setTargetPosition(frontLeft.getCurrentPosition() + move);
         backRight.setTargetPosition(backRight.getCurrentPosition() + move);
