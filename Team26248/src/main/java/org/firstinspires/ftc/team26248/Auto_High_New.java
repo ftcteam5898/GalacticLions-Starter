@@ -1,50 +1,5 @@
 /*
     @Author: HackingU0
-
-
-
-
-                                    .
-                                   :***+-:.
-                                    =*####*+-.
-                                    -*#######*+-.
-                                   .+###########*=:
-                                  :*############***+-
-                                 =*############**####+:
-                                =############***######*+.
-                                +#########****##########*:
-                                :+*********##############*.
-                             :=+*########################*-
-                          .-**###########################+.
-                         -*############################**+=-:.
-                        +*##########################****#####**=:
-                       =*########################****###########*+.
-                       +######################****################+
-                       +####**+===+*####*******######**+===+*#####+.
-                       :*#*+:      .-+****#########*+:       -*##*=
-                      .:++:  .-==-:  .+*##########*-  .-===:  .=*+:
-                   :=**#*-  =#%%%%%+.  +#########*-  -#%%%%%*:  +#**+=:
-                 -**####+  =%%%%%%%%*. -*########+  -#%%%%%%%*. :*####**-
-               .+######*=  *%%%%%%%%#- .*########=  +%%%%%%%%%- .*#######+.
-               +########=  *%%%%%%%%#: :*########+  +%%%%%%%%#- .*########+
-              :*########+  -#%%%%%%%+  -*#######*+. :#%%%%%%%+  -*########*.
-              :*########*=  :*%%%%#=  .*###*******=  :*#%%%#=. .+#########*.
-               =*########*=   .::.   :+*****######*=.  .:::   :+##########+
-                +*######***+-.    .:+*##############*-.     :=*##########*:
-             .-=+***********#******###################*******##########****+=:.
-          -+**#######################################################***######*+:
-        =*####################*=::::::::::::::::::::::::::=*######****##########*+:
-      .+#######################*-                        =*####****###############*-
-      =#########################*+-                   .-*###*****##################+.
-      +############################*=:.            .-+*##****######################*.
-      +###############################**+=-----==+**#*****########################*=
-      -*#######################################*******############################+.
-       -*###############################*********###############################*+.
-        :=*###################************####################################**=
-           :-=+********++=--:::--====++++********************************++=-:.
-                                                  ..................
-
-                                      This Code is crap
  */
 
 
@@ -194,7 +149,6 @@ public class Auto_High_New extends LinearOpMode {
         backRight.setMode(mode);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
     }
     public void stopAllMotors() {
         frontLeft.setPower(0);
@@ -210,25 +164,13 @@ public class Auto_High_New extends LinearOpMode {
         while (opModeIsActive() &&
                 (frontLeft.isBusy() || frontRight.isBusy() || backLeft.isBusy() || backRight.isBusy() ||
                         armMotor.isBusy() || slideMotor.isBusy())) {
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
 
             if (System.currentTimeMillis() - startTime > timeout) {
                 telemetry.addData("Warning", "Motor timeout!");
                 telemetry.update();
                 break;
             }
-            if (slideMotor.getPower()==.5||armMotor.getPower()==.5){
-                sleep(100);
-                telemetry.addData("Status", "Finished running");
-                telemetry.update();
-                break;
-            }
+
             telemetry.addData("Status", "Motors Running...");
             telemetry.update();
         }
@@ -242,8 +184,6 @@ public class Auto_High_New extends LinearOpMode {
         strafeLeft(12,0.5);
         arm.down();
         slide.expandDown();
-        telemetry.addData("SlideMotor Status", slideMotor.isBusy());
-        telemetry.update();
         forward(13.5,0.6);
         waitForMotors();
         claw.close();
@@ -308,7 +248,7 @@ public class Auto_High_New extends LinearOpMode {
         }
         waitForMotors();
     }
-    public void inithardware(){
+    private void inithardware(){
         clawLeft = hardwareMap.servo.get("vl");
         frontLeft = hardwareMap.dcMotor.get("fl");
         frontRight = hardwareMap.dcMotor.get("fr");
@@ -316,18 +256,12 @@ public class Auto_High_New extends LinearOpMode {
         backRight = hardwareMap.dcMotor.get("br");
         clawRight = hardwareMap.servo.get("vr");
 
-        slideMotor = hardwareMap.dcMotor.get("slide");
+        DcMotor slideMotor = hardwareMap.get(DcMotor.class, "slide");
         armMotor = hardwareMap.dcMotor.get("arm");
 
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
-        if (frontLeft == null || frontRight == null || backLeft == null || backRight == null || slideMotor == null || armMotor == null) {
-            telemetry.addData("Error", "One or more motors are not initialized!");
-            telemetry.update();
-            return;
-        }
 
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
