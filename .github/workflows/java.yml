@@ -16,7 +16,7 @@ jobs:
   run-java-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
