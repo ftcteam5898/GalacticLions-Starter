@@ -14,8 +14,9 @@ on:
     branches: [ "master" ]
   
 jobs:
-  run-java-test:
+  build:
     runs-on: ubuntu-22.04
+    name: Check if tests compile cleanly with starter sources
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -27,7 +28,10 @@ jobs:
         with:
           java-version: 17
           distribution: "temurin" # See 'Supported distributions' for available options
-
+  lint:
+      runs-on: ubuntu-22.04
+      name: Lint files
+      steps:
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
