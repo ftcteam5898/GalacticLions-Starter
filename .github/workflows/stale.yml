@@ -7,18 +7,16 @@
 name: Close Stale Issues
 on:
   schedule:
-  - cron: '0 0 * * *'
-  
+  - cron: '0 0 * * *' 
 jobs:
   stale:
-
     runs-on: ubuntu-22.04
     permissions:
       issues: write
       pull-requests: write
-
     steps:
-      - uses: actions/stale@v9.0.0
+      - name: Check for Stale Issues
+        uses: actions/stale@v9.0.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           
