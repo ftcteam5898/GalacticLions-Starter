@@ -3,7 +3,6 @@
 # You can adjust the behavior by modifying this file.
 # For more information, see:
 # https://github.com/actions/checkout
-# https://github.com/actions/super-linter
 
 name: Java CI
 
@@ -28,13 +27,11 @@ jobs:
         with:
           java-version: 17
           distribution: "temurin" # See 'Supported distributions' for available options
-  lint:
+  review:
       runs-on: ubuntu-22.04
-      name: Lint files
+      name: Review changed files
       steps:
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "master"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Review Code Base
+        uses: pmd/pmd-github-action@v2
+        with:
+          rulesets: 'ruleset.xml'
