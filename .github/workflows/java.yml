@@ -27,11 +27,11 @@ jobs:
         with:
           java-version: 17
           distribution: "temurin" # See 'Supported distributions' for available options
-  review:
+  lint:
       runs-on: ubuntu-22.04
-      name: Review changed files
+      name: Lint changed files
       steps:
-      - name: Review Code Base
-        uses: pmd/pmd-github-action@v2
-        with:
-          rulesets: 'ruleset.xml'
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v7.2.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
