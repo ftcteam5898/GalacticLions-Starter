@@ -30,6 +30,7 @@ jobs:
   lint:
       runs-on: ubuntu-latest
       name: Lint changed files 
+      needs: build
       steps:
       - name: Checkout Code
         uses: actions/checkout@v2
