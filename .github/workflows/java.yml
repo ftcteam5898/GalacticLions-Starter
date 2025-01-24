@@ -38,12 +38,3 @@ jobs:
         uses: super-linter/super-linter@v7.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
-  results:
-      runs-on: ubuntu-22.04
-      name: Load a run summary
-      steps:
-        - name: Create Summary
-          run: |
-            SUMMARY=$'# Java CI - Run Report'
-            echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
