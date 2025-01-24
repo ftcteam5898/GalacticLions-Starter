@@ -138,11 +138,11 @@ public class Follower {
     private double rawDriveError;
     private double previousRawDriveError;
 
-    public static boolean drawOnDashboard = true;
-    public static boolean useTranslational = true;
-    public static boolean useCentripetal = true;
+    public static boolean drawOnDashboard = false;
+    public static boolean useTranslational = false;
+    public static boolean useCentripetal = false;
     public static boolean useHeading = true;
-    public static boolean useDrive = true;
+    public static boolean useDrive = false;
 
     /**
      * This creates a new Follower given a HardwareMap.
