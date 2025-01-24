@@ -38,3 +38,13 @@ jobs:
         uses: super-linter/super-linter@v7.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  finish:
+      runs-on: ubuntu-22.04
+      name: Upload a run artifact
+      steps:
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: Java-CI-Run-Report
+            path: downloads
