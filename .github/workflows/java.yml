@@ -39,12 +39,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
-  finish:
+  results:
       runs-on: ubuntu-22.04
-      name: Upload a run artifact
+      name: Load a run summary
       steps:
-        - name: Upload Artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: Java-CI-Run-Report
-            path: downloads
+        - name: Create Summary
+          run: |
+            SUMMARY=$'# Java CI - Run Report'
+            echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
