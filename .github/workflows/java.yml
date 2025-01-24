@@ -35,7 +35,8 @@ jobs:
       name: Lint changed files 
       steps:
       - name: Lint Code Base
-        uses: super-linter/super-linter@v7.2.1
+        uses: github/super-linter@v4.7.3
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
