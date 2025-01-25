@@ -157,7 +157,7 @@ public class Auto_High extends LinearOpMode {
         sleep(250);
         turnLeft(-90,0.6);
         sleep(250);
-        turnLeft(-40,0.6);
+        turnLeft(-45,0.6);
         sleep(250);
         forward(8.75,0.5);
         sleep(200);
@@ -177,19 +177,11 @@ public class Auto_High extends LinearOpMode {
         sleep(2500);
         arm.down();
         sleep(1500);
-        turnRight(-40,0.7);
+        turnRight(-45,0.7);
         sleep(250);
-        turnLeft(-90,1);
-        strafeLeft(15,0.7);
-        back(132,1);
-        sleep(500);
-        slideMotor.setTargetPosition(100);
-        sleep(500);
-        claw.close();
-        sleep(250);
-        armMotor.setTargetPosition(100);
-        sleep(250);
-        stop();
+        turnRight(-90,1);
+        back(15,0.7);
+
 
 
 

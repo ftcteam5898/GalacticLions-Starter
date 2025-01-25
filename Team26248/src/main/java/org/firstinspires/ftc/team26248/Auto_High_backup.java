@@ -7,7 +7,6 @@ package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,9 +15,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@Disabled
-@Autonomous(name = "AutoHigh (Use this,No Parking)",group = "Autonomous")
-public class Auto_High_New extends LinearOpMode {
+
+@Autonomous(name = "AutoHigh Preload",group = "Autonomous")
+public class Auto_High_backup extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
@@ -65,21 +64,21 @@ public class Auto_High_New extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(-1500);
+            slideMotor.setTargetPosition(-1540);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void contract(){
             slideMotor.setTargetPosition(0);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
             slideMotor.setTargetPosition(-3050);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(0.5);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         }
@@ -90,7 +89,7 @@ public class Auto_High_New extends LinearOpMode {
 
         //Change Arm Status Here
         private final int arm_up = 2100; //TODO:need to change
-        private final int arm_down = 425;//TODO:need to change
+        private final int arm_down = 400;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
@@ -141,16 +140,18 @@ public class Auto_High_New extends LinearOpMode {
 
 
 
+
         initGyro();
         arm.down();
         slide.contract();
         claw.open();
+        sleep(2000);
+        claw.close();
         waitForStart();
 
         strafeLeft(12,0.5);
         arm.down();
-        slide.expandDown();
-        forward(13,0.5);
+        forward(13.5,0.6);
         sleep(1000);
         claw.close();
         sleep(500);
@@ -159,32 +160,31 @@ public class Auto_High_New extends LinearOpMode {
         turnLeft(-90,0.6);
         sleep(250);
         turnLeft(-40,0.6);
-        sleep(500);
-        forward(9.5,0.5);
+        sleep(250);
+        forward(8.75,0.5);
         sleep(200);
         arm.up();
         sleep(1000);
         slide.expandUP();
-        sleep(2250);
+        sleep(2750);
 
         claw.open();
         sleep(250);
         armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
-        back(2,0.5);
-        sleep(550);
+        back(2,0.3);
+        sleep(750);
         armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
         sleep(250);
         slide.contract();
-        sleep(2500);
+        sleep(2000);
         arm.down();
         sleep(1500);
-        turnRight(-40,1);
+        turnRight(-45,0.7);
         sleep(250);
         turnRight(-90,1);
-        sleep(500);
-        back(10,1);
-        sleep(250);
-        strafeRight(144,1);
+        back(15,0.7);
+
+
 
 
 
@@ -198,10 +198,10 @@ public class Auto_High_New extends LinearOpMode {
         //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
-                armMotor.setPower(1);
+                armMotor.setPower(0.7);
             }
             if(!slideMotor.isBusy()){
-                slideMotor.setPower(1);
+                slideMotor.setPower(0.7);
             }
 
             telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
@@ -209,17 +209,7 @@ public class Auto_High_New extends LinearOpMode {
 
             telemetry.addData("Arm Position", armMotor.getCurrentPosition());
             telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
-            telemetry.addData("Is ARM Busy?", armMotor.isBusy());
-            telemetry.addData("Is Slide Busy?", slideMotor.isBusy());
-            telemetry.addData("Is Front Left Busy?", frontLeft.isBusy());
-            telemetry.addData("Is Front Right Busy?", frontRight.isBusy());
-            telemetry.addData("Is Back Left Busy?", backLeft.isBusy());
-            telemetry.addData("Is Back Right Busy?", backRight.isBusy());
-            telemetry.addData("ARM POWER:", armMotor.getPower());
-            telemetry.addData("SLIDE POWER:", slideMotor.getPower());
-
             telemetry.update();
-
         }
     }
     public void forward(double inches, double speed) {
@@ -355,17 +345,17 @@ public class Auto_High_New extends LinearOpMode {
         turnWithEncoder(speedDirection / 3);
 
         if (Math.abs(seconda - secondb) < 11) {
-            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {
+            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
                 telemetry.update();
             }
-            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {
+            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {// 是否在范围内？
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));

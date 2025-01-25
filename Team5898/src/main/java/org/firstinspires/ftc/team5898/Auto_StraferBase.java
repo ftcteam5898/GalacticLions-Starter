@@ -55,7 +55,7 @@ public class Auto_StraferBase extends LinearOpMode{
     //
     double conversion = cpi * bias;
     //
-    final int TILT_HIGH = 1850;
+    final int TILT_HIGH = 1900;
 
     final int TILT_LOW = 200;
 
@@ -63,7 +63,7 @@ public class Auto_StraferBase extends LinearOpMode{
 
     final int TILT_PARK = 1300;
     final int TILT_SAMPLE_UP = 800;
-    final int TILT_SAMPLE_DOWN = 510;
+    final int TILT_SAMPLE_DOWN = 320;
 
     final int BELT_OUT = 3000;
 
@@ -156,16 +156,17 @@ public class Auto_StraferBase extends LinearOpMode{
         motorArmTilt.setPower(1);
         motorArmTilt.setTargetPosition(TILT_SAMPLE_UP);
         motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        servoWrist.setPosition(.26);
+        servoWrist.setPosition(.2);
         sleep(500);
-        forward(9, .4);
-        motorArmTilt.setPower(1);
+        forward(9.5, .4);
+        motorArmTilt.setPower(.5);
         motorArmTilt.setTargetPosition(TILT_SAMPLE_DOWN);
         motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(500);
         servoClaw.setPower(-1);
         sleep(1000);
         servoClaw.setPower(0);
-        servoWrist.setPosition(.5);
+        servoWrist.setPosition(.6);
         motorBeltDrive.setPower(1);
         motorBeltDrive.setTargetPosition(BELT_IN);
         motorBeltDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -201,6 +202,17 @@ public class Auto_StraferBase extends LinearOpMode{
         motorArmTilt.setTargetPosition(TILT_LOW);
         motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         wrist(.5, .25);
+
+        strafeLeft(5, .6);
+        forward(15, .3);
+        motorArmTilt.setPower(1);
+        motorArmTilt.setTargetPosition(TILT_HIGH);
+        motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        forward(10, 3);
+
+
+
+
 //        forward(45, 1);
 //        turnRight(-70, .6);
 //        forward(15, .6);
@@ -219,12 +231,12 @@ public class Auto_StraferBase extends LinearOpMode{
 //        belt(200, .6);
 //        double wristPos2 = .2;
 //        servoWrist.setPosition(wristPos2);
-
-        // Going to basket
-        // back(15, .3);
-        // turnRight(-40, .6);
-
-        sleep(1000);
+//
+//         // Going to basket
+//         back(15, .3);
+//         turnRight(-40, .6);
+//
+//        sleep(1000);
 
     }
 
