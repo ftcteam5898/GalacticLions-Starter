@@ -91,7 +91,7 @@ public class Auto_BlueLeft extends LinearOpMode {
         turnRight(90, .4);
         claw.setPosition(0.65);
         sleep(200);
-        lowerArm(600);
+        lowerArm(500);
         forward(40,.4);
         strafeRight(20, .4);
         strafeLeft(5.25,.4);
