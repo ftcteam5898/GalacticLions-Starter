@@ -37,7 +37,7 @@ public class StraferTeleOpTest extends OpMode {
     private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
-    final int TILT_HIGH = 1900;
+    final int TILT_HIGH = 2100;
     final int TILT_LOW = 200;
     final int BELT_IN = 0;
     final int BELT_OUT = -2900;
@@ -158,7 +158,7 @@ public class StraferTeleOpTest extends OpMode {
             case ARM_START:
                 // wait for input
                 motorBeltSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                if (gamepad2.left_bumper) {
+                if (gamepad2.x) {
                     motorArmTilt.setPower(1);
                     motorArmTilt.setTargetPosition(TILT_HIGH);
                     motorArmTilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -176,7 +176,7 @@ public class StraferTeleOpTest extends OpMode {
                     // manual slide control
                     if (slideLimit)
                     {
-                        if (gamepad2.dpad_up && slidePos >= -1800)
+                        if (gamepad2.dpad_up && slidePos >= -1450)
                         {
                             motorBeltSlide.setPower(-.5);
                         }
@@ -212,7 +212,7 @@ public class StraferTeleOpTest extends OpMode {
                             motorBeltSlide.setPower(0);
                         }
                         // manual tilt control
-                        if (gamepad2.dpad_left && tiltPos <= 3100)
+                        if (gamepad2.dpad_left && tiltPos <= 2000)
                         {
                             motorArmTilt.setTargetPosition(motorArmTilt.getCurrentPosition()+50);
                         }
@@ -277,7 +277,7 @@ public class StraferTeleOpTest extends OpMode {
                 }
                 break;
             case FLIP_OUT:
-                if (runtime.seconds()>=2) {
+                if (runtime.seconds()>=1) {
                     servoClaw.setPower(1);
                     armState = ArmState.SPIT_OUT;
                     runtime.reset();
@@ -292,7 +292,7 @@ public class StraferTeleOpTest extends OpMode {
                 }
                 break;
             case INTAKE_IN:
-                if (servoWrist.getPosition() < .55);{
+                if (servoWrist.getPosition() < .7);{
                     armState = ArmState.ARM_IN;
                     runtime.reset();
                     motorBeltSlide.setTargetPosition(BELT_IN);

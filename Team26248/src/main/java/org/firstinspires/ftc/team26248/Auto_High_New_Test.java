@@ -7,7 +7,6 @@ package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -16,9 +15,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@Disabled
-@Autonomous(name = "AutoHigh (Use this,No Parking)",group = "Autonomous")
-public class Auto_High_New extends LinearOpMode {
+
+@Autonomous(name = "AutoHigh(Only for test purpose)",group = "Autonomous")
+public class Auto_High_New_Test extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
@@ -65,7 +64,7 @@ public class Auto_High_New extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(-1500);
+            slideMotor.setTargetPosition(-1510);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -111,9 +110,13 @@ public class Auto_High_New extends LinearOpMode {
         }
     }
 
-
+    public void waitforbot(){
+        waitForArm();
+        waitForDrive();
+    }
     @Override
     public void runOpMode() {
+
         clawLeft = hardwareMap.servo.get("vl");
         frontLeft = hardwareMap.dcMotor.get("fl");
         frontRight = hardwareMap.dcMotor.get("fr");
@@ -148,43 +151,51 @@ public class Auto_High_New extends LinearOpMode {
         waitForStart();
 
         strafeLeft(12,0.5);
+
         arm.down();
+        waitforbot();
         slide.expandDown();
-        forward(13,0.5);
-        sleep(1000);
+        waitforbot();
+
+        forward(13.5,0.6);
+        waitforbot();
         claw.close();
         sleep(500);
         slide.contract();
-        sleep(250);
+        waitforbot();
         turnLeft(-90,0.6);
-        sleep(250);
+        waitforbot();
         turnLeft(-40,0.6);
-        sleep(500);
-        forward(9.5,0.5);
-        sleep(200);
+        waitforbot();
+        forward(9,0.5);
+        waitforbot();
         arm.up();
-        sleep(1000);
+        waitforbot();
         slide.expandUP();
-        sleep(2250);
-
+        waitforbot();
         claw.open();
-        sleep(250);
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
-        back(2,0.5);
-        sleep(550);
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
-        sleep(250);
-        slide.contract();
-        sleep(2500);
-        arm.down();
-        sleep(1500);
-        turnRight(-40,1);
-        sleep(250);
-        turnRight(-90,1);
         sleep(500);
-        back(10,1);
-        sleep(250);
-        strafeRight(144,1);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
+        waitforbot();
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back(2,0.5);
+        waitforbot();
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
+        waitforbot();
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        waitforbot();
+        slide.contract();
+        waitforbot();
+        arm.down();
+        waitforbot();
+        turnRight(-40,0.7);
+        waitforbot();
+        turnRight(-90,0.7);
+        waitforbot();
+        back(5,0.6);
+        waitforbot();
+        back(3,1);
+        strafeRight(140,1);
 
 
 
@@ -198,15 +209,14 @@ public class Auto_High_New extends LinearOpMode {
         //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
-                armMotor.setPower(1);
+                armMotor.setPower(.5);
             }
             if(!slideMotor.isBusy()){
-                slideMotor.setPower(1);
+                slideMotor.setPower(.5);
             }
-
+            waitForArm();
+            waitForDrive();
             telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.update();
-
             telemetry.addData("Arm Position", armMotor.getCurrentPosition());
             telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
             telemetry.addData("Is ARM Busy?", armMotor.isBusy());
@@ -217,8 +227,45 @@ public class Auto_High_New extends LinearOpMode {
             telemetry.addData("Is Back Right Busy?", backRight.isBusy());
             telemetry.addData("ARM POWER:", armMotor.getPower());
             telemetry.addData("SLIDE POWER:", slideMotor.getPower());
-
             telemetry.update();
+
+
+        }
+    }
+
+    public void waitForDrive() {
+        while (opModeIsActive()) {
+            if (frontLeft.isBusy()|| frontLeft.isBusy()|| backLeft.isBusy()|| backRight.isBusy()) {
+                telemetry.addData("Driving to position", "In Progress");
+                telemetry.addData("Is Front Left Busy?", frontLeft.isBusy());
+                telemetry.addData("Is Front Right Busy?", frontRight.isBusy());
+                telemetry.addData("Is Back Left Busy?", backLeft.isBusy());
+                telemetry.addData("Is Back Right Busy?", backRight.isBusy());
+                telemetry.update();
+            }
+            else {
+                sleep(200);
+                break;
+            }
+        }
+    }
+    public void waitForArm() {
+        long startTime = System.currentTimeMillis();
+        long timeout = 3500;
+        while (armMotor.isBusy()||slideMotor.isBusy()) {
+
+            if (System.currentTimeMillis() - startTime > timeout) {
+                sleep(200);
+                break;
+            }else{
+                if (armMotor.getPower()<.7&&slideMotor.getPower()<.7){
+                    sleep(500);
+                    break;
+                }
+                else {
+                    telemetry.addData("Arm is moving","In Progress");
+                }
+            }
 
         }
     }
