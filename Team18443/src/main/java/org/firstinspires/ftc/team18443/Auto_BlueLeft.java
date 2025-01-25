@@ -78,40 +78,42 @@ public class Auto_BlueLeft extends LinearOpMode {
 
         // Begin with Blue specimen
         // Extend arm and move forward; attach specimen
-        forward(25,.5);
-        sleep(500);
-        extendArm(-2700);
-        forward(7,.5);
+        // forward(25,.5);
+        // sleep(500);
+        extendArm(-2850);
+        forward(38,.6);
         sleep(500);
         lowerArm(2000);
         openClaw();
 
         // Reverse and strafe to Observation Zone
-        back(20,.3);
-        turnRight(90, .3);
+        back(20,.4);
+        turnRight(90, .4);
         claw.setPosition(0.65);
         sleep(200);
-        lowerArm(410);
-        forward(40,.3);
-        strafeRight(20, .3);
-        strafeLeft(5.25,.3);
+        lowerArm(600);
+        forward(40,.4);
+        strafeRight(20, .4);
+        strafeLeft(5.25,.4);
         openClaw();
-        forward(26,.3);
+        forward(26,.4);
         sleep(200);
         claw.setPosition(0.65);
         sleep(300);
-        back(63,.3);
+        back(60,.4);
         turnLeft(90, .3);
         forward(18,.5);
         sleep(500);
         extendArm(-2800);
         sleep(200);
-        forward(10,.5);
+        forward(9,.6);
         sleep(500);
         lowerArm(2100);
         sleep(500);
         openClaw();
         back(5,.3);
+        back(24, .7);
+        strafeRight(45, .7);
         lowerArm(700);
         //strafeRight(47,.5);
         //lowerArm(500);
