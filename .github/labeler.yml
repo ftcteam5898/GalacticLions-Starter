@@ -3,13 +3,13 @@ version: v1
 labels:
   - label: 'Lifecycle: Frozen'
     matcher:
-	    comment: '/freeze'
+	comment: '/freeze'
   - label: 'Resolution: Fixed'
     matcher:
-	    comment: '/fixed'
+	comment: '/fixed'
   - label: 'Resolution: Partially Fixed'
     matcher:
-	    comment: '/partial'
+	comment: '/partial'
   - label: 'Resolution: Wont Fix'
     matcher:
-	    comment: '/no-fix'
+	comment: '/no-fix'
