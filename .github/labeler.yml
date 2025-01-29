@@ -1,0 +1,15 @@
+version: v1
+
+labels:
+  - label: 'Lifecycle: Frozen'
+    matcher:
+	    comment: '/freeze'
+  - label: 'Resolution: Fixed'
+    matcher:
+	    comment: '/fixed'
+  - label: 'Resolution: Partially Fixed'
+    matcher:
+	    comment: '/partial'
+  - label: 'Resolution: Wont Fix'
+    matcher:
+	    comment: '/no-fix'
