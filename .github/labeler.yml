@@ -27,3 +27,10 @@ labels:
   - label: 'PR - Review Status: Failed'
     matcher:
       comment: '/review-fail'
+
+checks:
+  - context: 'Merge check'
+    description: 'Labels for merge.'
+    labels:
+      any: ['PR - Review Status: Passed']
+      none: ['PR - Review Status: Failed']
