@@ -292,7 +292,7 @@ public class StraferTeleOpTest extends OpMode {
                 }
                 break;
             case INTAKE_IN:
-                if (servoWrist.getPosition() < .7);{
+                if (runtime.seconds() >= 2) {
                     armState = ArmState.ARM_IN;
                     runtime.reset();
                     motorBeltSlide.setTargetPosition(BELT_IN);
