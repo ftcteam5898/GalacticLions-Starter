@@ -1,0 +1,16 @@
+name: Labeling Commands
+
+on:
+  issue_comment:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  labeler:
+    name: Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fuxingloh/multi-labeler@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          config-path: .github/labeler.yml
