@@ -18,7 +18,7 @@ public class TeleOp26248 extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, armMotor, slideMotor;
-    private Servo clawLeftMotor, clawRightMotor;
+    private Servo clawLeftMotor, clawRightMotor, wristServo;
     private IMU imu;
     private final double CLAW_LEFT_OPEN = 0.4;
     private final double CLAW_RIGHT_OPEN = 0.4;
@@ -58,6 +58,8 @@ public class TeleOp26248 extends OpMode {
         slideMotor = hardwareMap.dcMotor.get("slide");
         clawLeftMotor = hardwareMap.servo.get("vr");
         clawRightMotor = hardwareMap.servo.get("vl");
+        wristServo = hardwareMap.servo.get("wr");
+        wristServo.setDirection(Servo.Direction.REVERSE);
 
 
         slideLimit = true;
@@ -78,6 +80,8 @@ public class TeleOp26248 extends OpMode {
 
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -145,6 +149,12 @@ public class TeleOp26248 extends OpMode {
         // it's just handled here
         if (gamepad2.guide && armState != ArmState.ARM_DOWN) {
             armState = ArmState.ARM_DOWN;
+        }
+        if (gamepad2.right_trigger>0.4)
+        {
+            wristServo.setPosition(0);
+        } else if (gamepad2.left_trigger>0.4) {
+            wristServo.setPosition(0.2);
         }
 
 

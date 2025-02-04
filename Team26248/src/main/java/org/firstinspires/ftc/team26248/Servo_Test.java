@@ -13,17 +13,23 @@ public class Servo_Test extends LinearOpMode {
     // 初始化伺服的默认位置
     private double servoRightPosition; // 中位
     private double servoLeftPosition;  // 中位
+    private Servo servoWrist;
+
+    private double servoWristPosition = 1;
 
     @Override
     public void runOpMode() {
         // 获取硬件映射
         servoRight = hardwareMap.servo.get("vr");
         servoLeft = hardwareMap.servo.get("vl");
+        servoWrist = hardwareMap.servo.get("wr");
+
 
         // 将伺服移动到初始位置
         servoRight.setPosition(servoRightPosition);
         servoLeft.setPosition(servoLeftPosition);
-
+        servoWrist.setDirection(Servo.Direction.REVERSE);
+        servoWrist.setPosition(0);
         // 显示初始化完成
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Servo Right Position", servoRightPosition);
@@ -45,6 +51,12 @@ public class Servo_Test extends LinearOpMode {
                 servoLeftPosition += 0.1; // 左伺服增加
             } else if (gamepad1.x) {
                 servoLeftPosition -= 0.1; // 左伺服减少
+            }
+            if(gamepad1.right_trigger>=0.5)
+            {
+                servoWrist.setPosition(0);
+            } else if (gamepad1.left_trigger>=0.5) {
+                servoWrist.setPosition(0.2);
             }
 
             // 限制伺服位置范围在 [0, 1]
