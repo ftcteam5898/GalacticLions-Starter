@@ -33,6 +33,7 @@ public class Test_TeleOP extends OpMode {
 
     private boolean slideLimit;
     private boolean slideLimit_alt = false;
+    private boolean isAutoArmMode = false;
 
     // An Enum is used to represent arm states.
     // (This is one thing enums are designed to do)
@@ -92,6 +93,7 @@ public class Test_TeleOP extends OpMode {
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -124,6 +126,7 @@ public class Test_TeleOP extends OpMode {
      */
     @Override
     public void loop() {
+
         armMotor.setPower(1);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
