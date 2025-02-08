@@ -10,7 +10,6 @@ import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.team5898.pedroPathing.constants.FConstants;
@@ -26,7 +25,7 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
  * @version 2.0, 11/28/2024
  */
 
-@Autonomous(name = "Example Auto Blue", group = "Examples")@Disabled
+@Autonomous(name = "Example Auto Blue", group = "Examples")
 public class ExampleBucketAuto extends OpMode {
 
     private Follower follower;
@@ -289,3 +288,4 @@ public class ExampleBucketAuto extends OpMode {
     public void stop() {
     }
 }
+
