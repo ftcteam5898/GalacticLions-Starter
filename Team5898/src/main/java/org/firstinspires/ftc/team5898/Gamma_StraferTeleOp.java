@@ -1,55 +1,41 @@
 package org.firstinspires.ftc.team5898;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name="Gamma Strafer Tele Op - Test Code", group="Starter Code")
+@TeleOp(name="Gamma Strafer Tele Op - Test Code", group="Gamma Bot")
 public class Gamma_StraferTeleOp extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, motorUpLeft, motorUpRight;
-
-    private IMU imu;
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
     private double wristPos;
+    private RobotHardware robot;
+
+    public enum BotState {
+        NEUTRAL,
+        INTAKE_OUT,
+        GRAB_DOWN,
+        INTAKE_GRAB_IN,
+        OUTTAKE_GRAB_FLIP,
+        OUTTAKE_UP,
+        OUTTAKE_RELEASE_DOWN
+    };
+
+    BotState botState = BotState.NEUTRAL;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
-        motorFrontLeft = hardwareMap.dcMotor.get("FL");
-        motorBackLeft = hardwareMap.dcMotor.get("BL");
-        motorFrontRight = hardwareMap.dcMotor.get("FR");
-        motorBackRight = hardwareMap.dcMotor.get("BR");
-
-        // These are the extra moving parts
-
-
-        // Retrieve the IMU from the hardware map
-        imu = hardwareMap.get(IMU.class, "imu");
-        // Adjust the orientation parameters to match your robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
+        robot = new RobotHardware(hardwareMap);
+        robot.init();  // Initialize all hardware
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -67,11 +53,48 @@ public class Gamma_StraferTeleOp extends OpMode {
      */
     @Override
     public void start() {
+
         runtime.reset();
     }
 
     @Override
     public void loop() {
+
+
+        switch (botState) {
+            case NEUTRAL:
+                robot.rightIntake.setPosition(.2);
+                robot.leftIntake.setPosition(.8);
+                robot.wrist.setPosition(.3);
+                robot.grabber.setPosition(.2); //closed
+
+
+                // wait for input
+                if (gamepad2.dpad_left) {
+                    //change state to INTAKE_OUT
+                    botState = BotState.INTAKE_OUT;
+                }
+                break;
+            case INTAKE_OUT:
+                // set intake servos to go out
+                robot.leftIntake.setPosition(1);
+                robot.rightIntake.setPosition(0);
+                robot.wrist.setPosition(.9);
+                robot.grabber.setPosition(0); //open
+                // wait for input
+                if (gamepad2.x) {
+                    //change state to GRAB_DOWN
+                    botState = BotState.GRAB_DOWN;
+                }
+                else if (gamepad2.dpad_right) {
+                    //change state to INTAKE_OUT
+                    botState = BotState.NEUTRAL;
+                }
+                break;
+            default:
+                botState = BotState.NEUTRAL;
+        }
+
 
 
 
@@ -86,10 +109,10 @@ public class Gamma_StraferTeleOp extends OpMode {
         // it can be freely changed based on preference.
         // The equivalent button is start on Xbox-style controllers or options on PS4-style controllers.
         if (gamepad1.guide) {
-            imu.resetYaw();
+            robot.imu.resetYaw();
         }
 
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double botHeading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -105,10 +128,10 @@ public class Gamma_StraferTeleOp extends OpMode {
         double backRightPower = (rotY + rotX - rx) / denominator;
 
 
-        motorFrontLeft.setPower(frontLeftPower);
-        motorBackLeft.setPower(backLeftPower);
-        motorFrontRight.setPower(frontRightPower);
-        motorBackRight.setPower(backRightPower);
+        robot.leftFront.setPower(frontLeftPower);
+        robot.leftRear.setPower(backLeftPower);
+        robot.rightFront.setPower(frontRightPower);
+        robot.rightRear.setPower(backRightPower);
 
 
 
@@ -116,11 +139,6 @@ public class Gamma_StraferTeleOp extends OpMode {
         telemetry.update();
     }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
-    }
+
 
 }
