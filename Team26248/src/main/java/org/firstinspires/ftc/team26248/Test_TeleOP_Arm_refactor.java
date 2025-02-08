@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@Disabled
+
 @TeleOp(name="TeleOp NEWARM", group="Starter Code")
 public class Test_TeleOP_Arm_refactor extends OpMode {
 
@@ -26,6 +26,7 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
     private final double CLAW_RIGHT_OPEN = 0.4;
     private final double CLAW_LEFT_CLOSE = 0.6;
     private final double CLAW_RIGHT_CLOSE = 0.6;
+    private final double ARM_POWER_SCALING = 0.6; // Scaled power for joystick control
     private final double WRIST_DOWN = 0.22;
     private final double WRIST_MIDDLE = 0.11;
     private final double WRIST_UP = 0;
@@ -33,26 +34,32 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
     final int TILT_MEDIUM = 720;
     final int TILT_LOW = 480;
     private final double ARM_TICKS_TO_DEGREES = 0.0529;
-    private boolean slideLimit;
-    private boolean slideLimit_alt = false;
-
+    private final double SLIDE_TICKS_TO_INCHES = -0.01191;
+    private final double ARM_LENGTH = 44.8; // unit: inches
+    private final double MAX_ARM_ANGLE = 120.0; // Maximum arm rotation in degrees
+    private final double MIN_ARM_ANGLE = 0.0;   // Minimum arm rotation in degrees
+    private final double ARM_POWER = 0.6; // Power level for arm movement
+    private final int MAX_SLIDE_TICKS = -2400; // Maximum slide extension ticks
+    private final int MIN_SLIDE_TICKS = 0;     // Minimum slide retracted ticks
     public void updateslidelimit(){
-        final double ARM_LENGTH = 44.8; //unit: inches
-        //unit: ticks
+        double slideLengthInches = slideMotor.getCurrentPosition() * SLIDE_TICKS_TO_INCHES;
+        double armAngleDegrees = armMotor.getCurrentPosition() * ARM_TICKS_TO_DEGREES;
+        armAngleDegrees = Math.max(MIN_ARM_ANGLE, Math.min(MAX_ARM_ANGLE, armAngleDegrees)); // Limit arm angle
+        double armAngleRadians = Math.toRadians(armAngleDegrees);
 
+        double armX = ARM_LENGTH * Math.cos(armAngleRadians);
+        double armY = ARM_LENGTH * Math.sin(armAngleRadians);
 
-
+        telemetry.addData("Updated Slide Length (inches)", slideLengthInches);
+        telemetry.addData("Updated Arm X (inches)", armX);
+        telemetry.addData("Updated Arm Y (inches)", armY);
     }
+
+
 
     // An Enum is used to represent arm states.
     // (This is one thing enums are designed to do)
-    public enum ArmState {
-        ARM_DOWN,
-        ARM_MIDDLE,
-        ARM_UP,
-    };
 
-    ArmState armState = ArmState.ARM_DOWN;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -77,8 +84,7 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
 
 
 
-        slideLimit = true;
-        slideLimit_alt = false;
+
 
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -105,6 +111,8 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        armMotor.setTargetPosition(TILT_LOW);
+
     }
 
     /*
@@ -128,6 +136,28 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
         wristServo.setPosition(WRIST_MIDDLE);
 
     }
+    public void updateSlideControl() {
+        int slideTicks = slideMotor.getCurrentPosition();
+        double slidePower = -gamepad2.left_stick_y;
+
+        if ((slideTicks >= MAX_SLIDE_TICKS && slidePower < 0) || (slideTicks <= MIN_SLIDE_TICKS && slidePower > 0)) {
+            slideMotor.setPower(slidePower);
+        } else {
+            slideMotor.setPower(0);
+        }
+    }
+    public void updateArmControl() {
+        int currentTicks = armMotor.getCurrentPosition();
+        double currentDegrees = currentTicks * ARM_TICKS_TO_DEGREES;
+        double armPower = -gamepad2.right_stick_y * ARM_POWER_SCALING; // Use right joystick for arm control
+
+        // Prevent movement beyond limits
+        if ((currentDegrees >= MAX_ARM_ANGLE && armPower > 0) || (currentDegrees <= MIN_ARM_ANGLE && armPower < 0)) {
+            armMotor.setPower(0);
+        } else {
+            armMotor.setPower(armPower);
+        }
+    }
 
     /*
      * Code to run REPEATEDLY after the driver hits START but before they hit STOP
@@ -136,71 +166,29 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
     public void loop() {
 
 
+        updateslidelimit();
+        updateSlideControl();
+        updateArmControl();
+        // Compute slide extension length
+        double slideLengthInches = slideMotor.getCurrentPosition() * SLIDE_TICKS_TO_INCHES;
 
+        // Compute arm angle and endpoint position
         double armAngleDegrees = armMotor.getCurrentPosition() * ARM_TICKS_TO_DEGREES;
+        armAngleDegrees = Math.max(MIN_ARM_ANGLE, Math.min(MAX_ARM_ANGLE, armAngleDegrees)); // Limit arm angle
+        double armAngleRadians = Math.toRadians(armAngleDegrees);
 
+        double armX = ARM_LENGTH * Math.cos(armAngleRadians); // Horizontal distance
+        double armY = ARM_LENGTH * Math.sin(armAngleRadians); // Vertical height
+
+        telemetry.addData("Slide Length (inches)", slideLengthInches);
+        telemetry.addData("Arm Angle (degrees)", armAngleDegrees);
+        telemetry.addData("Arm X (horizontal, inches)", armX);
+        telemetry.addData("Arm Y (vertical, inches)", armY);
+        telemetry.update();
         armMotor.setPower(1);
-        telemetry.addData("State: ", ""+armState);
-        telemetry.addData("Slide Limited? ", slideLimit);
-        if(slideLimit)
-        {
-            slideLimit_alt = false;
-        } else if (slideLimit_alt) {
-            slideLimit = true;
 
-        }
 
-        switch (armState) {
-            case ARM_DOWN:
-                // wait for input
-                if (gamepad2.left_bumper) {
-                    armMotor.setTargetPosition(TILT_HIGH);
-                    armState = ArmState.ARM_UP;
-                    slideLimit = false;
-                }
-                else if (gamepad2.right_trigger > 0.5) {
-                    armMotor.setTargetPosition(TILT_MEDIUM);
-                    armState = ArmState.ARM_MIDDLE;
-                    slideLimit_alt = true;
-                }
-                break;
-            case ARM_UP:
-                // check if the arm has finished tilting,
-                // otherwise do nothing.
-                if (gamepad2.right_bumper) {
-                    armMotor.setTargetPosition(TILT_LOW);
-                    armState = ArmState.ARM_DOWN;
-                    slideLimit = true;
-                }
-                else if (gamepad2.right_trigger > 0.5) {
-                    armMotor.setTargetPosition(TILT_MEDIUM);
-                    armState = ArmState.ARM_MIDDLE;
-                    slideLimit = true;
-                }
-                break;
-            case ARM_MIDDLE:
-                if (gamepad2.right_bumper) {
-                    armMotor.setTargetPosition(TILT_LOW);
-                    armState = ArmState.ARM_DOWN;
-                    slideLimit = true;
-                }
-                else if (gamepad2.left_bumper) {
-                    armMotor.setTargetPosition(TILT_HIGH);
-                    armState = ArmState.ARM_UP;
-                    slideLimit = false;
-                }
-                break;
-            default:
-                // should never be reached, as armState should never be null
-                armState = ArmState.ARM_DOWN;
-        }
 
-        // small optimization, instead of repeating ourselves in each
-        // lift state case besides LIFT_START for the cancel action,
-        // it's just handled here
-        if (gamepad2.guide && armState != ArmState.ARM_DOWN) {
-            armState = ArmState.ARM_DOWN;
-        }
 
 
 
@@ -242,42 +230,7 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
         telemetry.addData("Current tilt position", tiltPos);
 
         // slide control
-        if (slideLimit)
-        {
-            if (slidePos > -620 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y*0.9);
-            else if (slidePos < 0 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y);
-            else
-            {
-                slideMotor.setPower(0);
-            }
 
-        }
-        else{
-            if (slideLimit_alt)
-            {
-                if (slidePos > -700 && gamepad2.left_stick_y < 0&&wristServo.getPosition() == 0.11)
-                {
-                    slideMotor.setPower(gamepad2.left_stick_y);
-                } else if (slidePos>-950&&gamepad2.left_stick_y<0&&wristServo.getPosition() == 0.22) {
-                    slideMotor.setPower(gamepad2.left_stick_y);
-                }
-                else slideMotor.setPower(0);
-            }
-            else {
-            if (slidePos > -2550 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y);
-            else if (slidePos < 0 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y*0.9);
-            else if (slidePos>-2700 && gamepad2.left_stick_y < 0 &&wristServo.getPosition() == 0.22) {
-                slideMotor.setPower(gamepad2.left_stick_y);
-            } else
-            {
-                slideMotor.setPower(0);
-            }
-        }
-        }
         
 
         if (gamepad2.a) {
@@ -299,6 +252,8 @@ public class Test_TeleOP_Arm_refactor extends OpMode {
             wristServo.setPosition(WRIST_MIDDLE);
         }
         telemetry.update();
+
+
     }
 
     /*
