@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.team26248;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,8 +13,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@TeleOp(name="TeleOp Test", group="Starter Code")
-public class Test_TeleOP extends OpMode {
+@Disabled
+@TeleOp(name="TeleOp NEWARM", group="Starter Code")
+public class Test_TeleOP_Arm_refactor extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -30,9 +32,17 @@ public class Test_TeleOP extends OpMode {
     final int TILT_HIGH = 2250;
     final int TILT_MEDIUM = 720;
     final int TILT_LOW = 480;
-
+    private final double ARM_TICKS_TO_DEGREES = 0.0529;
     private boolean slideLimit;
     private boolean slideLimit_alt = false;
+
+    public void updateslidelimit(){
+        final double ARM_LENGTH = 44.8; //unit: inches
+        //unit: ticks
+
+
+
+    }
 
     // An Enum is used to represent arm states.
     // (This is one thing enums are designed to do)
@@ -124,6 +134,11 @@ public class Test_TeleOP extends OpMode {
      */
     @Override
     public void loop() {
+
+
+
+        double armAngleDegrees = armMotor.getCurrentPosition() * ARM_TICKS_TO_DEGREES;
+
         armMotor.setPower(1);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
