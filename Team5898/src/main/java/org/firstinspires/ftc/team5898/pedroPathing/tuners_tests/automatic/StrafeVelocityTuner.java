@@ -1,4 +1,4 @@
-package pedroPathing.tuners_tests.automatic;
+package org.firstinspires.ftc.team5898.pedroPathing.tuners_tests.automatic;
 
 
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
@@ -48,7 +48,7 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous(name = "TUNE TESTS - Strafe Velocity Tuner", group = "Automatic Tuners")
+@Autonomous(name = "Strafe Velocity Tuner", group = "Automatic Tuners")
 public class StrafeVelocityTuner extends OpMode {
     private ArrayList<Double> velocities = new ArrayList<>();
 

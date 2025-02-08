@@ -60,7 +60,7 @@ public class ForwardZeroPowerAccelerationTuner extends OpMode {
 
     private PoseUpdater poseUpdater;
 
-    public static double VELOCITY = 28;
+    public static double VELOCITY = 30;
 
     private double previousVelocity;
 
@@ -137,7 +137,9 @@ public class ForwardZeroPowerAccelerationTuner extends OpMode {
         }
 
         poseUpdater.update();
+
         Vector heading = new Vector(1.0, poseUpdater.getPose().getHeading());
+
         if (!end) {
             if (!stopping) {
                 if (MathFunctions.dotProduct(poseUpdater.getVelocity(), heading) > VELOCITY) {
