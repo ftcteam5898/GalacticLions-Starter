@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.team5898.pedroPathing.tuners_tests.localization;
+package pedroPathing.tuners_tests.localization;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -60,7 +60,7 @@ For support, contact tech@gobilda.com
  */
 
 
-@TeleOp(name="goBILDA® PinPoint Odometry Example", group="Teleop Test")
+@TeleOp(name="TUNE TESTS - goBILDA® PinPoint Odometry Example", group="Teleop Test")
 
 public class SensorGoBildaPinpointExample extends LinearOpMode {
 

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import org.firstinspires.ftc.team5898.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
 
@@ -47,7 +48,7 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous(name = "Forward Velocity Tuner", group = "Automatic Tuners")
+@Autonomous(name = "TUNE TESTS - Forward Velocity Tuner", group = "Automatic Tuners")
 public class ForwardVelocityTuner extends OpMode {
     private ArrayList<Double> velocities = new ArrayList<>();
 

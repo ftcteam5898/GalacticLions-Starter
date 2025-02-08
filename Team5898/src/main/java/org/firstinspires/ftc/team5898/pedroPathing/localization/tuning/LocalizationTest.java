@@ -1,20 +1,17 @@
-package org.firstinspires.ftc.team5898.pedroPathing.tuners_tests.localization;
+package org.firstinspires.ftc.team5898.pedroPathing.localization.tuning;
 
-import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
-import static com.pedropathing.follower.FollowerConstants.leftRearMotorName;
-import static com.pedropathing.follower.FollowerConstants.rightFrontMotorName;
-import static com.pedropathing.follower.FollowerConstants.rightRearMotorName;
-import static com.pedropathing.follower.FollowerConstants.leftFrontMotorDirection;
-import static com.pedropathing.follower.FollowerConstants.leftRearMotorDirection;
-import static com.pedropathing.follower.FollowerConstants.rightFrontMotorDirection;
-import static com.pedropathing.follower.FollowerConstants.rightRearMotorDirection;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.leftFrontMotorName;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.leftRearMotorName;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.rightFrontMotorName;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.rightRearMotorName;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.leftFrontMotorDirection;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.leftRearMotorDirection;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.rightFrontMotorDirection;
+import static org.firstinspires.ftc.team5898.pedroPathing.tuning.FollowerConstants.rightRearMotorDirection;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.pedropathing.pathgen.MathFunctions;
-import com.pedropathing.pathgen.Vector;
-import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -22,14 +19,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import com.pedropathing.localization.PoseUpdater;
-import com.pedropathing.util.DashboardPoseTracker;
-import com.pedropathing.util.Drawing;
+import org.firstinspires.ftc.team5898.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.team5898.pedroPathing.util.DashboardPoseTracker;
+import org.firstinspires.ftc.team5898.pedroPathing.util.Drawing;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.firstinspires.ftc.team5898.pedroPathing.constants.*;
 
 /**
  * This is the LocalizationTest OpMode. This is basically just a simple mecanum drive attached to a
@@ -40,7 +35,7 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.*;
  * @version 1.0, 5/6/2024
  */
 @Config
-@TeleOp(group = "Teleop Test", name = "Localization Test")
+@TeleOp(group = "Pedro Pathing Tuning", name = "Localization Test")
 public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;
@@ -57,7 +52,6 @@ public class LocalizationTest extends OpMode {
      */
     @Override
     public void init() {
-        Constants.setConstants(FConstants.class, LConstants.class);
         poseUpdater = new PoseUpdater(hardwareMap);
 
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
@@ -123,8 +117,6 @@ public class LocalizationTest extends OpMode {
         telemetryA.addData("y", poseUpdater.getPose().getY());
         telemetryA.addData("heading", poseUpdater.getPose().getHeading());
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
-        telemetryA.addData("Velocity", poseUpdater.getVelocity().getMagnitude());
-        telemetryA.addData("Current Vel: ", MathFunctions.dotProduct(poseUpdater.getVelocity(), new Vector(1.0, poseUpdater.getPose().getHeading())));
         telemetryA.update();
 
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
