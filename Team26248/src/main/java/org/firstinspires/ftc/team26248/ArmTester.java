@@ -15,10 +15,12 @@ public class ArmTester extends LinearOpMode {
         armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         waitForStart();
 
-        while(opModeIsActive()) {
+        int armPosition = 0;
 
+        while(opModeIsActive()) {
 
             if(direction) {
                 armMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -30,17 +32,29 @@ public class ArmTester extends LinearOpMode {
                 direction = !direction;
             }
             if(gamepad1.dpad_up) {
-                armMotor.setPower(0.5);
-
+                armPosition += 10;
             }
             else if(gamepad1.dpad_down) {
-                armMotor.setPower(-0.5);
-
+                armPosition -= 10;
             }
-            else {
-                armMotor.setPower(0);
-
+            else if(gamepad1.left_trigger > 0.5) {
+                armPosition -= 100;
             }
+            else if(gamepad1.right_trigger > 0.5) {
+                armPosition += 100;
+            }
+            else if(gamepad1.left_bumper) {
+                armPosition -= 1;
+            }
+            else if(gamepad1.right_bumper) {
+                armPosition += 1;
+            }
+
+            armMotor.setTargetPosition(armPosition);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            sleep(500);
+            armMotor.setPower(0.5);
+
             telemetry.addData("Arm Position", armMotor.getCurrentPosition());
             telemetry.update();
         }
