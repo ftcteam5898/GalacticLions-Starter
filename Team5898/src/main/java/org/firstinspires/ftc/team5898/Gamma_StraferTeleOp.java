@@ -12,6 +12,9 @@ public class Gamma_StraferTeleOp extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
+    private final double INTAKE_IN_LEFT = .78;
+    private final double INTAKE_IN_RIGHT = .22;
+
     private final double CLAW_OPEN = 0.4;
     private final double CLAW_CLOSE = 0.27;
     private double wristPos;
@@ -63,8 +66,8 @@ public class Gamma_StraferTeleOp extends OpMode {
 
         switch (botState) {
             case NEUTRAL:
-                robot.rightIntake.setPosition(.2);
-                robot.leftIntake.setPosition(.8);
+                robot.rightIntake.setPosition(INTAKE_IN_RIGHT);
+                robot.leftIntake.setPosition(INTAKE_IN_LEFT);
                 robot.wrist.setPosition(.3);
                 robot.grabber.setPosition(.2); //closed
 
@@ -82,15 +85,33 @@ public class Gamma_StraferTeleOp extends OpMode {
                 robot.wrist.setPosition(.9);
                 robot.grabber.setPosition(0); //open
                 // wait for input
-                if (gamepad2.x) {
+                if (gamepad1.x) {
                     //change state to GRAB_DOWN
                     botState = BotState.GRAB_DOWN;
+                    runtime.reset();
                 }
                 else if (gamepad2.dpad_right) {
                     //change state to INTAKE_OUT
                     botState = BotState.NEUTRAL;
                 }
                 break;
+            case GRAB_DOWN:
+                // wrist goes down, grabber closes, then wrist comes up, and intake comes in
+                if (runtime.seconds() < .5)
+                {
+                    robot.wrist.setPosition(1);
+                    robot.grabber.setPosition(.2);
+                } else if (runtime.seconds() > .5) {
+                    robot.wrist.setPosition(0);
+                    robot.leftIntake.setPosition(INTAKE_IN_LEFT);
+                    robot.rightIntake.setPosition(INTAKE_IN_RIGHT);
+                    botState = BotState.INTAKE_GRAB_IN;
+                }
+                break;
+            case INTAKE_GRAB_IN:
+                //wait for input
+                break;
+
             default:
                 botState = BotState.NEUTRAL;
         }
@@ -103,6 +124,11 @@ public class Gamma_StraferTeleOp extends OpMode {
         // Drive Code
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        if (gamepad1.right_bumper)
+        {
+            y = clamp(y, -.25, .25);
+            x = clamp(x, -.25, .25);
+        }
         double rx = gamepad1.right_stick_x;
 
         // This button choice was made so that it is hard to hit on accident,
@@ -137,6 +163,10 @@ public class Gamma_StraferTeleOp extends OpMode {
 
 
         telemetry.update();
+    }
+
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
     }
 
 
