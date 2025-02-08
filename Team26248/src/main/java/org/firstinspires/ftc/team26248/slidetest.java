@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
+// TODO: Maxium for high basket is -2000
 @TeleOp(name="SlidePositionTest", group="Test")
 public class slidetest extends LinearOpMode {
     @Override
@@ -12,6 +12,9 @@ public class slidetest extends LinearOpMode {
     public void runOpMode() {
         boolean direction = true;
         DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         waitForStart();
         while(opModeIsActive()) {

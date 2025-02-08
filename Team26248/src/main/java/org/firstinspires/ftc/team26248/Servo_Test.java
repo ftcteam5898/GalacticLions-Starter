@@ -34,6 +34,8 @@ public class Servo_Test extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Servo Right Position", servoRightPosition);
         telemetry.addData("Servo Left Position", servoLeftPosition);
+        telemetry.addData("Servo Wrist Position",servoWrist.getPosition());
+
         telemetry.update();
 
         // 等待用户按下 PLAY 按钮
@@ -54,9 +56,13 @@ public class Servo_Test extends LinearOpMode {
             }
             if(gamepad1.right_trigger>=0.5)
             {
-                servoWrist.setPosition(0);
+                servoWrist.setPosition(servoWrist.getPosition() + 0.01);
+                sleep(100);
+                telemetry.update();
             } else if (gamepad1.left_trigger>=0.5) {
-                servoWrist.setPosition(0.2);
+                servoWrist.setPosition(servoWrist.getPosition() - 0.01);
+                sleep(100);
+                telemetry.update();
             }
 
             // 限制伺服位置范围在 [0, 1]
@@ -70,6 +76,7 @@ public class Servo_Test extends LinearOpMode {
             // 输出伺服位置到 telemetry
             telemetry.addData("Servo Right Position", servoRightPosition);
             telemetry.addData("Servo Left Position", servoLeftPosition);
+            telemetry.addData("Servo Wrist Position",servoWrist.getPosition());
             telemetry.update();
 
             // 短暂延迟以避免过于频繁地检测输入

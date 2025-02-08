@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@TeleOp(name="TeleOp", group="Starter Code")
-public class TeleOp26248 extends OpMode {
+@TeleOp(name="TeleOp Test", group="Starter Code")
+public class Test_TeleOP extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -24,8 +24,12 @@ public class TeleOp26248 extends OpMode {
     private final double CLAW_RIGHT_OPEN = 0.4;
     private final double CLAW_LEFT_CLOSE = 0.6;
     private final double CLAW_RIGHT_CLOSE = 0.6;
-    final int TILT_HIGH = 1500;
-    final int TILT_LOW = 430;
+    private final double WRIST_DOWN = 0.22;
+    private final double WRIST_MIDDLE = 0.11;
+    private final double WRIST_UP = 0;
+    final int TILT_HIGH = 2250;
+    final int TILT_MEDIUM = 650;
+    final int TILT_LOW = 480;
 
     private boolean slideLimit;
 
@@ -33,6 +37,7 @@ public class TeleOp26248 extends OpMode {
     // (This is one thing enums are designed to do)
     public enum ArmState {
         ARM_DOWN,
+        ARM_MIDDLE,
         ARM_UP,
     };
 
@@ -58,7 +63,7 @@ public class TeleOp26248 extends OpMode {
         clawLeftMotor = hardwareMap.servo.get("vr");
         clawRightMotor = hardwareMap.servo.get("vl");
         wristServo = hardwareMap.servo.get("wr");
-        wristServo.setDirection(Servo.Direction.FORWARD);
+
 
 
         slideLimit = true;
@@ -66,6 +71,7 @@ public class TeleOp26248 extends OpMode {
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        wristServo.setDirection(Servo.Direction.REVERSE);
 
 
         // Retrieve the IMU from the hardware map
@@ -107,6 +113,7 @@ public class TeleOp26248 extends OpMode {
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         clawLeftMotor.setPosition(.5);
         clawRightMotor.setPosition(.5);
+        wristServo.setPosition(WRIST_MIDDLE);
 
     }
 
@@ -128,6 +135,11 @@ public class TeleOp26248 extends OpMode {
                     armState = ArmState.ARM_UP;
                     slideLimit = false;
                 }
+                else if (gamepad2.right_trigger > 0.5) {
+                    armMotor.setTargetPosition(TILT_MEDIUM);
+                    armState = ArmState.ARM_MIDDLE;
+                    slideLimit = true;
+                }
                 break;
             case ARM_UP:
                 // check if the arm has finished tilting,
@@ -136,6 +148,23 @@ public class TeleOp26248 extends OpMode {
                     armMotor.setTargetPosition(TILT_LOW);
                     armState = ArmState.ARM_DOWN;
                     slideLimit = true;
+                }
+                else if (gamepad2.right_trigger > 0.5) {
+                    armMotor.setTargetPosition(TILT_MEDIUM);
+                    armState = ArmState.ARM_MIDDLE;
+                    slideLimit = true;
+                }
+                break;
+            case ARM_MIDDLE:
+                if (gamepad2.right_bumper) {
+                    armMotor.setTargetPosition(TILT_LOW);
+                    armState = ArmState.ARM_DOWN;
+                    slideLimit = true;
+                }
+                else if (gamepad2.left_bumper) {
+                    armMotor.setTargetPosition(TILT_HIGH);
+                    armState = ArmState.ARM_UP;
+                    slideLimit = false;
                 }
                 break;
             default:
@@ -149,12 +178,7 @@ public class TeleOp26248 extends OpMode {
         if (gamepad2.guide && armState != ArmState.ARM_DOWN) {
             armState = ArmState.ARM_DOWN;
         }
-        if (gamepad2.right_trigger>0.4)
-        {
-            wristServo.setPosition(0);
-        } else if (gamepad2.left_trigger>0.4) {
-            wristServo.setPosition(0.2);
-        }
+
 
 
         // Drive Code
@@ -184,10 +208,10 @@ public class TeleOp26248 extends OpMode {
         double frontRightPower = (rotY - rotX - rx) / denominator;
         double backRightPower = (rotY + rotX - rx) / denominator;
 
-        motorFrontLeft.setPower(frontLeftPower*0.9);
-        motorBackLeft.setPower(backLeftPower*0.9);
-        motorFrontRight.setPower(frontRightPower*0.9);
-        motorBackRight.setPower(backRightPower*0.9);
+        motorFrontLeft.setPower(frontLeftPower);
+        motorBackLeft.setPower(backLeftPower);
+        motorFrontRight.setPower(frontRightPower);
+        motorBackRight.setPower(backRightPower);
 
         int slidePos = slideMotor.getCurrentPosition();
         int tiltPos = armMotor.getCurrentPosition();
@@ -197,10 +221,10 @@ public class TeleOp26248 extends OpMode {
         // slide control
         if (slideLimit)
         {
-            if (slidePos > -1520 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .85);
-            else if (slidePos < -10 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .85);
+            if (slidePos > -620 && gamepad2.left_stick_y < 0)
+                slideMotor.setPower(gamepad2.left_stick_y);
+            else if (slidePos < 0 && gamepad2.left_stick_y > 0)
+                slideMotor.setPower(gamepad2.left_stick_y);
             else
             {
                 slideMotor.setPower(0);
@@ -208,10 +232,10 @@ public class TeleOp26248 extends OpMode {
 
         }
         else{
-            if (slidePos > -3100 && gamepad2.left_stick_y < 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .85);
-            else if (slidePos < -10 && gamepad2.left_stick_y > 0)
-                slideMotor.setPower(gamepad2.left_stick_y * .85);
+            if (slidePos > -2550 && gamepad2.left_stick_y < 0)
+                slideMotor.setPower(gamepad2.left_stick_y);
+            else if (slidePos < 0 && gamepad2.left_stick_y > 0)
+                slideMotor.setPower(gamepad2.left_stick_y);
             else
             {
                 slideMotor.setPower(0);
@@ -228,6 +252,14 @@ public class TeleOp26248 extends OpMode {
             clawRightMotor.setPosition(CLAW_RIGHT_CLOSE);
         }
 
+        if (gamepad2.dpad_up){
+            wristServo.setPosition(WRIST_UP);
+        }
+        else if (gamepad2.dpad_down){
+            wristServo.setPosition(WRIST_DOWN);
+        } else if (gamepad2.dpad_left) {
+            wristServo.setPosition(WRIST_MIDDLE);
+        }
         telemetry.update();
     }
 
