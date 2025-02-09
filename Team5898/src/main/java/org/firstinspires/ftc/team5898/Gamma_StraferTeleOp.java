@@ -11,16 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class Gamma_StraferTeleOp extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private final double INTAKE_IN_LEFT = .78;
-    private final double INTAKE_IN_RIGHT = .22;
-    private final double GRABBER_OPEN = 0;
-    private final double GRABBER_CLOSE = .2;
-    private final double WRIST_NEUTRAL = .3;
-    private final double WRIST_BACK = 0;
-    private final double WRIST_HOVER = .9;
-    private final double WRIST_GRAB = 1;
-    private final double CLAW_OPEN = 0.3;
-    private final double CLAW_CLOSE = 0.1;
+
     private RobotHardware robot;
 
     public enum BotState {
@@ -68,13 +59,13 @@ public class Gamma_StraferTeleOp extends OpMode {
 
         switch (botState) {
             case NEUTRAL:
-                robot.rightIntake.setPosition(INTAKE_IN_RIGHT);
-                robot.leftIntake.setPosition(INTAKE_IN_LEFT);
-                robot.wrist.setPosition(WRIST_NEUTRAL);
-                robot.grabber.setPosition(GRABBER_CLOSE); //grabber closed
+                robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
+                robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+                robot.wrist.setPosition(robot.WRIST_NEUTRAL);
+                robot.grabber.setPosition(robot.GRABBER_CLOSE); //grabber closed
                 robot.rightOuttake.setPosition(0); //waiting to grab
                 robot.leftOuttake.setPosition(1); //waiting to grab
-                robot.claw.setPosition(CLAW_OPEN); // claw resting open
+                robot.claw.setPosition(robot.CLAW_OPEN); // claw resting open
 
 
                 // wait for input
@@ -87,8 +78,8 @@ public class Gamma_StraferTeleOp extends OpMode {
                 // set intake servos to go out
                 robot.leftIntake.setPosition(1);
                 robot.rightIntake.setPosition(0);
-                robot.wrist.setPosition(WRIST_HOVER);
-                robot.grabber.setPosition(GRABBER_OPEN); //open
+                robot.wrist.setPosition(robot.WRIST_HOVER);
+                robot.grabber.setPosition(robot.GRABBER_OPEN); //open
                 // wait for input
                 if (gamepad1.x) {
                     //change state to GRAB_DOWN
@@ -104,12 +95,12 @@ public class Gamma_StraferTeleOp extends OpMode {
                 // wrist goes down, grabber closes, then wrist comes up, and intake comes in
                 if (runtime.seconds() < .5)
                 {
-                    robot.wrist.setPosition(WRIST_GRAB);
+                    robot.wrist.setPosition(robot.WRIST_GRAB);
                     robot.grabber.setPosition(.2);
                 } else if (runtime.seconds() > .5) {
-                    robot.wrist.setPosition(WRIST_BACK);
-                    robot.leftIntake.setPosition(INTAKE_IN_LEFT);
-                    robot.rightIntake.setPosition(INTAKE_IN_RIGHT);
+                    robot.wrist.setPosition(robot.WRIST_BACK);
+                    robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+                    robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
                     botState = BotState.INTAKE_GRAB_IN;
                     runtime.reset();
                 }
@@ -117,11 +108,11 @@ public class Gamma_StraferTeleOp extends OpMode {
             case INTAKE_GRAB_IN:
                 //transition sample to outtake claw and wait for input
                 if (runtime.seconds() > .5 && runtime.seconds() < 1){
-                    robot.claw.setPosition(CLAW_CLOSE);
+                    robot.claw.setPosition(robot.CLAW_CLOSE);
                 }
                 else if (runtime.seconds() > 1){
-                    robot.grabber.setPosition(GRABBER_OPEN);
-                    robot.wrist.setPosition(.5);
+                    robot.grabber.setPosition(robot.GRABBER_OPEN);
+                    robot.wrist.setPosition(robot.WRIST_MID);
                 }
                 if (gamepad2.y){
                     botState = BotState.OUTTAKE_GRAB_FLIP_UP;
@@ -144,7 +135,7 @@ public class Gamma_StraferTeleOp extends OpMode {
                 break;
             case OUTTAKE_RELEASE_DOWN:
                 //release sample, bring outtake back in
-                robot.claw.setPosition(CLAW_OPEN);
+                robot.claw.setPosition(robot.CLAW_OPEN);
                 if (runtime.seconds() > .5) {
                     robot.rightOuttake.setPosition(0);
                     robot.leftOuttake.setPosition(1);

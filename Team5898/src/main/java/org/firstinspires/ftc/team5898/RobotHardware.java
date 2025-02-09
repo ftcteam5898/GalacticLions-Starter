@@ -22,6 +22,18 @@ public class RobotHardware {
     // Sensors
     public IMU imu;
 
+    public final double INTAKE_IN_LEFT = .78;
+    public final double INTAKE_IN_RIGHT = .22;
+    public final double GRABBER_OPEN = 0;
+    public final double GRABBER_CLOSE = .2;
+    public final double WRIST_NEUTRAL = .3;
+    public final double WRIST_BACK = 0;
+    public final double WRIST_MID = .5;
+    public final double WRIST_HOVER = .9;
+    public final double WRIST_GRAB = 1;
+    public final double CLAW_OPEN = 0.3;
+    public final double CLAW_CLOSE = 0.1;
+
     // Hardware Map Reference
     private HardwareMap hardwareMap;
 

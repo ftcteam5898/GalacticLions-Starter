@@ -229,7 +229,13 @@ public class Gamma_Auto extends OpMode {
         follower.setStartingPose(startPose);
         buildPaths();
 
-        robot.claw.setPosition(.1);
+        robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
+        robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+        robot.wrist.setPosition(robot.WRIST_MID);
+        robot.grabber.setPosition(robot.GRABBER_CLOSE); //grabber closed
+        robot.rightOuttake.setPosition(0); //waiting to grab
+        robot.leftOuttake.setPosition(1); //waiting to grab
+        robot.claw.setPosition(robot.CLAW_CLOSE); // claw resting open
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
