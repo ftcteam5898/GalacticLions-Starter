@@ -49,7 +49,7 @@ public class RobotHardware {
         slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); // Declare OpMode member for the Odometry Computer
+        GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
 
         // clear encoder values for slides
