@@ -17,6 +17,8 @@ public class RobotHardware {
     // Declare Servos
     public Servo claw, grabber, leftOuttake, rightOuttake, wrist, leftIntake, rightIntake;
 
+    public GoBildaPinpointDriver odo;
+
     // Sensors
     public IMU imu;
 
@@ -46,6 +48,8 @@ public class RobotHardware {
         // Set all motors to brake when power is zero
         slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo"); // Declare OpMode member for the Odometry Computer
 
 
         // clear encoder values for slides
