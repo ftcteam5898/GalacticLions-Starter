@@ -12,9 +12,6 @@ public class Gamma_StraferTeleOp extends OpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    private final double CLAW_OPEN = 0.4;
-    private final double CLAW_CLOSE = 0.27;
-    private double wristPos;
     private RobotHardware robot;
 
     public enum BotState {
@@ -22,8 +19,7 @@ public class Gamma_StraferTeleOp extends OpMode {
         INTAKE_OUT,
         GRAB_DOWN,
         INTAKE_GRAB_IN,
-        OUTTAKE_GRAB_FLIP,
-        OUTTAKE_UP,
+        OUTTAKE_GRAB_FLIP_UP,
         OUTTAKE_RELEASE_DOWN
     };
 
@@ -63,10 +59,13 @@ public class Gamma_StraferTeleOp extends OpMode {
 
         switch (botState) {
             case NEUTRAL:
-                robot.rightIntake.setPosition(.2);
-                robot.leftIntake.setPosition(.8);
-                robot.wrist.setPosition(.3);
-                robot.grabber.setPosition(.2); //closed
+                robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
+                robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+                robot.wrist.setPosition(robot.WRIST_NEUTRAL);
+                robot.grabber.setPosition(robot.GRABBER_CLOSE); //grabber closed
+                robot.rightOuttake.setPosition(0); //waiting to grab
+                robot.leftOuttake.setPosition(1); //waiting to grab
+                robot.claw.setPosition(robot.CLAW_OPEN); // claw resting open
 
 
                 // wait for input
@@ -79,17 +78,70 @@ public class Gamma_StraferTeleOp extends OpMode {
                 // set intake servos to go out
                 robot.leftIntake.setPosition(1);
                 robot.rightIntake.setPosition(0);
-                robot.wrist.setPosition(.9);
-                robot.grabber.setPosition(0); //open
+                robot.wrist.setPosition(robot.WRIST_HOVER);
+                robot.grabber.setPosition(robot.GRABBER_OPEN); //open
                 // wait for input
-                if (gamepad2.x) {
+                if (gamepad1.x) {
                     //change state to GRAB_DOWN
                     botState = BotState.GRAB_DOWN;
+                    runtime.reset();
                 }
                 else if (gamepad2.dpad_right) {
                     //change state to INTAKE_OUT
                     botState = BotState.NEUTRAL;
                 }
+                break;
+            case GRAB_DOWN:
+                // wrist goes down, grabber closes, then wrist comes up, and intake comes in
+                if (runtime.seconds() < .5)
+                {
+                    robot.wrist.setPosition(robot.WRIST_GRAB);
+                    robot.grabber.setPosition(.2);
+                } else if (runtime.seconds() > .5) {
+                    robot.wrist.setPosition(robot.WRIST_BACK);
+                    robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+                    robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
+                    botState = BotState.INTAKE_GRAB_IN;
+                    runtime.reset();
+                }
+                break;
+            case INTAKE_GRAB_IN:
+                //transition sample to outtake claw and wait for input
+                if (runtime.seconds() > .5 && runtime.seconds() < 1){
+                    robot.claw.setPosition(robot.CLAW_CLOSE);
+                }
+                else if (runtime.seconds() > 1){
+                    robot.grabber.setPosition(robot.GRABBER_OPEN);
+                    robot.wrist.setPosition(robot.WRIST_MID);
+                }
+                if (gamepad2.y){
+                    botState = BotState.OUTTAKE_GRAB_FLIP_UP;
+                    runtime.reset();
+                }
+                else if (gamepad2.dpad_right) {
+                    // can return to NEUTRAL if grab is unsuccessful
+                    botState = BotState.NEUTRAL;
+                }
+                break;
+            case OUTTAKE_GRAB_FLIP_UP:
+                //outtake flips and the slides rise up
+                robot.rightOuttake.setPosition(1);
+                robot.leftOuttake.setPosition(0);
+                //add code to make slides go up and hold here
+
+                if (gamepad1.b){
+                    botState = BotState.OUTTAKE_RELEASE_DOWN;
+                }
+                break;
+            case OUTTAKE_RELEASE_DOWN:
+                //release sample, bring outtake back in
+                robot.claw.setPosition(robot.CLAW_OPEN);
+                if (runtime.seconds() > .5) {
+                    robot.rightOuttake.setPosition(0);
+                    robot.leftOuttake.setPosition(1);
+                    // add code to make slides go back down and chill here
+                }
+                botState = BotState.NEUTRAL;
                 break;
             default:
                 botState = BotState.NEUTRAL;
@@ -104,6 +156,15 @@ public class Gamma_StraferTeleOp extends OpMode {
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
         double rx = gamepad1.right_stick_x;
+
+        // slow/precision mode
+        if (gamepad1.right_bumper)
+        {
+            y = clamp(y, -.25, .25);
+            x = clamp(x, -.25, .25);
+            rx = clamp(rx, -.25, .25);
+        }
+
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
@@ -137,6 +198,10 @@ public class Gamma_StraferTeleOp extends OpMode {
 
 
         telemetry.update();
+    }
+
+    public static double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
     }
 
 

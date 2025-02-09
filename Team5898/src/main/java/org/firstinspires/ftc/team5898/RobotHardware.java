@@ -12,11 +12,27 @@ public class RobotHardware {
     public DcMotorEx leftFront, leftRear, rightFront, rightRear;
     public DcMotorEx slideLeft, slideRight;
 
+    private PIDController liftPID;
+
     // Declare Servos
     public Servo claw, grabber, leftOuttake, rightOuttake, wrist, leftIntake, rightIntake;
 
+    public GoBildaPinpointDriver odo;
+
     // Sensors
     public IMU imu;
+
+    public final double INTAKE_IN_LEFT = .78;
+    public final double INTAKE_IN_RIGHT = .22;
+    public final double GRABBER_OPEN = 0;
+    public final double GRABBER_CLOSE = .2;
+    public final double WRIST_NEUTRAL = .3;
+    public final double WRIST_BACK = 0;
+    public final double WRIST_MID = .5;
+    public final double WRIST_HOVER = .9;
+    public final double WRIST_GRAB = 1;
+    public final double CLAW_OPEN = 0.3;
+    public final double CLAW_CLOSE = 0.1;
 
     // Hardware Map Reference
     private HardwareMap hardwareMap;
@@ -45,12 +61,18 @@ public class RobotHardware {
         slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
-        // Set all motors to run without encoders initially
+
+        // clear encoder values for slides
         slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Initialize PID Controller for slide(Tune these values!)
+        liftPID = new PIDController(0.01, 0.0005, 0.001);
+        liftPID.setMaxOutput(1.0);
 
         // Servos
         claw = hardwareMap.get(Servo.class, "Claw");
@@ -80,8 +102,28 @@ public class RobotHardware {
         leftRear.setMode(mode);
         rightFront.setMode(mode);
         rightRear.setMode(mode);
-        slideLeft.setMode(mode);
-        slideRight.setMode(mode);
+    }
+
+    public void setLiftPosition(int targetPosition, double power) {
+        slideLeft.setTargetPosition(targetPosition);
+        slideRight.setTargetPosition(targetPosition);
+
+        slideLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slideLeft.setPower(power);
+        slideRight.setPower(power);
+    }
+
+    public void syncLift(double targetPower) {
+        int leftPos = slideLeft.getCurrentPosition();
+        int rightPos = slideRight.getCurrentPosition();
+
+        // Calculate power correction using PID
+        double correction = liftPID.calculate(leftPos, rightPos);
+
+        slideLeft.setPower(targetPower - correction);
+        slideRight.setPower(targetPower + correction);
     }
 
 }
