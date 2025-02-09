@@ -165,12 +165,16 @@ public class Gamma_StraferTeleOp extends OpMode {
         // Drive Code
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+        double rx = gamepad1.right_stick_x;
+
+        // slow/precision mode
         if (gamepad1.right_bumper)
         {
             y = clamp(y, -.25, .25);
             x = clamp(x, -.25, .25);
+            rx = clamp(rx, -.25, .25);
         }
-        double rx = gamepad1.right_stick_x;
+
 
         // This button choice was made so that it is hard to hit on accident,
         // it can be freely changed based on preference.
