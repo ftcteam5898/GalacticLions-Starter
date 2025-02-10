@@ -214,7 +214,8 @@ public class Gamma_Auto extends OpMode {
         telemetry.update();
     }
 
-    /** This method is called once at the init of the OpMode. **/
+    /** This method is called once at the init of the OpMode.
+     * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void init() {
         pathTimer = new Timer();
@@ -242,8 +243,7 @@ public class Gamma_Auto extends OpMode {
     @Override
     public void init_loop() {}
 
-    /** This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system **/
+    /** This method is called once at the start of the OpMode.**/
     @Override
     public void start() {
         opmodeTimer.resetTimer();

@@ -17,7 +17,7 @@ public class RobotHardware {
     // Declare Servos
     public Servo claw, grabber, leftOuttake, rightOuttake, wrist, leftIntake, rightIntake;
 
-    public GoBildaPinpointDriver odo;
+    //public GoBildaPinpointDriver odo;
 
     // Sensors
     public IMU imu;
@@ -61,7 +61,7 @@ public class RobotHardware {
         slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        //GoBildaPinpointDriver odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
 
         // clear encoder values for slides
