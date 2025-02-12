@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team26248.pedroPathing;
+package org.firstinspires.ftc.team26248.pedroPathing.Constants;
 
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.Localizers;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class FConstants {
     static {
-        FollowerConstants.localizers = Localizers.THREE_WHEEL;
+        FollowerConstants.localizers = Localizers.PINPOINT;
 
         FollowerConstants.leftFrontMotorName = "fl";
         FollowerConstants.leftRearMotorName = "bl";
@@ -18,7 +18,6 @@ public class FConstants {
         FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 10;
-
+        FollowerConstants.mass = 9.07;
     }
 }

@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.team26248;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Disabled
 @TeleOp(name="TeleOp V5", group="TeleOp")
 public class StraferTeleOP extends LinearOpMode{
     @Override
