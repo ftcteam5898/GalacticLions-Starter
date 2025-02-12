@@ -71,7 +71,7 @@ public class RobotHardware {
         slideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Initialize PID Controller for slide(Tune these values!)
-        liftPID = new PIDController(0.01, 0.0005, 0.001);
+        liftPID = new PIDController(0.01, 0, 0);
         liftPID.setMaxOutput(1.0);
 
         // Servos
