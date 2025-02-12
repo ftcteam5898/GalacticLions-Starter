@@ -20,7 +20,8 @@ public class Gamma_StraferTeleOp extends OpMode {
         GRAB_DOWN,
         INTAKE_GRAB_IN,
         OUTTAKE_GRAB_FLIP_UP,
-        OUTTAKE_RELEASE_DOWN
+        OUTTAKE_RELEASE_DOWN,
+        WRIST_DOWN
     };
 
     BotState botState = BotState.NEUTRAL;
@@ -89,6 +90,21 @@ public class Gamma_StraferTeleOp extends OpMode {
                 else if (gamepad2.dpad_right) {
                     //change state to INTAKE_OUT
                     botState = BotState.NEUTRAL;
+                }
+                else if (gamepad2.a && runtime.seconds() > .5){
+                    botState = BotState.WRIST_DOWN;
+                    runtime.reset();
+                }
+                break;
+            case WRIST_DOWN:
+                robot.wrist.setPosition(robot.WRIST_GRAB);
+                if (gamepad2.a && runtime.seconds() > .5){
+                    botState = BotState.INTAKE_OUT;
+                    runtime.reset();
+                }
+                else if (gamepad2.dpad_right){
+                    botState = BotState.NEUTRAL;
+                    runtime.reset();
                 }
                 break;
             case GRAB_DOWN:
