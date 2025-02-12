@@ -28,10 +28,6 @@ labels:
     matcher:
       comment: '/review-fail'
 
-  - label: 'Lifecycle: Active'
-    matcher:
-      baseBranch: '^master/.*' 
-      
 checks:
   - context: 'Merge check'
     description: 'Labels for merge.'
