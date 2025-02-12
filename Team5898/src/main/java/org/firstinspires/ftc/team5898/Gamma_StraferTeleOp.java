@@ -64,9 +64,17 @@ public class Gamma_StraferTeleOp extends OpMode {
                 robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
                 robot.wrist.setPosition(robot.WRIST_NEUTRAL);
                 robot.grabber.setPosition(robot.GRABBER_CLOSE); //grabber closed
-                robot.rightOuttake.setPosition(0); //waiting to grab
-                robot.leftOuttake.setPosition(1); //waiting to grab
+                robot.rightOuttake.setPosition(.1); //waiting to grab
+                robot.leftOuttake.setPosition(.9); //waiting to grab
                 robot.claw.setPosition(robot.CLAW_OPEN); // claw resting open
+
+                if (runtime.seconds() > 2.5)
+                {
+                    robot.slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    robot.slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    robot.slideLeft.setPower(0);
+                    robot.slideRight.setPower(0);
+                }
 
 
                 // wait for input
@@ -144,6 +152,8 @@ public class Gamma_StraferTeleOp extends OpMode {
                 robot.rightOuttake.setPosition(1);
                 robot.leftOuttake.setPosition(0);
                 //add code to make slides go up and hold here
+                // Set a target encoder position for the lift (e.g., 500 ticks)
+                robot.setLiftPosition(3050, 1);
 
                 if (gamepad1.b){
                     botState = BotState.OUTTAKE_RELEASE_DOWN;
@@ -152,21 +162,17 @@ public class Gamma_StraferTeleOp extends OpMode {
             case OUTTAKE_RELEASE_DOWN:
                 //release sample, bring outtake back in
                 robot.claw.setPosition(robot.CLAW_OPEN);
-                if (runtime.seconds() > .5) {
-                    robot.rightOuttake.setPosition(0);
-                    robot.leftOuttake.setPosition(1);
-                    // add code to make slides go back down and chill here
-                }
+                robot.rightOuttake.setPosition(0);
+                robot.leftOuttake.setPosition(1);
+                // add code to make slides go back down and chill here
+                robot.setLiftPosition(20, .7);
+                // Loop until both motors reach the target
                 botState = BotState.NEUTRAL;
+                runtime.reset();
                 break;
             default:
                 botState = BotState.NEUTRAL;
         }
-
-
-
-
-
 
         // Drive Code
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
@@ -213,6 +219,8 @@ public class Gamma_StraferTeleOp extends OpMode {
 
 
 
+        telemetry.addData("Left Position", robot.slideLeft.getCurrentPosition());
+        telemetry.addData("Right Position", robot.slideRight.getCurrentPosition());
         telemetry.update();
     }
 
