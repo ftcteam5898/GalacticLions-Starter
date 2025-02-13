@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-@Disabled
+
 // TODO: Maxium for high basket is -2000
 @TeleOp(name="SlidePositionTest", group="Test")
 public class slidetest extends LinearOpMode {
@@ -16,9 +16,13 @@ public class slidetest extends LinearOpMode {
     public void runOpMode() {
         boolean direction = true;
         DcMotor slideMotor = hardwareMap.dcMotor.get("slide");
+        DcMotor armMotor = hardwareMap.dcMotor.get("arm");
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setTargetPosition(slideMotor.getCurrentPosition());
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         waitForStart();
         while(opModeIsActive()) {
@@ -31,21 +35,16 @@ public class slidetest extends LinearOpMode {
                     slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
                 }
             }
+            slideMotor.setPower(.5);
             if(gamepad1.dpad_up) {
-                slideMotor.setPower(0.5);
-                telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
-                telemetry.update();
+                slideMotor.setTargetPosition(slideMotor.getCurrentPosition() + 20);
             }
             else if(gamepad1.dpad_down) {
-                slideMotor.setPower(-0.5);
-                telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
-                telemetry.update();
+                slideMotor.setTargetPosition(slideMotor.getCurrentPosition() - 20);
             }
-            else {
-                slideMotor.setPower(0);
-                telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
-                telemetry.update();
-            }
+            telemetry.addData("Slide Current Position", slideMotor.getCurrentPosition());
+            telemetry.addData("Slide Target Position", slideMotor.getTargetPosition());
+            telemetry.update();
         }
     }
 

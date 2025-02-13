@@ -38,10 +38,10 @@ public class Auto_High_New extends LinearOpMode {
     public class Claw {
         private Servo clawLeft;
         private Servo clawRight;
-        private final double CLAW_LEFT_OPEN = 0.6;
-        private final double CLAW_RIGHT_OPEN = 0.4;
-        private final double CLAW_LEFT_CLOSE = 0.4;
-        private final double CLAW_RIGHT_CLOSE = 0.6;
+        private final double CLAW_LEFT_CLOSE = 0.6; //TODO: The Value
+        private final double CLAW_RIGHT_CLOSE = 0.4;//TODO: The Value
+        private final double CLAW_LEFT_OPEN = 0.4;//TODO: The Value
+        private final double CLAW_RIGHT_OPEN = 0.6;//TODO: The Value
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -80,21 +80,21 @@ public class Auto_High_New extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(-800); //TODO: The Value
+            slideMotor.setTargetPosition(-870); //TODO: The Value
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(.7);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void contract(){
             slideMotor.setTargetPosition(0);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(.7);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
-            slideMotor.setTargetPosition(-2300); //TODO: The Value
+            slideMotor.setTargetPosition(-2400); //TODO: The Value
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(1);
+            slideMotor.setPower(.9);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         }
@@ -104,7 +104,7 @@ public class Auto_High_New extends LinearOpMode {
         private DcMotor armMotor;
 
         //Change Arm Status Here
-        private final int arm_up = 2250; //TODO: The Value
+        private final int arm_up = 1945; //TODO: The Value
         private final int arm_down = 480;//TODO: The Value
 
         public Arm(DcMotor armMotor) {
@@ -166,29 +166,40 @@ public class Auto_High_New extends LinearOpMode {
         sleep(100);
         wrist.flat();
         waitForStart();
-        strafeLeft(14.5,0.6); //TODO: The Value
+
+        //Auto Code
+        strafeLeft(8.4,0.5); //TODO: The Value
         arm.down();
         sleep(100); //TODO: The Value
+        forward(13.5,0.6);
         slide.expandDown();
+        sleep(500);
         claw.close();
         sleep(500);
         slide.contract();
-
-        sleep(250);
+        sleep(550);
         turnLeft(-130,0.6); //TODO: The Value
-        forward(10.5,0.6);
+
+        sleep(500);
+        forward(6.5,0.5);
         sleep(500);
         arm.up();
+        sleep(700);
         slide.expandUP();
-        sleep(1000); //TODO: The Value
+        sleep(1500); //TODO: The Value
         claw.open();
-        back(2,0.3);
+        sleep(700);
+        armMotor.setTargetPosition(armMotor.getCurrentPosition()+30);
+        sleep(250);
+        back(6,0.4);
+        sleep(1000);
         slide.contract();
+        sleep(700);
         arm.down();
         turnRight(-130,0.6); //TODO: The Value
         sleep(500);
         back(20,1);//TODO: The Value
-
+        //Auto Code End
 
 
 
