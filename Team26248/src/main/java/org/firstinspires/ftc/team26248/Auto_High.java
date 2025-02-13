@@ -56,7 +56,18 @@ public class Auto_High extends LinearOpMode {
         }
     }
 
+    public class Wrist {
+        private Servo wristServo;
 
+        public Wrist(Servo wristServo) {this.wristServo = wristServo;}
+
+        public void flat(){
+            wristServo.setPosition(0.11);
+        }
+        public void down(){
+            wristServo.setPosition(0.22);
+        }
+    }
     public class Slide{
         private DcMotor slideMotor;
 

@@ -16,11 +16,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@Disabled
-@Autonomous(name = "AutoHigh (Use this,No Parking)",group = "Autonomous")
+@Autonomous(name = "AutoHigh (02/12/2025 Update)",group = "Autonomous")
 public class Auto_High_New extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
-    Servo clawLeft, clawRight;
+    Servo clawLeft, clawRight, wristServo;
 
     double cpr = 537.7; //312 RPM Gobilda
     double gearRatio = 1;
@@ -39,10 +38,10 @@ public class Auto_High_New extends LinearOpMode {
     public class Claw {
         private Servo clawLeft;
         private Servo clawRight;
-        private final double CLAW_LEFT_OPEN = 0.3;
-        private final double CLAW_RIGHT_OPEN = 0.7;
-        private final double CLAW_LEFT_CLOSE = 0.75;
-        private final double CLAW_RIGHT_CLOSE = 0.25;
+        private final double CLAW_LEFT_OPEN = 0.6;
+        private final double CLAW_RIGHT_OPEN = 0.4;
+        private final double CLAW_LEFT_CLOSE = 0.4;
+        private final double CLAW_RIGHT_CLOSE = 0.6;
         public Claw(Servo clawLeft, Servo clawRight) {
             this.clawLeft = clawLeft;
             this.clawRight = clawRight;
@@ -56,7 +55,23 @@ public class Auto_High_New extends LinearOpMode {
             clawRight.setPosition(CLAW_RIGHT_CLOSE);
         }
     }
+    public class Wrist {
+        private Servo wristServo;
 
+        public Wrist(Servo wristServo) {
+            if (wristServo == null){
+                throw new IllegalArgumentException("wristServo not showing up");
+            }
+            this.wristServo = wristServo;
+        }
+
+        public void flat(){
+            wristServo.setPosition(0.11);
+        }
+        public void down(){
+            wristServo.setPosition(0.22);
+        }
+    }
 
     public class Slide{
         private DcMotor slideMotor;
@@ -65,7 +80,7 @@ public class Auto_High_New extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(-1500);
+            slideMotor.setTargetPosition(-800); //TODO: The Value
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -77,7 +92,7 @@ public class Auto_High_New extends LinearOpMode {
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
-            slideMotor.setTargetPosition(-3050);
+            slideMotor.setTargetPosition(-2300); //TODO: The Value
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -89,24 +104,24 @@ public class Auto_High_New extends LinearOpMode {
         private DcMotor armMotor;
 
         //Change Arm Status Here
-        private final int arm_up = 2100; //TODO:need to change
-        private final int arm_down = 425;//TODO:need to change
+        private final int arm_up = 2250; //TODO: The Value
+        private final int arm_down = 480;//TODO: The Value
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
-            this.armMotor.setPower(.5);
+            this.armMotor.setPower(1);
             this.armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void up(){
             armMotor.setTargetPosition(arm_up);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(0.5);
+            armMotor.setPower(1);
             armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void down(){
             armMotor.setTargetPosition(arm_down);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(.5);
+            armMotor.setPower(1);
             armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
@@ -124,7 +139,7 @@ public class Auto_High_New extends LinearOpMode {
 
         armMotor = hardwareMap.dcMotor.get("arm");
         slideMotor = hardwareMap.dcMotor.get("slide");
-
+        wristServo = hardwareMap.servo.get("wr");
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -136,6 +151,8 @@ public class Auto_High_New extends LinearOpMode {
         claw = new Claw(clawLeft,clawRight);
         slide = new Slide(slideMotor);
         arm = new Arm(armMotor);
+        Wrist wrist = new Wrist(wristServo);
+        wristServo.setDirection(Servo.Direction.REVERSE);
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -143,48 +160,37 @@ public class Auto_High_New extends LinearOpMode {
 
         initGyro();
         arm.down();
-        slide.contract();
+        sleep(100);
+        sleep(100);
         claw.open();
+        sleep(100);
+        wrist.flat();
         waitForStart();
-
-        strafeLeft(12,0.5);
+        strafeLeft(14.5,0.6); //TODO: The Value
         arm.down();
+        sleep(100); //TODO: The Value
         slide.expandDown();
-        forward(13,0.5);
-        sleep(1000);
         claw.close();
         sleep(500);
         slide.contract();
-        sleep(250);
-        turnLeft(-90,0.6);
-        sleep(250);
-        turnLeft(-40,0.6);
-        sleep(500);
-        forward(9.5,0.5);
-        sleep(200);
-        arm.up();
-        sleep(1000);
-        slide.expandUP();
-        sleep(2250);
 
-        claw.open();
         sleep(250);
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
-        back(2,0.5);
-        sleep(550);
-        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
-        sleep(250);
-        slide.contract();
-        sleep(2500);
-        arm.down();
-        sleep(1500);
-        turnRight(-40,1);
-        sleep(250);
-        turnRight(-90,1);
+        turnLeft(-130,0.6); //TODO: The Value
+        forward(10.5,0.6);
         sleep(500);
-        back(10,1);
-        sleep(250);
-        strafeRight(144,1);
+        arm.up();
+        slide.expandUP();
+        sleep(1000); //TODO: The Value
+        claw.open();
+        back(2,0.3);
+        slide.contract();
+        arm.down();
+        turnRight(-130,0.6); //TODO: The Value
+        sleep(500);
+        back(20,1);//TODO: The Value
+
+
+
 
 
 

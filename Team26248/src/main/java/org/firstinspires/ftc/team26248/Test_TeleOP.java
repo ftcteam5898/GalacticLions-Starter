@@ -35,14 +35,14 @@ public class Test_TeleOP extends OpMode {
     private DcMotor motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight, armMotor, slideMotor;
     private Servo clawLeftMotor, clawRightMotor, wristServo;
     private IMU imu;
-    private final double CLAW_LEFT_OPEN = 0.4;
+    private final double CLAW_LEFT_OPEN = 0.6;
     private final double CLAW_RIGHT_OPEN = 0.4;
-    private final double CLAW_LEFT_CLOSE = 0.6;
+    private final double CLAW_LEFT_CLOSE = 0.4;
     private final double CLAW_RIGHT_CLOSE = 0.6;
     private final double WRIST_DOWN = 0.22;
     private final double WRIST_MIDDLE = 0.11;
     private final double WRIST_UP = 0;
-    final int TILT_HIGH = 2250;
+    final int TILT_HIGH = 2150;
     final int TILT_MEDIUM = 720;
     final int TILT_LOW = 480;
 
@@ -285,11 +285,11 @@ public class Test_TeleOP extends OpMode {
 
         if (gamepad2.a) {
             //open
-            clawLeftMotor.setPosition(CLAW_LEFT_CLOSE);
+            clawLeftMotor.setPosition(CLAW_LEFT_OPEN);
             clawRightMotor.setPosition(CLAW_RIGHT_OPEN);
         }
         else if (gamepad2.b) {
-            clawLeftMotor.setPosition(CLAW_LEFT_OPEN);
+            clawLeftMotor.setPosition(CLAW_LEFT_CLOSE);
             clawRightMotor.setPosition(CLAW_RIGHT_CLOSE);
         }
 
