@@ -36,16 +36,16 @@ public class Gamma_Auto extends OpMode {
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
 
     /** Start Pose of our robot */
-    private final Pose startPose = new Pose(9, 110, Math.toRadians(270));
+    private final Pose startPose = new Pose(9, 105, Math.toRadians(270));
 
     /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(15, 129, Math.toRadians(315));
+    private final Pose scorePose = new Pose(19, 122.5, Math.toRadians(315));
 
     /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(32, 121, Math.toRadians(0));
+    private final Pose pickup1Pose = new Pose(33.5, 119.5, Math.toRadians(0));
 
     /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(32, 131, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(33.5, 128.75, Math.toRadians(0));
 
     /** Park Pose for our robot, after we do all of the scoring. */
     private final Pose parkPose = new Pose(59, 100, Math.toRadians(270));
@@ -119,8 +119,21 @@ public class Gamma_Auto extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(scorePreload);
-                setPathState(1);
+
+                //outtake flips and the slides rise up
+                robot.rightOuttake.setPosition(1);
+                robot.leftOuttake.setPosition(0);
+                //add code to make slides go up and hold here
+                // Set a target encoder position for the lift (e.g., 500 ticks)
+                robot.setLiftPosition(3050, 1);
+
+                if (opmodeTimer.getElapsedTimeSeconds() > 1.5)
+                {
+                    follower.followPath(scorePreload);
+                    setPathState(1);
+                    opmodeTimer.resetTimer();
+                }
+
                 break;
             case 1:
 
@@ -133,20 +146,54 @@ public class Gamma_Auto extends OpMode {
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     /* Score Preload */
+                    if (opmodeTimer.getElapsedTimeSeconds() > 2 && opmodeTimer.getElapsedTimeSeconds() < 2.5)
+                    {
+                        //release sample, bring outtake back in
+                        robot.claw.setPosition(robot.CLAW_OPEN);
+                        robot.rightOuttake.setPosition(0);
+                        robot.leftOuttake.setPosition(1);
+                    }
+                    else if (opmodeTimer.getElapsedTimeSeconds() > 3.5)
+                    {
+                        // add code to make slides go back down and chill here
+                        robot.setLiftPosition(20, .7);
+                        /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                        follower.followPath(grabPickup1,true);
+                        setPathState(2);
+                        opmodeTimer.resetTimer();
+                        robot.grabber.setPosition(robot.GRABBER_OPEN); //open
+                        robot.wrist.setPosition(robot.WRIST_HOVER);
+                    }
 
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(grabPickup1,true);
-                    setPathState(2);
                 }
                 break;
             case 2:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the pickup1Pose's position */
                 if(!follower.isBusy()) {
-                    /* Grab Sample */
+                    if (opmodeTimer.getElapsedTimeSeconds() > 1.5 && opmodeTimer.getElapsedTimeSeconds() < 2) {
+                        /* Grab Sample */
+                        robot.wrist.setPosition(robot.WRIST_GRAB);
+                        robot.grabber.setPosition(.2);
+                    }
 
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
-                    follower.followPath(scorePickup1,true);
-                    setPathState(3);
+                    if (opmodeTimer.getElapsedTimeSeconds() > 2.5 && opmodeTimer.getElapsedTimeSeconds() < 3) {
+                        robot.wrist.setPosition(robot.WRIST_BACK);
+                        robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
+                        robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
+                    }
+                    if (opmodeTimer.getElapsedTimeSeconds() > 3 && opmodeTimer.getElapsedTimeSeconds() < 3.5) {
+                        //transition sample to outtake claw and wait for input
+                        robot.claw.setPosition(robot.CLAW_CLOSE);
+                    }
+                    if (opmodeTimer.getElapsedTimeSeconds() > 3.5 && opmodeTimer.getElapsedTimeSeconds() < 4) {
+                            robot.grabber.setPosition(robot.GRABBER_OPEN);
+                            robot.wrist.setPosition(robot.WRIST_MID);
+
+                        /* Since this is a pathChain, we can have Pedro hold the end point while we are scoring the sample */
+                        //follower.followPath(scorePickup1,true);
+                        //setPathState(3);
+                    }
+
                 }
                 break;
             case 3:
@@ -189,6 +236,11 @@ public class Gamma_Auto extends OpMode {
                 }
                 break;
         }
+
+        telemetry.addData("State: ", pathState);
+        telemetry.addData("OpMode Timer: ", opmodeTimer.getElapsedTimeSeconds());
+        telemetry.addData("Is Follower Busy: ", follower.isBusy());
+        telemetry.update();
     }
 
     /** These change the states of the paths and actions
@@ -232,7 +284,7 @@ public class Gamma_Auto extends OpMode {
 
         robot.rightIntake.setPosition(robot.INTAKE_IN_RIGHT);
         robot.leftIntake.setPosition(robot.INTAKE_IN_LEFT);
-        robot.wrist.setPosition(robot.WRIST_MID);
+        robot.wrist.setPosition(robot.WRIST_NEUTRAL);
         robot.grabber.setPosition(robot.GRABBER_CLOSE); //grabber closed
         robot.rightOuttake.setPosition(0); //waiting to grab
         robot.leftOuttake.setPosition(1); //waiting to grab
