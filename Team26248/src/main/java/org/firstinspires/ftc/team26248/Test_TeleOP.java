@@ -48,7 +48,9 @@ public class Test_TeleOP extends OpMode {
 
     private boolean slideLimit;
     private boolean slideLimit_alt = false;
-    private boolean isAutoArmMode = false;
+    private boolean armLock = true;
+    private boolean actionDone = false;
+    private final double DELAY_SECONDS = 1.0;
 
     // An Enum is used to represent arm states.
     // (This is one thing enums are designed to do)
@@ -86,6 +88,7 @@ public class Test_TeleOP extends OpMode {
         slideLimit = true;
         slideLimit_alt = false;
 
+
         // Reverse the left side motors
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -103,8 +106,8 @@ public class Test_TeleOP extends OpMode {
 
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -117,6 +120,10 @@ public class Test_TeleOP extends OpMode {
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit START
      */
+
+    private void doDelayedAction() {
+        telemetry.addData("Action", "Delayed action");
+    }
     @Override
     public void init_loop() {
     }
@@ -130,8 +137,8 @@ public class Test_TeleOP extends OpMode {
         imu.resetYaw();
         armMotor.setTargetPosition(TILT_LOW);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        clawLeftMotor.setPosition(.5);
-        clawRightMotor.setPosition(.5);
+        clawLeftMotor.setPosition(CLAW_LEFT_OPEN);
+        clawRightMotor.setPosition(CLAW_RIGHT_OPEN);
         wristServo.setPosition(WRIST_MIDDLE);
 
     }
@@ -142,7 +149,7 @@ public class Test_TeleOP extends OpMode {
     @Override
     public void loop() {
 
-        armMotor.setPower(1);
+        armMotor.setPower(.9);
         telemetry.addData("State: ", ""+armState);
         telemetry.addData("Slide Limited? ", slideLimit);
         if(slideLimit)
@@ -152,14 +159,37 @@ public class Test_TeleOP extends OpMode {
             slideLimit = true;
 
         }
+        if (actionDone && runtime.seconds() > DELAY_SECONDS) {
+            telemetry.addData("Status", "Delayed Finished");
+            doDelayedAction();
+            actionDone = false;
+        }
+        if(gamepad2.left_trigger>0.5&&armState!=armState.ARM_UP)
+        {
+            runtime.reset();
+            armLock = !armLock;
+            actionDone = true;
+        }
+        if (armLock == false && armState != ArmState.ARM_UP)
+        {
+            if (gamepad2.left_bumper) {
+                armMotor.setTargetPosition(armMotor.getCurrentPosition() + 20);
+            }
+            else if (gamepad2.right_bumper) {
+                armMotor.setTargetPosition(armMotor.getCurrentPosition() - 20);
+            }
+        }
+
+
 
         switch (armState) {
             case ARM_DOWN:
                 // wait for input
-                if (gamepad2.left_bumper) {
+                if (gamepad2.left_bumper&&armLock==true) {
                     armMotor.setTargetPosition(TILT_HIGH);
                     armState = ArmState.ARM_UP;
                     slideLimit = false;
+                    slideLimit_alt = false;
                 }
                 else if (gamepad2.right_trigger > 0.5) {
                     armMotor.setTargetPosition(TILT_MEDIUM);
@@ -170,27 +200,31 @@ public class Test_TeleOP extends OpMode {
             case ARM_UP:
                 // check if the arm has finished tilting,
                 // otherwise do nothing.
-                if (gamepad2.right_bumper) {
+                if (gamepad2.right_bumper&&armLock==true) {
                     armMotor.setTargetPosition(TILT_LOW);
                     armState = ArmState.ARM_DOWN;
                     slideLimit = true;
+                    slideLimit_alt = false;
                 }
-                else if (gamepad2.right_trigger > 0.5) {
+                else if (gamepad2.right_trigger > 0.5 && armLock == true) {
                     armMotor.setTargetPosition(TILT_MEDIUM);
                     armState = ArmState.ARM_MIDDLE;
-                    slideLimit = true;
+                    slideLimit_alt = true;
+                    slideLimit = false;
                 }
                 break;
             case ARM_MIDDLE:
-                if (gamepad2.right_bumper) {
+                if (gamepad2.right_bumper&&armLock==true) {
                     armMotor.setTargetPosition(TILT_LOW);
                     armState = ArmState.ARM_DOWN;
                     slideLimit = true;
+                    slideLimit_alt = false;
                 }
-                else if (gamepad2.left_bumper) {
+                else if (gamepad2.left_bumper&&armLock==true) {
                     armMotor.setTargetPosition(TILT_HIGH);
                     armState = ArmState.ARM_UP;
                     slideLimit = false;
+                    slideLimit_alt = false;
                 }
                 break;
             default:
@@ -260,7 +294,7 @@ public class Test_TeleOP extends OpMode {
         else{
             if (slideLimit_alt)
             {
-                if (slidePos > -700 && gamepad2.left_stick_y < 0&&wristServo.getPosition() == 0.11)
+                if (slidePos > -720 && gamepad2.left_stick_y < 0&&wristServo.getPosition() == 0.11)
                 {
                     slideMotor.setPower(gamepad2.left_stick_y);
                 } else if (slidePos>-950&&gamepad2.left_stick_y<0&&wristServo.getPosition() == 0.22) {
@@ -281,6 +315,7 @@ public class Test_TeleOP extends OpMode {
             }
         }
         }
+
         
 
         if (gamepad2.a) {

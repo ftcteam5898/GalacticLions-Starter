@@ -161,14 +161,17 @@ public class Auto_High_New extends LinearOpMode {
         initGyro();
         arm.down();
         sleep(100);
-        sleep(100);
         claw.open();
         sleep(100);
-        wrist.flat();
+        slideMotor.setTargetPosition(slideMotor.getCurrentPosition()+10);
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideMotor.setPower(.5);
+        wristServo.setPosition(wristServo.getPosition());
         waitForStart();
 
         //Auto Code
-        strafeLeft(8.4,0.5); //TODO: The Value
+        wrist.flat();
+        strafeLeft(8.9,0.5); //TODO: The Value
         arm.down();
         sleep(100); //TODO: The Value
         forward(13.5,0.6);
