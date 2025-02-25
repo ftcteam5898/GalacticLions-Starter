@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+- name: ⚙️ Report an FTC SDK Issue
+  url: https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues
+  about: Please open issues relating to the FTC SDK here.
