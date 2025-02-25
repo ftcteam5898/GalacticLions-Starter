@@ -1,4 +1,4 @@
-# This workflow will test and lint (automated checking for errors) pushed or pulled code.
+# This workflow will build, test, and lint (automated checking for errors) pushed or pulled code.
 #
 # You can adjust the behavior by modifying this file.
 
@@ -27,11 +27,23 @@ jobs:
           
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+  test:
+    runs-on: ubuntu-latest
+    name: Test with Gradle
+    needs: build
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: Grant Permissions to gradlew
+      run: chmod +x gradlew
 
+    - name: Perform Gradle Test
+      run: ./gradlew test --tests "*"
   lint:
       runs-on: ubuntu-latest
       name: Lint changed files 
-      needs: build
+      needs: test
       steps:
       - name: Checkout Code
         uses: actions/checkout@v2
