@@ -39,7 +39,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Perform Gradle Test
-      run: ./gradlew test --tests "*"
+      run: ./gradlew test
   lint:
       runs-on: ubuntu-latest
       name: Lint changed files 
