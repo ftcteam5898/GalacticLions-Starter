@@ -27,8 +27,8 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 
-@TeleOp(name="Current TeleOP", group="Starter Code")
-public class Test_TeleOP extends OpMode {
+@TeleOp(name="Current TeleOP (But encoder resets)", group="Starter Code")
+public class Test_TeleOP_Encoder_rest extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -93,6 +93,8 @@ public class Test_TeleOP extends OpMode {
         motorFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         wristServo.setDirection(Servo.Direction.REVERSE);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Retrieve the IMU from the hardware map
