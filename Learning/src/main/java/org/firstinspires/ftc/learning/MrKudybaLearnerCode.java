@@ -9,34 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class MrKudybaLearnerCode extends LinearOpMode {
 
     @Override
-    // This method starts running once we hit init.
     public  void  runOpMode() {
-        //If we want anything to happen before we hit play
-        DcMotor leftMotor = hardwareMap.dcMotor.get("left");
-        DcMotor rightMotor = hardwareMap.dcMotor.get("right");
-
-        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        //Wait for the driver to press play
-        waitForStart();
-
-        //Check to see if the driver pressed stop, if so STOP.
-        if (isStopRequested()){
-            return;
-        }
-
-        while (opModeIsActive()){
-            //This is all the code we want to do when we press play
-            if (gamepad1.left_bumper){
-                leftMotor.setPower(1);
-            }
-            else leftMotor.setPower(0);
-
-            if (gamepad1.right_bumper){
-                rightMotor.setPower(1);
-            }
-            else rightMotor.setPower(0);
-        }
 
     }
 }

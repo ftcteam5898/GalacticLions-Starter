@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.learning;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import kotlin.DslMarker;
 
 
 /**
@@ -14,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * The Right stick rotates the robot left and right.
  *
  */
-
+@Disabled
 @TeleOp(name="Strafer Tele Op", group="Starter Code")
 public class StraferTeleOp extends LinearOpMode {
 
