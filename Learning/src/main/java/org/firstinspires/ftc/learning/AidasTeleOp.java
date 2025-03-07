@@ -14,7 +14,6 @@ public class AidasTeleOp extends LinearOpMode {
         DcMotor motorLeft = hardwareMap.dcMotor.get("lob");
         DcMotor motorRight = hardwareMap.dcMotor.get("rob");
 
-        motorLeft.setPower(0.5);
 
         //This lets the code wait for us to press the play button
         waitForStart();
@@ -26,7 +25,9 @@ public class AidasTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
            //Do all code here as long as we have pressed play and
            // not pressed stop.
-            motorRight.setPower(0.5);
+            motorRight.setPower(gamepad1.right_trigger);
+            motorLeft.setPower(gamepad1.left_trigger);
+
         }
     }
 }
