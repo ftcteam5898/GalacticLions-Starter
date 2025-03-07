@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-@Disabled
-@TeleOp(name="Mr.Kudyba's TeleOp", group="Starter Code")
+@TeleOp(name="Test", group="Starter Code")
 public class Test extends LinearOpMode {
 
     @Override
