@@ -16,7 +16,8 @@ public class MrKudybaLearnerCode extends LinearOpMode {
         DcMotor motorLeft = hardwareMap.dcMotor.get("left");
         DcMotor motorRight = hardwareMap.dcMotor.get("right");
 
-        motorLeft.setPower(1);
+        // We need to flip the left motor so it goes the same way as the right motor.
+        motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //This lets the code wait for us to press the play button
         waitForStart();
@@ -28,7 +29,26 @@ public class MrKudybaLearnerCode extends LinearOpMode {
         while (opModeIsActive()) {
             //Do all code here as long as we have pressed play and
             // not pressed stop.
-            motorRight.setPower(1);
+            motorRight.setPower(gamepad1.right_trigger);
+            motorLeft.setPower(gamepad1.left_trigger);
+
+            //IF we press the right bumper do the thing in the { }
+            if (gamepad1.right_bumper){
+                motorRight.setPower(-1);
+            }
+            //If we let go of the right bumper do the else
+            else {
+                motorRight.setPower(0);
+            }
+
+            //IF we press the left bumper do the thing in the { }
+            if (gamepad1.left_bumper){
+                motorLeft.setPower(-1);
+            }
+            //If we let go of the left bumper do the else
+            else {
+                motorLeft.setPower(0);
+            }
         }
     }
 }
