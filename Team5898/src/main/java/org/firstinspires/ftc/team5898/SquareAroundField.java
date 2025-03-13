@@ -61,7 +61,6 @@ public class SquareAroundField extends OpMode {
                 .build();
 
         line4 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(point3), new Point(parkPose)))
                 .addPath(new BezierCurve(new Point(point3), new Point(parkControlPose), new Point(parkPose)))
                 .setLinearHeadingInterpolation(point3.getHeading(), parkPose.getHeading())
                 .build();

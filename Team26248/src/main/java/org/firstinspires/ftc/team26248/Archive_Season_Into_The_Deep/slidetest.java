@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team26248.Archive_Season_Into_The_Deep;
 
 
 
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-// TODO: Maxium for high basket is -2000
+@Disabled
 @TeleOp(name="SlidePositionTest", group="Test")
 public class slidetest extends LinearOpMode {
     @Override
