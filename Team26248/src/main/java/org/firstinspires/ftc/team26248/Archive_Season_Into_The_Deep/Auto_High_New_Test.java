@@ -1,67 +1,13 @@
 /*
     @Author: HackingU0
-    ....................................................................................................
-....................................................................................................
-....................................................................................................
-......................................+#*=....::....................................................
-.....................................+%%%%%%*-...::.................................................
-.....................................=%######%%#=:..::..............................................
-.....................................:%%########%%#=..:::...........................................
-......................................#%##########%%%+...-:.........................................
-.....................................*%%#############%%+...-:.......................................
-...................................-%%#################%%=..:-:.....................................
-..................................=%%####################%%:.:-:....................................
-.................................:#%######################%%+..=-...................................
-.................................-%%#######################%%+..=-:.................................
-.................................-%######%%%################%%-.:=-.................................
-................................:*%%%%%%#####################%%..==:................................
-.............................+%%%%%###########################%:.-+-................................
-..........................:#%%################################%-.-+-:...............................
-.........................*%%#################################%%*-...::..............................
-.......................:*%#####################################%%%#+-...::..........................
-.......................+%##########################################%%%+..:-:........................
-......................:%%#############################################%#-..=:.......................
-......................-%%#######################%######################%%-.:=-......................
-......................-%%#################%%%###########################%%..==:.....................
-.......................+%###########%%%%%%%###########%%%%%#############%%:.=+-.....................
-.......................-#%###%%%%%%%%#*****#%%######%%#****#%%##########%%..:=-:....................
-.....................+*#%%%%%%###%%%*********%%####%*********%%%###%%%##%%%+:..::...................
-..................=#%%####%#******#**********#%###%#**********#******#%####%%#-..::.................
-................-%%%#####%%*******************%%##%*******************#%#####%%%-..-:...............
-...............+%%#######%#******************#%###%#******************#%#######%%+..=-:.............
-..............+%%########%%*****************#%%####%******************#%########%%+..=-:............
-.............:#%##########%#***************#%%#####%%#***************#%##########%%:.==:............
-.............=%%###########%%#************#%#########%#************#%%############%=.:+-:...........
-.............=%%#############%%%##*******#%%%%%#######%%********#%%%##############%=.-*=:...........
-.............-#%#################%%%%#**%%#############%%**#%%%%#################%%:.+*=:...........
-..............*%%####%%%%%%%%%%%%%####%%%###############%%%#####################%%=..=+-:...........
-............-#%%%%%%%%%%#######################################################%%%%*-:..::..........
-.........:*%%%################%%%##############################%%%##################%%*-..::........
-.......:*%%####################%%%%%%%%%##################%%%%%%%#####################%%*:.:-:......
-......-#%#######################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%########################%%-.:-:.....
-.....-%%##########################%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##########################%#-.-=:....
-.....%%############################%%%%%%%%%%%%%%%%%%%%%%%%%%#######%#####################%*.:+-:...
-....=%%##############################%%%%%%%%%%%%%###%%%%%%%##############################%#-.+=-...
-....*%#################################%%%%#*********#%%%#################################%#-.++-:..
-....*%####################################%%%%####%%%%####%###############################%*:.*+-:..
-....=%%#############################################%%%##################################%%+.-*+-...
-.....#%#########################################%%%#####################################%%*.:**=:...
-......*%##################################%%%%#########################################%%*.:+*+-....
-....:..=%%%########################%%%%%%############################################%%#-.:**+-:....
-.....::..=#%%%#############%%%%%%%%%%############################################%%%%*-.:=#*=-:.....
-......:--...:==+++*************************##################################***++-:..-+**+-:.......
-........:-===-::.................................................................:-+***+=-:.........
-...........:--=+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==-::...........
-................::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::................
-....................................................................................................
-....................................................................................................
  */
 
 
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team26248.Archive_Season_Into_The_Deep;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -71,8 +17,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "Auto Right S",group = "Autonomous")
-public class Auto_Right_Speciment extends LinearOpMode {
+@Disabled
+@Autonomous(name = "AutoHigh(Only for test purpose)",group = "Autonomous")
+public class Auto_High_New_Test extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
@@ -119,21 +66,21 @@ public class Auto_Right_Speciment extends LinearOpMode {
             this.slideMotor = slideMotor;
         }
         public void expandDown(){
-            slideMotor.setTargetPosition(-1540);
+            slideMotor.setTargetPosition(-1510);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(0.5);
+            slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void contract(){
             slideMotor.setTargetPosition(0);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(0.5);
+            slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         public void expandUP(){
             slideMotor.setTargetPosition(-3050);
             slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(0.5);
+            slideMotor.setPower(1);
             slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         }
@@ -144,7 +91,7 @@ public class Auto_Right_Speciment extends LinearOpMode {
 
         //Change Arm Status Here
         private final int arm_up = 2100; //TODO:need to change
-        private final int arm_down = 400;//TODO:need to change
+        private final int arm_down = 425;//TODO:need to change
 
         public Arm(DcMotor armMotor) {
             this.armMotor = armMotor;
@@ -165,9 +112,13 @@ public class Auto_Right_Speciment extends LinearOpMode {
         }
     }
 
-
+    public void waitforbot(){
+        waitForArm();
+        waitForDrive();
+    }
     @Override
     public void runOpMode() {
+
         clawLeft = hardwareMap.servo.get("vl");
         frontLeft = hardwareMap.dcMotor.get("fl");
         frontRight = hardwareMap.dcMotor.get("fr");
@@ -200,25 +151,53 @@ public class Auto_Right_Speciment extends LinearOpMode {
         slide.contract();
         claw.open();
         waitForStart();
-        strafeRight(12,.5);
-        forward(50,.5);
-        strafeRight(10,.5);
+
+        strafeLeft(12,0.5);
+
+        arm.down();
+        waitforbot();
+        slide.expandDown();
+        waitforbot();
+
+        forward(13.5,0.6);
+        waitforbot();
+        claw.close();
         sleep(500);
-        back(45,.6);
+        slide.contract();
+        waitforbot();
+        turnLeft(-90,0.6);
+        waitforbot();
+        turnLeft(-40,0.6);
+        waitforbot();
+        forward(9,0.5);
+        waitforbot();
+        arm.up();
+        waitforbot();
+        slide.expandUP();
+        waitforbot();
+        claw.open();
         sleep(500);
-        forward(50,.5);
-        strafeRight(10,.5);
-        sleep(500);
-        back(50,.6);
-        forward(50,.7);
-        strafeRight(14,.7);
-        back(55,1);
-        stop();
-
-
-
-
-
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() - 30);
+        waitforbot();
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        back(2,0.5);
+        waitforbot();
+        armMotor.setTargetPosition(armMotor.getCurrentPosition() + 30);
+        waitforbot();
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        waitforbot();
+        slide.contract();
+        waitforbot();
+        arm.down();
+        waitforbot();
+        turnRight(-40,0.7);
+        waitforbot();
+        turnRight(-90,0.7);
+        waitforbot();
+        back(5,0.6);
+        waitforbot();
+        back(3,1);
+        strafeRight(140,1);
 
 
 
@@ -232,18 +211,64 @@ public class Auto_Right_Speciment extends LinearOpMode {
         //Do not touch
         while(opModeIsActive()){
             if(!armMotor.isBusy()){
-                armMotor.setPower(0.7);
+                armMotor.setPower(.5);
             }
             if(!slideMotor.isBusy()){
-                slideMotor.setPower(0.7);
+                slideMotor.setPower(.5);
             }
-
+            waitForArm();
+            waitForDrive();
             telemetry.addData("Current Yaw", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.update();
-
             telemetry.addData("Arm Position", armMotor.getCurrentPosition());
             telemetry.addData("Slide Position", slideMotor.getCurrentPosition());
+            telemetry.addData("Is ARM Busy?", armMotor.isBusy());
+            telemetry.addData("Is Slide Busy?", slideMotor.isBusy());
+            telemetry.addData("Is Front Left Busy?", frontLeft.isBusy());
+            telemetry.addData("Is Front Right Busy?", frontRight.isBusy());
+            telemetry.addData("Is Back Left Busy?", backLeft.isBusy());
+            telemetry.addData("Is Back Right Busy?", backRight.isBusy());
+            telemetry.addData("ARM POWER:", armMotor.getPower());
+            telemetry.addData("SLIDE POWER:", slideMotor.getPower());
             telemetry.update();
+
+
+        }
+    }
+
+    public void waitForDrive() {
+        while (opModeIsActive()) {
+            if (frontLeft.isBusy()|| frontLeft.isBusy()|| backLeft.isBusy()|| backRight.isBusy()) {
+                telemetry.addData("Driving to position", "In Progress");
+                telemetry.addData("Is Front Left Busy?", frontLeft.isBusy());
+                telemetry.addData("Is Front Right Busy?", frontRight.isBusy());
+                telemetry.addData("Is Back Left Busy?", backLeft.isBusy());
+                telemetry.addData("Is Back Right Busy?", backRight.isBusy());
+                telemetry.update();
+            }
+            else {
+                sleep(200);
+                break;
+            }
+        }
+    }
+    public void waitForArm() {
+        long startTime = System.currentTimeMillis();
+        long timeout = 3500;
+        while (armMotor.isBusy()||slideMotor.isBusy()) {
+
+            if (System.currentTimeMillis() - startTime > timeout) {
+                sleep(200);
+                break;
+            }else{
+                if (armMotor.getPower()<.7&&slideMotor.getPower()<.7){
+                    sleep(500);
+                    break;
+                }
+                else {
+                    telemetry.addData("Arm is moving","In Progress");
+                }
+            }
+
         }
     }
     public void forward(double inches, double speed) {
@@ -379,17 +404,17 @@ public class Auto_Right_Speciment extends LinearOpMode {
         turnWithEncoder(speedDirection / 3);
 
         if (Math.abs(seconda - secondb) < 11) {
-            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {// 是否在范围内？
+            while (!(seconda < yaw && yaw < secondb) && opModeIsActive()) {
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));
                 telemetry.update();
             }
-            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {// 是否在范围内？
+            while (!((seconda < yaw && yaw < 180) || (-180 < yaw && yaw < secondb)) && opModeIsActive()) {
                 robotOrientation = imu.getRobotYawPitchRollAngles();
-                yaw = robotOrientation.getYaw(AngleUnit.DEGREES); // 是否应为负数？
+                yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
                 telemetry.addData("Position", yaw);
                 telemetry.addData("second before", second);
                 telemetry.addData("second after", convertify(second));

@@ -58,10 +58,11 @@
  */
 
 
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team26248.Archive_Season_Into_The_Deep;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -71,8 +72,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoPark Right",group = "Autonomous")
-public class Auto_Park_Right extends LinearOpMode {
+@Disabled
+@Autonomous(name = "Auto Right S",group = "Autonomous")
+public class Auto_Right_Speciment extends LinearOpMode {
     DcMotor frontLeft,frontRight, backLeft, backRight, armMotor, slideMotor;
     Servo clawLeft, clawRight;
 
@@ -200,8 +202,19 @@ public class Auto_Park_Right extends LinearOpMode {
         slide.contract();
         claw.open();
         waitForStart();
-        strafeRight(60,1);
-        back(10,1);
+        strafeRight(12,.5);
+        forward(50,.5);
+        strafeRight(10,.5);
+        sleep(500);
+        back(45,.6);
+        sleep(500);
+        forward(50,.5);
+        strafeRight(10,.5);
+        sleep(500);
+        back(50,.6);
+        forward(50,.7);
+        strafeRight(14,.7);
+        back(55,1);
         stop();
 
 
