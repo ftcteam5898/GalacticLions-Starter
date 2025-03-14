@@ -4,7 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name="Micah's First Code", group="Starter Code")
 public class MicahLearnCodeToday extends LinearOpMode {
@@ -19,6 +22,8 @@ public class MicahLearnCodeToday extends LinearOpMode {
 
         Servo Gigalith = hardwareMap.get(Servo.class,"Gigalith");
         CRServo Boldore = hardwareMap.crservo.get("Boldore");
+
+        DistanceSensor Tyrunt = hardwareMap.get(DistanceSensor.class,"Tyrunt");
 
         //we need to flip the left motor so it goes the same way as the right motor
         Pikachu.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -35,6 +40,11 @@ public class MicahLearnCodeToday extends LinearOpMode {
         while (opModeIsActive()) {
             Pikachu.setPower(-gamepad1.left_stick_y);
             Raichu.setPower(-gamepad1.right_stick_y);
+
+            //Distance sensor stuff
+            telemetry.addData("deviceName", Tyrunt.getDeviceName() );
+            telemetry.addData("range", String.format("%.01f cm", Tyrunt.getDistance(DistanceUnit.MM)));
+            telemetry.update();
 
             //controlling the servo with the x axis joystick
             //Gigalith.setPosition(gamepad1.left_stick_x);
