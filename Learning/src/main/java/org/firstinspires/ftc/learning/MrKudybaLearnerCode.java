@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 @TeleOp(name="Mr.Kudyba's TeleOp", group="Starter Code")
 public class MrKudybaLearnerCode extends LinearOpMode {
@@ -19,6 +20,9 @@ public class MrKudybaLearnerCode extends LinearOpMode {
 
         Servo arm = hardwareMap.get(Servo.class, "arm");
 
+        DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "sensor_distance");;
+        //Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor) sensorDistance;
+
         // We need to flip the left motor so it goes the same way as the right motor.
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -32,6 +36,12 @@ public class MrKudybaLearnerCode extends LinearOpMode {
         while (opModeIsActive()) {
             motorLeft.setPower(-gamepad1.left_stick_y);
             motorRight.setPower(-gamepad1.right_stick_y);
+
+            // DistanceSensor stuff
+            telemetry.addData("deviceName", dist.getDeviceName() );
+            telemetry.addData("range", String.format("%.01f cm", dist.getDistance(DistanceUnit.CM)));
+            telemetry.update();
+
 
             //Trigger & Bumper driving code.
 //            //Do all code here as long as we have pressed play and
