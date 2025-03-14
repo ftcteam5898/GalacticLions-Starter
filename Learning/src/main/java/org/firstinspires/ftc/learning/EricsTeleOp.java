@@ -5,11 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @TeleOp(name="FortNiteShawty", group="Starter Code")
-public class EricsTeleOp extends LinearOpMode {
+    public class EricsTeleOp extends LinearOpMode {
     //runOpMode starts once we press init
     @Override
     public void runOpMode() {
@@ -20,6 +23,8 @@ public class EricsTeleOp extends LinearOpMode {
 
         Servo EliXiao = hardwareMap.get(Servo.class, "EliXiao");
         CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
+
+        DistanceSensor SUBZEROMK3 = hardwareMap.get(DistanceSensor.class, "BI-HAN" );
 
         //We need to flip the left motor so it goes the same way as the right
         Peely.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -38,6 +43,13 @@ public class EricsTeleOp extends LinearOpMode {
             Peely.setPower(-gamepad1.left_stick_y);
             BigDill.setPower(-gamepad1.right_stick_y);
 
+            //DistanceSensor stuff
+            telemetry.addData("deviceName", SUBZEROMK3.getDeviceName() );
+            telemetry.addData("range", String.format("%.01f cm", SUBZEROMK3.getDistance(DistanceUnit.CM)));
+            telemetry.update();
+
+            
+
             //Controlling our arm servo with the thumb stick
 //            EliXiao.setPosition(gamepad1.left_stick_x);
 
@@ -49,6 +61,7 @@ public class EricsTeleOp extends LinearOpMode {
                 EliXiao.setPosition(1);
             }
             else EliXiao.setPosition(.5);
+
 
             //Controlling our FletcherKane servo with the triggers
             FletcherKane.setPower(gamepad1.right_trigger);
