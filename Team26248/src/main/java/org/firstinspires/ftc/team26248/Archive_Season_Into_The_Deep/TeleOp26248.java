@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team26248.Archive_Season_Into_The_Deep;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-
+@Disabled
 @TeleOp(name="TeleOp", group="Starter Code")
 public class TeleOp26248 extends OpMode {
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.team26248;
+package org.firstinspires.ftc.team26248.Archive_Season_Into_The_Deep;
 
 /*   MIT License
  *   Copyright (c) [2024] [Base 10 Assets, LLC]
@@ -25,6 +25,7 @@ package org.firstinspires.ftc.team26248;
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 
 import com.qualcomm.hardware.lynx.LynxI2cDeviceSynch;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
@@ -41,6 +42,7 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 
 
+@Disabled
 @I2cDeviceType
 @DeviceProperties(
         name = "goBILDA® Pinpoint Odometry Computer",
