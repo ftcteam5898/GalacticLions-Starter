@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
         DcMotor BigDill = hardwareMap.dcMotor.get("Brat");
 
         Servo EliXiao = hardwareMap.get(Servo.class, "EliXiao");
-        CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
+        //CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
 
         DistanceSensor SUBZEROMK3 = hardwareMap.get(DistanceSensor.class, "BI-HAN" );
 
@@ -64,8 +64,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
             //Controlling our FletcherKane servo with the triggers
-            FletcherKane.setPower(gamepad1.right_trigger);
-            FletcherKane.setPower(-gamepad1.left_trigger);
+            //FletcherKane.setPower(gamepad1.right_trigger);
+            //FletcherKane.setPower(-gamepad1.left_trigger);
 
                // Trigger & Bumper driving code.
 //            //Do all code here as long as we have pressed play and
