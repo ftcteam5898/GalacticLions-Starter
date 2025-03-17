@@ -3,6 +3,7 @@ package org.firstinspires.ftc.learning;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -26,6 +27,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
         DistanceSensor SUBZEROMK3 = hardwareMap.get(DistanceSensor.class, "BI-HAN" );
 
+        ColorSensor KhabyLame = hardwareMap.get(ColorSensor.class, "TITAN");
+
         //We need to flip the left motor so it goes the same way as the right
         Peely.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -48,7 +51,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
             telemetry.addData("range", String.format("%.01f cm", SUBZEROMK3.getDistance(DistanceUnit.CM)));
             telemetry.update();
 
-            
+            //ColorSensor stuff
+            int red = KhabyLame.red();
+            int blue = KhabyLame.blue();
+            int green = KhabyLame.green();
+            telemetry.addData("Red      ", red);
+            telemetry.addData("Blue     ", blue);
+            telemetry.addData("Green    ", green);
+            telemetry.update();
+
+            if (gamepad1.a)
+            {
+                KhabyLame.enableLed(true);
+            }
+
+            else if (gamepad1.b)
+            {
+                KhabyLame.enableLed(false);
+            }
 
             //Controlling our arm servo with the thumb stick
 //            EliXiao.setPosition(gamepad1.left_stick_x);
