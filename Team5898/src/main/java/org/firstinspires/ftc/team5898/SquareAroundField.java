@@ -24,22 +24,22 @@ public class SquareAroundField extends OpMode {
     private int pathState;
 
     /** Start Pose of our robot */
-    private final Pose startPose = new Pose(12, 24, Math.toRadians(0));
+    private final Pose startPose = new Pose(8, 80, Math.toRadians(0));
 
     /** First point - moving to x: 120, y: 24 */
-    private final Pose point1 = new Pose(120, 24, Math.toRadians(90));
+    private final Pose point1 = new Pose(31, 72, Math.toRadians(90));
 
     /** Second point - moving to x: 120, y: 120 */
-    private final Pose point2 = new Pose(120, 120, Math.toRadians(180));
+    private final Pose point2 = new Pose(30.5, 34, Math.toRadians(180));
 
     /** Third point - moving to x: 24, y: 120 */
-    private final Pose point3 = new Pose(24, 120, Math.toRadians(270));
+    private final Pose point3 = new Pose(73, 34, Math.toRadians(270));
 
     /** Final parking pose - moving to x: 73, y: 26 */
-    private final Pose parkPose = new Pose(73, 26, Math.toRadians(90));
+    private final Pose point4 = new Pose(109, 117.5 , Math.toRadians(90));
 
     /** Park Control Pose for curve manipulation */
-    private final Pose parkControlPose = new Pose(8, 31, Math.toRadians(90));
+    private final Pose point4control = new Pose(142, 25, Math.toRadians(90));
 
     /* PathChains */
     private PathChain line1, line2, line3, line4;
@@ -50,21 +50,19 @@ public class SquareAroundField extends OpMode {
                 .setLinearHeadingInterpolation(startPose.getHeading(), point1.getHeading())
                 .build();
 
-        line2 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(point1), new Point(point2)))
-                .setLinearHeadingInterpolation(point1.getHeading(), point2.getHeading())
-                .build();
+       line2 = follower.pathBuilder()
+               .addPath(new BezierLine(new Point(point1), new Point(point2)))
+               .setLinearHeadingInterpolation(point1.getHeading(), point2.getHeading())
+               .build();
+       line3 = follower.pathBuilder()
+               .addPath(new BezierLine(new Point(point2), new Point(point3)))
+               .setLinearHeadingInterpolation(point2.getHeading(), point3.getHeading())
+               .build();
+       line4 = follower.pathBuilder()
+               .addPath(new BezierCurve(new Point(point3),new Point(point4control),new Point(point4)))
+               .setLinearHeadingInterpolation(point3.getHeading(), point4.getHeading())
+               .build();
 
-        line3 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(point2), new Point(point3)))
-                .setLinearHeadingInterpolation(point2.getHeading(), point3.getHeading())
-                .build();
-
-        line4 = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(point3), new Point(parkPose)))
-                .addPath(new BezierCurve(new Point(point3), new Point(parkControlPose), new Point(parkPose)))
-                .setLinearHeadingInterpolation(point3.getHeading(), parkPose.getHeading())
-                .build();
     }
 
     public void autonomousPathUpdate() {
