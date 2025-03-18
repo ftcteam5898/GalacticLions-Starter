@@ -2,6 +2,7 @@ package org.firstinspires.ftc.learning;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -24,6 +25,7 @@ public class MicahLearnCodeToday extends LinearOpMode {
         CRServo Boldore = hardwareMap.crservo.get("Boldore");
 
         DistanceSensor Tyrunt = hardwareMap.get(DistanceSensor.class,"Tyrunt");
+        ColorSensor Grookey = hardwareMap.get(ColorSensor.class,"Grookey");
 
         //we need to flip the left motor so it goes the same way as the right motor
         Pikachu.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -41,10 +43,32 @@ public class MicahLearnCodeToday extends LinearOpMode {
             Pikachu.setPower(-gamepad1.left_stick_y);
             Raichu.setPower(-gamepad1.right_stick_y);
 
-            //Distance sensor stuff
+            //distance sensor stuff
             telemetry.addData("deviceName", Tyrunt.getDeviceName() );
             telemetry.addData("range", String.format("%.01f cm", Tyrunt.getDistance(DistanceUnit.MM)));
+            //telemetry.update();
+
+            //color sensor stuff
+            int red = Grookey.red();
+            int blue = Grookey.blue();
+            int green = Grookey.green();
+            telemetry.addData("red: ", red);
+            telemetry.addData("blue: ", blue);
+            telemetry.addData("green: ",green);
             telemetry.update();
+
+            if (gamepad1.a){
+                Grookey.enableLed(true);
+            }
+            else if (gamepad1.b) {
+                Grookey.enableLed(false);
+            }
+            if (red>2000){
+                Boldore.setPower(1);
+            }
+            else {
+                Boldore.setPower(0);
+            }
 
             //controlling the servo with the x axis joystick
             //Gigalith.setPosition(gamepad1.left_stick_x);
