@@ -2,6 +2,7 @@ package org.firstinspires.ftc.learning;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -26,6 +27,23 @@ public class EmmasTeleOp extends LinearOpMode {
         Servo arm = hardwareMap.get(Servo.class, "");
 
         DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "Daniela");
+
+        ColorSensor color = hardwareMap.get(ColorSensor.class, "Color");
+
+        //color sensor stuffs
+        int red = color.red();
+        int blue = color.blue();
+        int green = color.green();
+        telemetry.addData("Red", red);
+        telemetry.addData("Blue", blue);
+        telemetry.addData("Green", green);
+        telemetry.update();
+        if (gamepad1.a) {
+            color.enableLed(true);
+        } else if (gamepad1.b) {
+            color.enableLed(false);
+        }
+        
 
         //Getting our servo into position before we hit start
         arm.setPosition(.5);
