@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -23,11 +24,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
         DcMotor BigDill = hardwareMap.dcMotor.get("Brat");
 
         Servo EliXiao = hardwareMap.get(Servo.class, "EliXiao");
-        CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
+        //CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
 
         DistanceSensor SUBZEROMK3 = hardwareMap.get(DistanceSensor.class, "BI-HAN" );
 
         ColorSensor KhabyLame = hardwareMap.get(ColorSensor.class, "TITAN");
+
+        //Create our touch sensor
+        TouchSensor SteveRogersCaptainAmerica = hardwareMap.get(TouchSensor.class, "Spider-Man");
 
         //We need to flip the left motor so it goes the same way as the right
         Peely.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -58,7 +62,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
             telemetry.addData("Red      ", red);
             telemetry.addData("Blue     ", blue);
             telemetry.addData("Green    ", green);
-            telemetry.update();
+
 
             if (gamepad1.a)
             {
@@ -69,6 +73,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
             {
                 KhabyLame.enableLed(false);
             }
+
+            if(SteveRogersCaptainAmerica.isPressed())
+            {
+                telemetry.addData("Touch Sensor", "Is Pressed");
+            }
+
+            else telemetry.addData("Touch Sensor", "Not Pressed");
+
+            telemetry.update();
 
             //Controlling our arm servo with the thumb stick
 //            EliXiao.setPosition(gamepad1.left_stick_x);
@@ -84,8 +97,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
             //Controlling our FletcherKane servo with the triggers
-            FletcherKane.setPower(gamepad1.right_trigger);
-            FletcherKane.setPower(-gamepad1.left_trigger);
+            //FletcherKane.setPower(gamepad1.right_trigger);
+            //FletcherKane.setPower(-gamepad1.left_trigger);
 
                // Trigger & Bumper driving code.
 //            //Do all code here as long as we have pressed play and
