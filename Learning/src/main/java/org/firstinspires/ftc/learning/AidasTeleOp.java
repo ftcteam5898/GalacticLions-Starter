@@ -2,53 +2,88 @@ package org.firstinspires.ftc.learning;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name="AidasTeleOp", group="Starter Code")
 public class AidasTeleOp extends LinearOpMode {
-    //runOpMode starts once we press init
+    // pressing init starts runOpMode
     @Override
-    public void runOpMode(){
-        //Any code that we write BEFORE waitForStart() will run when
-        //press init but before we press play.
-        DcMotor motorLeft = hardwareMap.dcMotor.get("lob");
-        DcMotor motorRight = hardwareMap.dcMotor.get("rob");
+    public void runOpMode() {
 
-        //We need to flip the left motor so it goes the same way at the right motor.
+        //any code we write before waitForStart() will run when we
+        //press init but before we press play
+        DcMotor motorLeft = hardwareMap.dcMotor.get("left");
+        DcMotor motorRight = hardwareMap.dcMotor.get("right");
+
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        Servo arm = hardwareMap.get(Servo.class, "");
 
-        //This lets the code wait for us to press the play button
+        DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "Daniela");
+
+        ColorSensor color = hardwareMap.get(ColorSensor.class, "Color");
+
+        //color sensor stuffs
+        int red = color.red();
+        int blue = color.blue();
+        int green = color.green();
+        telemetry.addData("Red", red);
+        telemetry.addData("Blue", blue);
+        telemetry.addData("Green", green);
+        telemetry.update();
+        if (gamepad1.a) {
+            color.enableLed(true);
+        } else if (gamepad1.b) {
+            color.enableLed(false);
+        }
+
+
+        //Getting our servo into position before we hit start
+        arm.setPosition(.5);
+
+        // While init wait for the play button
         waitForStart();
 
-        //If we press stop BEFORE pressing play, stop the code.
+        // All the code to make the robot go once we have pressed
+        // play
+
+        // If stop is requested STAWP
         if (isStopRequested()) return;
 
         // while (I've hit play())
         while (opModeIsActive()) {
-           //Do all code here as long as we have pressed play and
-           // not pressed stop.
-            motorRight.setPower(gamepad1.right_trigger);
-            motorLeft.setPower(gamepad1.left_trigger);
+            //Do all code here as long as we have pressed play and
+            // not pressed stop
 
-            //IF we press the right bumper do the the thing in the { }
-            if (gamepad1.right_bumper){
-                motorRight.setPower(-1);
-            }
-            //If wet let go of the right bumper do the else
-            else {
-                motorRight.setPower(0);
+            motorLeft.setPower(-gamepad1.left_stick_y);
+            motorRight.setPower(-gamepad1.right_stick_y);
+
+            //Distance sensor stuff
+            telemetry.addData("range", String.format("%.01f cm", dist.getDistance(DistanceUnit.CM)));
+            telemetry.update();
+
+            //Controlling our arm servo with the thumb sticks
+            //arm.setPosition(gamepad1.left_stick_x);
+
+            //Controlling our servo with the dpad
+            if (gamepad1.dpad_left){
+                arm.setPosition(0);
             }
 
-            //IF we press the left bumper do the the thing in the { }
-            if (gamepad1.left_bumper){
-                motorLeft.setPower(-1);
+            else if (gamepad1.dpad_right){
+                arm.setPosition(1);
             }
-            //If wet let go of the left bumper do the else
-            else {
-                motorLeft.setPower(0);
-            }
+            else arm.setPosition(.5);
+
+
+
         }
     }
-}5
+
+}
