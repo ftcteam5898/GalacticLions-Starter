@@ -24,14 +24,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
         DcMotor BigDill = hardwareMap.dcMotor.get("Brat");
 
         Servo EliXiao = hardwareMap.get(Servo.class, "EliXiao");
-        //CRServo FletcherKane = hardwareMap.get("CampRaineyMountian");
+        CRServo FletcherKane = hardwareMap.crservo.get("CampRaineyMountian");
 
         DistanceSensor SUBZEROMK3 = hardwareMap.get(DistanceSensor.class, "BI-HAN" );
 
         ColorSensor KhabyLame = hardwareMap.get(ColorSensor.class, "TITAN");
 
+
+
         //Create our touch sensor
         TouchSensor SteveRogersCaptainAmerica = hardwareMap.get(TouchSensor.class, "Spider-Man");
+
+        boolean IAMGROOT = false; //We use this to flip the direction of the CR servo
+
+        double Groot = .5; //This powers our CR servo
 
         //We need to flip the left motor so it goes the same way as the right
         Peely.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -73,13 +79,29 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
             {
                 KhabyLame.enableLed(false);
             }
+            //Debugging code that is no longer necessary
+            //telemetry.addData("SteveRogersCaptainAmerica pressed:", SteveRogersCaptainAmerica.isPressed());
 
             if(SteveRogersCaptainAmerica.isPressed())
             {
-                telemetry.addData("Touch Sensor", "Is Pressed");
+                telemetry.addData("SteveRogersCaptainAmerica", "Is Pressed");
+                IAMGROOT = true;
+                //FletcherKane.setPower(1);
             }
 
-            else telemetry.addData("Touch Sensor", "Not Pressed");
+            else
+            {
+                telemetry.addData("Touch Sensor", "Not Pressed");
+               // FletcherKane.setPower(-1);
+                IAMGROOT = false;
+            }
+
+            if (IAMGROOT)
+            {
+                Groot = Groot * -1;
+            }
+
+            FletcherKane.setPower(Groot);
 
             telemetry.update();
 
