@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -26,6 +27,8 @@ public class MicahLearnCodeToday extends LinearOpMode {
 
         DistanceSensor Tyrunt = hardwareMap.get(DistanceSensor.class,"Tyrunt");
         ColorSensor Grookey = hardwareMap.get(ColorSensor.class,"Grookey");
+        //create our touch sensor
+        TouchSensor Budew = hardwareMap.get(TouchSensor.class,"Budew");
 
         //we need to flip the left motor so it goes the same way as the right motor
         Pikachu.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -46,7 +49,6 @@ public class MicahLearnCodeToday extends LinearOpMode {
             //distance sensor stuff
             telemetry.addData("deviceName", Tyrunt.getDeviceName() );
             telemetry.addData("range", String.format("%.01f cm", Tyrunt.getDistance(DistanceUnit.MM)));
-            //telemetry.update();
 
             //color sensor stuff
             int red = Grookey.red();
@@ -55,6 +57,11 @@ public class MicahLearnCodeToday extends LinearOpMode {
             telemetry.addData("red: ", red);
             telemetry.addData("blue: ", blue);
             telemetry.addData("green: ",green);
+
+            if (Budew.isPressed()){
+                telemetry.addData("Budew", "Is Pressed");
+            }
+            else telemetry.addData("Budew", "Not Pressed");
             telemetry.update();
 
             if (gamepad1.a){
@@ -69,6 +76,8 @@ public class MicahLearnCodeToday extends LinearOpMode {
             else {
                 Boldore.setPower(0);
             }
+
+            //
 
             //controlling the servo with the x axis joystick
             //Gigalith.setPosition(gamepad1.left_stick_x);
