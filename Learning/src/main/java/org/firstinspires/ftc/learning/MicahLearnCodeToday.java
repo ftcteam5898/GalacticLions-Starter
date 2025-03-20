@@ -19,16 +19,21 @@ public class MicahLearnCodeToday extends LinearOpMode {
     public void runOpMode(){
         //Any code the we write BEFORE waitforstart() will run when we
         //press init but before we press play
-        DcMotor Pikachu = hardwareMap.dcMotor.get("pokemonGo");
-        DcMotor Raichu = hardwareMap.dcMotor.get("pokemonTCGP");
 
+        //adding code for the motors
+        DcMotor Pikachu = hardwareMap.dcMotor.get("Pikachu");
+        DcMotor Raichu = hardwareMap.dcMotor.get("Raichu");
+
+        //adding code for the servos
         Servo Gigalith = hardwareMap.get(Servo.class,"Gigalith");
         CRServo Boldore = hardwareMap.crservo.get("Boldore");
 
+        //adding code for the sensors
         DistanceSensor Tyrunt = hardwareMap.get(DistanceSensor.class,"Tyrunt");
         ColorSensor Grookey = hardwareMap.get(ColorSensor.class,"Grookey");
-        //create our touch sensor
         TouchSensor Budew = hardwareMap.get(TouchSensor.class,"Budew");
+        boolean Roserade = false; //we use this to flip the direction of the CRServo
+        double Tyrogue = .5; //this powers our CRServo
 
         //we need to flip the left motor so it goes the same way as the right motor
         Pikachu.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -57,14 +62,28 @@ public class MicahLearnCodeToday extends LinearOpMode {
             telemetry.addData("red: ", red);
             telemetry.addData("blue: ", blue);
             telemetry.addData("green: ",green);
+            //debugging code that's no longer necessary
+            //telemetry.addData("Budew pressed:", Budew.isPressed());
 
             if (Budew.isPressed()){
                 telemetry.addData("Budew", "Is Pressed");
+                Roserade = true;
+                //Boldore.setPower(1);
             }
-            else telemetry.addData("Budew", "Not Pressed");
+            else {
+                telemetry.addData("Budew", "Not Pressed");
+                Roserade = false;
+                //Boldore.setPower(-1);
+            }
+
+            if (Roserade) {
+                Tyrogue = Tyrogue * -1;
+            }
+            Boldore.setPower(Tyrogue);
+
             telemetry.update();
 
-            if (gamepad1.a){
+          /*  if (gamepad1.a){
                 Grookey.enableLed(true);
             }
             else if (gamepad1.b) {
@@ -75,7 +94,7 @@ public class MicahLearnCodeToday extends LinearOpMode {
             }
             else {
                 Boldore.setPower(0);
-            }
+            }*/
 
             //
 
@@ -92,8 +111,8 @@ public class MicahLearnCodeToday extends LinearOpMode {
             else Gigalith.setPosition(0.5);
 
             //controlling the CR servo with the triggers
-            Boldore.setPower(gamepad1.right_trigger);
-            Boldore.setPower(-gamepad1.left_trigger);
+//            Boldore.setPower(gamepad1.right_trigger);
+//            Boldore.setPower(-gamepad1.left_trigger);
 
             //Trigger & Bumber driving code
 //            //do all code here as long as we have pressed play and
