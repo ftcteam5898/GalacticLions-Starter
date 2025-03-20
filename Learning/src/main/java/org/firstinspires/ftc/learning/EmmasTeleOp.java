@@ -2,6 +2,7 @@ package org.firstinspires.ftc.learning;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -26,11 +27,14 @@ public class EmmasTeleOp extends LinearOpMode {
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Servo arm = hardwareMap.get(Servo.class, "arm");
+        CRServo spin = hardwareMap.crservo.get("spin");
 
         DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "Daniela");
 
         //Create our touch sensor
         TouchSensor sensy = hardwareMap.get(TouchSensor.class, "sensy");
+        boolean flip = false; //we use this to flip the direction of the CR servo
+        double power = .5; //This powers our CR servo
 
         ColorSensor color = hardwareMap.get(ColorSensor.class, "Color");
 
@@ -72,10 +76,26 @@ public class EmmasTeleOp extends LinearOpMode {
             //Distance sensor stuff
             telemetry.addData("range", String.format("%.01f cm", dist.getDistance(DistanceUnit.CM)));
 
-            if (sensy.isPressed()){
+            //Debugging code that's no longer necessary
+            //telemetry.addData("Button pressed:", sensy.isPressed());
+
+
+            if (sensy.isPressed()) {
                 telemetry.addData("Touch Sensor", "Is Pressed");
+                flip = true;
+                // else telemetry.addData("Touch Sensor", "Not Pressed");
             }
-            else telemetry.addData("Touch Sensor", "Not Pressed");
+            else {
+                telemetry.addData("Touch Sensor", "Not Pressed");
+                //spin.setPower(-1);
+                flip = false;
+            };
+
+            if (flip) {
+                power = power * -1;
+            }
+
+            spin.setPower(power);
 
             telemetry.update();
 
