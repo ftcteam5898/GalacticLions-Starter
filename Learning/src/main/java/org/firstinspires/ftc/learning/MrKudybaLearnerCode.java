@@ -2,10 +2,12 @@ package org.firstinspires.ftc.learning;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -22,8 +24,15 @@ public class MrKudybaLearnerCode extends LinearOpMode {
 
         Servo arm = hardwareMap.get(Servo.class, "arm");
 
-        DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "sensor_distance");;
+        CRServo spin = hardwareMap.get(CRServo.class, "spin");
+
+        DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "sensor_distance");
         //Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor) sensorDistance;
+
+        //Create our touch sensor
+        TouchSensor button = hardwareMap.get(TouchSensor.class, "button");
+        boolean flip = false; //We use this to flip the direction of the CR servo
+        double power = .5; //This powers our CR servo
 
         // We need to flip the left motor so it goes the same way as the right motor.
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -42,6 +51,27 @@ public class MrKudybaLearnerCode extends LinearOpMode {
             // DistanceSensor stuff
             telemetry.addData("deviceName", dist.getDeviceName() );
             telemetry.addData("range", String.format("%.01f cm", dist.getDistance(DistanceUnit.CM)));
+
+            //Debugging code that's no longer necessary
+            //telemetry.addData("Button pressed:", button.isPressed());
+
+            if (button.isPressed()){
+                telemetry.addData("Touch Sensor", "Is Pressed");
+                flip = true;
+                //spin.setPower(1);
+            }
+            else {
+                telemetry.addData("Touch Sensor", "Not Pressed");
+                //spin.setPower(-1);
+                flip = false;
+            }
+
+            if (flip) {
+                power = power * -1;
+            }
+
+            spin.setPower(power);
+
             telemetry.update();
 
 
