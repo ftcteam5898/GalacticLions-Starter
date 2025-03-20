@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -24,9 +25,12 @@ public class EmmasTeleOp extends LinearOpMode {
 
         motorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        Servo arm = hardwareMap.get(Servo.class, "");
+        Servo arm = hardwareMap.get(Servo.class, "arm");
 
         DistanceSensor dist = hardwareMap.get(DistanceSensor.class, "Daniela");
+
+        //Create our touch sensor
+        TouchSensor sensy = hardwareMap.get(TouchSensor.class, "sensy");
 
         ColorSensor color = hardwareMap.get(ColorSensor.class, "Color");
 
@@ -43,7 +47,7 @@ public class EmmasTeleOp extends LinearOpMode {
         } else if (gamepad1.b) {
             color.enableLed(false);
         }
-        
+
 
         //Getting our servo into position before we hit start
         arm.setPosition(.5);
@@ -67,6 +71,12 @@ public class EmmasTeleOp extends LinearOpMode {
 
             //Distance sensor stuff
             telemetry.addData("range", String.format("%.01f cm", dist.getDistance(DistanceUnit.CM)));
+
+            if (sensy.isPressed()){
+                telemetry.addData("Touch Sensor", "Is Pressed");
+            }
+            else telemetry.addData("Touch Sensor", "Not Pressed");
+
             telemetry.update();
 
             //Controlling our arm servo with the thumb sticks
