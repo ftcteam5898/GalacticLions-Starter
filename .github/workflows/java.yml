@@ -40,21 +40,3 @@ jobs:
 
     - name: Perform Gradle Test
       run: ./gradlew test
-  lint:
-      runs-on: ubuntu-latest
-      name: Lint changed files 
-      needs: test
-      steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
-          
-      - name: Lint Code Base
-        uses: github/super-linter@v4.7.3
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DISABLE_ERRORS: true
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
