@@ -1,4 +1,4 @@
-package pedroPathing.tuners_tests.localization;
+package org.firstinspires.ftc.team5898.pedroPathing.tuners_tests.localization;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -29,7 +29,7 @@ import org.firstinspires.ftc.team5898.pedroPathing.constants.LConstants;
  * @version 1.0, 5/6/2024
  */
 @Config
-@Autonomous(name = "TUNE TESTS - Lateral Localizer Tuner", group = ".Localization")
+@Autonomous(name = "Lateral Localizer Tuner", group = ".Localization")
 public class LateralTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

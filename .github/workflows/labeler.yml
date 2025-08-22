@@ -1,0 +1,38 @@
+name: Labeler
+
+on:  
+  issues:
+    types: [opened, closed]
+
+  issue_comment:
+  
+  pull_request:
+  
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  
+jobs:
+  labeler:
+    name: Label Issue/PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add Opening Label
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: "Lifecycle: Active"
+        
+      - name: Check for label keywords/matchers
+        uses: fuxingloh/multi-labeler@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          config-path: .github/labeler.yml
+      
+      - name: Remove Undesired Labels on Close
+        if: github.event.issue.state == 'closed'
+        uses: mondeja/remove-labels-gh-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            Lifecycle: Active

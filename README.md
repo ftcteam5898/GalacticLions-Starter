@@ -1,3 +1,5 @@
+> [!WARNING]
+> This is an outdated version of the ReadMe file and will be replaced soon. The new version of this ReadMe file can be found [here](https://github.com/ZRJohnson208/GalacticLions-CodeVault/blob/main/README.md).
 
 ![image](https://github.com/user-attachments/assets/209a029e-211d-40fe-bc4b-fef26d3470d0)
 ___

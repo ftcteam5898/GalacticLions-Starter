@@ -1,8 +1,6 @@
 # This workflow warns and then closes issues and PRs that have had no activity for a specified amount of time.
 #
 # You can adjust the behavior by modifying this file.
-# For more information, see:
-# https://github.com/actions/stale
 
 name: Close Stale Issues
 on:
@@ -13,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      pull-requests: write
     steps:
       - name: Check for Stale Issues
         uses: actions/stale@v9.0.0
@@ -22,9 +19,6 @@ jobs:
           
           # Number of days of inactivity before an Issue becomes stale
           days-before-issue-stale: 15
-
-          # Number of days of inactivity before a Pull Request becomes stale
-          days-before-pr-stale: 30
           
           # Number of days of inactivity before an Issue/Pull Request with the stale label is closed.
           # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.
@@ -33,7 +27,7 @@ jobs:
           stale-issue-label: 'Lifecycle: Stale'
           
           # Issues with these labels will never be considered stale. Set to `[]` to disable
-          exempt-issue-labels: 'Lifecycle: Frozen, PR - Review Status: Passed'
+          exempt-issue-labels: 'Lifecycle: Frozen'
           
           # Label to remove when stale
           labels-to-remove-when-stale: 'Lifecycle: Active'
